@@ -1,0 +1,160 @@
+/* --------------- Form Section ---------------- */
+
+.contact-section {
+    padding: 80px 60px;
+    background: linear-gradient(135deg,#edcb96, #ffe5bb);
+      /* background: linear-gradient(135deg, #f1d49b, #c89d72); */
+
+}
+
+.contact-container {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+}
+
+.contact-container h2{
+    font-family: "Lucida Handwriting", cursive;
+
+}
+
+/* LEFT */
+.form-side {
+    flex: 1;
+}
+
+.form-container {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+.form-row .form-floating,
+.form-row .form-select {
+    flex: 1;
+}
+
+textarea {
+    width: 100%;
+    height: 240px;
+    margin-bottom: 20px;
+    padding: 14px;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+    
+}
+
+input, select {
+    padding: 14px;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  
+  border-color: #c89d72 !important;
+  box-shadow: none !important;
+  outline: none !important;
+
+}
+
+.submit-btn {
+    background: #c89d72;
+    color: #fff;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+/* RIGHT  ------Map Section */
+.map-side {
+    flex: 1;
+}
+.map-para{
+    max-width: 100%;
+    margin-bottom: 0;
+    
+}
+
+.map-side h2{
+    font-family: cinzel;
+}
+
+.map-side iframe {
+    width: 100%;
+    height: 320px;
+    border: 0;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.map-side h4{
+    font-family: Cinzel;
+    margin-top: 6px;
+}
+
+/* Social Media Section  */
+
+.social{
+    display:flex;
+    gap:15px;
+}
+
+.social div{
+    width:25px;
+    height:25px;
+    background:#062036;
+    color:#f1d49b;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.social div:hover{
+    background:#f1d49b;
+    color:#062036;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .contact-container {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 576px){
+    .contact-section{
+        padding: 30px 20px;
+    }
+
+     .form-row{
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-container{
+        padding: 25px;
+    }
+
+    .submit-btn{
+        width: 100%;
+    }
+
+
+
+}

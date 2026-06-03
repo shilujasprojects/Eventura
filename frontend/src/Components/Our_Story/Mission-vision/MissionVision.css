@@ -1,0 +1,65 @@
+ /* Mission & Vision Cards – SOLID (NO GLASS) */
+
+ .mission-section{
+    background-color: #f1d49b;
+ }
+
+.mission-row {
+  align-items: stretch;
+}
+
+.mission-card {
+  height: 100%;
+  min-height: 280px;
+
+  background-color: #fff7ee;
+  border-radius: 28px;
+  border: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mission-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.15);
+  transition: 0.5 ease-in-out;
+}
+
+/* Icon */
+.mission-card i {
+  font-size: 46px;
+  color: #d3b679;
+}
+
+/* Title */
+.mission-card .card-title {
+  color: #062036;
+  font-size: 1.5rem;
+}
+
+/* Text */
+.mission-card .card-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #062036;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .mission-card {
+    padding: 2.5rem;
+  }
+
+  .mission-card i {
+    font-size: 36px;
+  }
+
+  .mission-card .card-title {
+    font-size: 1.2rem;
+  }
+}

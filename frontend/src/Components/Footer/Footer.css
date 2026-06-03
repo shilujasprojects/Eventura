@@ -1,0 +1,101 @@
+/* Footer Section */
+
+.eventura-footer {
+  /* background-color: #041c32; */
+  background: linear-gradient(to bottom, #041c32, #031526);
+
+  padding: 60px 0 0;
+  color: #dcdcdc;
+}
+
+.eventura-footer .container {
+  padding-bottom: 60px;
+}
+
+.footer-logo {
+  font-family: Cinzel;
+  color: #e0bc74;
+  margin-bottom: 15px;
+}
+
+.img-fluid-footer {
+  width: 200px;
+  height: 80px;
+  padding-right: 50px;
+}
+
+@media (max-width: 576px) {
+  .img-fluid-footer {
+    padding-right: 80px;
+  }
+}
+
+.footer-text {
+  font-size: 15px;
+  line-height: 26px;
+  font-family: Cinzel;
+  /* padding-right: 16px; adjust as needed */
+}
+
+.footer-text i{
+  padding: 4px;
+  color: #e0bc74;
+}
+
+.footer-title {
+  font-family: Cinzel;
+  color: #e0bc74;
+  margin-bottom: 15px;
+}
+
+.footer-links {
+  font-family: cinzel;
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-links li a {
+  color: #dcdcdc;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #e0bc74;
+  padding-left: 5px;
+}
+
+.footer-social a {
+  color: #dcdcdc;
+  font-size: 18px;
+  margin-right: 12px;
+  transition: 0.3s;
+}
+
+.footer-social a:hover {
+  color: #e0bc74;
+}
+
+.footer-bottom {
+  background-color: #031526;
+  padding: 15px 0;
+  margin-top: 30px;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 768px) {
+  .eventura-footer {
+    padding: 80px 0 0;
+  }
+
+  .eventura-footer .container {
+    padding-bottom: 0;
+  }
+}

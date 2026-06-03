@@ -1,0 +1,61 @@
+/* -------------- Service Banner Section -------------- */
+
+.about-service {
+  display: flex;
+  position: relative;
+  width: 1521px;
+  height: 530px;
+  padding: 0 75px;
+  background:
+    linear-gradient(
+      to right,
+      rgba(245, 246, 247, 0.95) 10%,
+      rgba(245, 246, 247, 0.85) 20%,
+      rgba(245, 246, 247, 0.3) 70%,
+      transparent 100%
+    ),
+    url("../Service-Images/banner-service.png") center / cover no-repeat;
+}
+
+.content-service {
+  position: absolute;
+  top: 57%;
+  left: 18%;
+  padding: 28%;
+  transform: translate(-50%, -50%);
+}
+
+.content-service h2 {
+  font-size: 40px;
+  font-family: cinzel;
+  font-weight: 700;
+}
+
+.content-service span {
+  font-style: italic;
+}
+
+.content-service a {
+  background-color: #d6aa5f;
+  color: #fff;
+}
+
+.content-service a:hover {
+  background-color: #d3b679;
+  color: #062036;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .about-section {
+    margin-top: 40px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 576px) {
+  .content-service {
+    margin-left: 49px;
+  }
+}

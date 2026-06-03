@@ -1,0 +1,140 @@
+/* ================= FOUNDER SECTION ================= */
+
+.eventura-hero {
+  background: #f1d49b;
+  padding: 90px 0 70px;
+  /* background: linear-gradient(
+    135deg,
+    #f1d49b,
+    #855c0b
+  ); */
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Founder */
+.founder {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.founder img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+
+.founder span {
+  font-size: 14px;
+  color: #444;
+}
+
+/* Headline */
+.hero-founder-content h1 {
+  font-size: 56px;
+  line-height: 1.15;
+  color: #062036;
+  margin-bottom: 20px;
+}
+
+/* Description */
+.hero-founder-desc {
+  max-width: 420px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* Button */
+.hero-btn {
+  display: inline-block;
+  background: #062036;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.hero-btn:hover {
+  background: #041526;
+  color: #ccc;
+}
+
+/* Image */
+.hero-image img {
+  width: 100%;
+  border-radius: 26px;
+  object-fit: cover;
+}
+
+/* Stats */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin-top: 60px;
+}
+
+/* .stat-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 22px;
+  padding: 22px;
+  text-align: center;
+} */
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.18); /* glass transparency */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px); /* Safari support */
+
+  border-radius: 22px;
+  padding: 22px;
+  text-align: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(6, 32, 54, 0.12);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 40px rgba(6, 32, 54, 0.18);
+}
+
+.stat-card h3 {
+  font-size: 28px;
+  color: #062036;
+  margin-bottom: 6px;
+}
+
+.stat-card p {
+  font-size: 13px;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero--founder-content h1 {
+    font-size: 42px;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

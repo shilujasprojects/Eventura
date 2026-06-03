@@ -1,0 +1,253 @@
+.funeral-page{
+font-family:Poppins;
+background:#fff7ee;
+color:#062036;
+}
+
+
+/* HERO */
+
+.funeral-hero{
+background:#062036;
+color:#fff7ee;
+padding:120px 20px;
+text-align:center;
+}
+
+.funeral-hero h1{
+font-size:48px;
+color:#f1d49b;
+margin-bottom:20px;
+font-family:"Courgette",cursive;
+}
+
+.funeral-hero p{
+max-width:700px;
+margin:auto;
+font-size:18px;
+line-height:1.7;
+}
+
+
+/* SERVICES */
+
+.funeral-services{
+padding:80px 10%;
+text-align:center;
+background:#fff7ee;
+}
+
+.funeral-services h2{
+font-size:40px;
+margin-bottom:50px;
+font-family:"Courgette",cursive;
+}
+
+.funeral-services-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.funeral-service-card{
+background:white;
+padding:30px;
+border-radius:10px;
+border-top:4px solid #f1d49b;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.funeral-service-card:hover{
+transform:translateY(-8px);
+}
+
+.service-card h3{
+margin-bottom:15px;
+}
+
+
+/* MEMORIAL GALLERY */
+
+/* MEMORIAL MOMENT SECTION */
+
+.memorial-moment{
+padding:90px 10%;
+background:#fff7ee;
+position:relative;
+
+overflow:hidden;
+}
+
+/* flower petals background */
+
+.memorial-moment::before{
+content:"🌸 🌸 🌸 🌸 🌸";
+position:absolute;
+font-size:40px;
+opacity:0.15;
+top:20px;
+left:0;
+width:100%;
+text-align:center;
+}
+
+.memorial-content{
+display:flex;
+align-items:center;
+gap:60px;
+}
+
+/* LEFT TEXT */
+
+.memorial-text{
+flex:1;
+}
+
+.client-info{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:20px;
+}
+
+.client-info img{
+width:60px;
+height:60px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #f1d49b;
+}
+
+.client-info h4{
+margin:0;
+color:#062036;
+}
+
+.gratitude-text{
+font-size:18px;
+line-height:1.7;
+font-style:italic;
+color:#062036;
+max-width:500px;
+}
+
+/* RIGHT IMAGE */
+
+.memorial-image{
+flex:1;
+}
+
+.memorial-image img{
+width:80%;
+margin-left: 20%;
+height:320px;
+/* object-fit:contain; */
+border-radius:10px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+/* TRIBUTE SECTION */
+
+.tribute-section{
+padding:50px 10%;
+background:#fff7ee;
+display:flex;
+justify-content:center;
+}
+
+/* Card container */
+
+.tribute-container{
+background:white;
+padding:50px 40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+text-align:center;
+max-width:700px;
+width:100%;
+position:relative;
+}
+
+/* Decorative top line */
+
+.tribute-container::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:5px;
+background:#f1d49b;
+border-radius:12px 12px 0 0;
+}
+
+.tribute-container h2{
+font-size:36px;
+color:#062036;
+margin-bottom:10px;
+font-family:"Courgette",cursive;
+}
+
+.tribute-subtitle{
+font-size:15px;
+color:#555;
+margin-bottom:30px;
+}
+
+/* FORM */
+
+.tribute-form textarea{
+width:100%;
+height:140px;
+padding:18px;
+border-radius:8px;
+border:1px solid #ddd;
+font-family:Poppins;
+font-size:14px;
+resize:none;
+outline:none;
+transition:0.3s;
+}
+
+/* Focus effect */
+
+.tribute-form textarea:focus{
+border-color:#f1d49b;
+box-shadow:0 0 0 3px rgba(241,212,155,0.3);
+}
+
+/* Button */
+
+.tribute-form button{
+margin-top:20px;
+padding:14px 35px;
+background:#062036;
+color:#fff7ee;
+border:none;
+border-radius:8px;
+font-size:15px;
+font-weight:500;
+cursor:pointer;
+transition:0.3s;
+}
+
+/* Button hover */
+
+.tribute-form button:hover{
+background:#041626;
+transform:translateY(-2px);
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+.gallery-grid{
+column-count:2;
+}
+
+.funeral-hero h1{
+font-size:36px;
+}
+
+}

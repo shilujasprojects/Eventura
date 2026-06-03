@@ -1,0 +1,37 @@
+/* ------------------ Who  we are section ----------------- */
+
+.content2{
+    color: #062036;
+        margin-top: 70px;
+        margin-bottom: 0;
+       
+        background-color: #f1d49b;
+}
+ .content2 img {
+      border-radius: 20px;
+      max-height: 300px;
+    }
+
+    
+    .about-title{
+        text-transform: capitalize;
+        font-size: 50px;
+        font-family: Cinzel;
+    }
+
+    .about-subtitle{
+        padding-top: 20px;
+        font-size: 20px;
+        line-height: 1.75;
+        font-style: italic;
+    }
+
+    @media (max-width: 768px){
+      .about-title{
+        font-size: 35px;
+      }
+      .about-subtitle{
+        font-size: 10px;
+        
+      }
+    }

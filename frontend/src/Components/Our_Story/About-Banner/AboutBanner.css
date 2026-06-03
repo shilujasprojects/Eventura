@@ -1,0 +1,109 @@
+
+
+     .about-title{
+        text-transform: capitalize;
+        font-size: 50px;
+        font-family: Cinzel;
+    }
+
+    .about-subtitle{
+        padding-top: 20px;
+        font-size: 20px;
+        line-height: 1.75;
+        font-style: italic;
+    }
+
+    @media (max-width: 768px){
+      .about-title{
+        font-size: 35px;
+      }
+      .about-subtitle{
+        font-size: 10px;
+        
+      }
+    }
+
+.about-section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 500px;
+  padding: 0 75px;
+  margin-top: 70px;
+  color: #062036;
+  margin-bottom: 0;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(15, 34, 51, 0.95) 0%,
+      rgba(15, 34, 51, 0.85) 40%,
+      rgba(15, 34, 51, 0.3) 60%,
+      transparent 100%
+    ),
+    url('../Story_images/about_part_1.png')
+    center center / cover no-repeat;
+}
+
+    .content {
+        max-width: 600px;
+        
+    }
+
+    .content h1 {
+        font-size: 70px;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #d3b679;
+        font-family: Cinzel;
+    }
+
+    .content p {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: #dce4eb;
+        font-style: italic;
+    }
+
+    .content2 img {
+      border-radius: 20px;
+      max-height: 300px;
+    }
+
+    
+
+
+@media (max-width: 768px) {
+
+  .about-section{
+    padding: 0 40px;
+  }
+  
+  .content { 
+    margin-top: 20px;
+  }
+  
+
+  .content h1 {
+    font-size: 42px;
+  }
+
+  .content p{
+    margin-top: 20px;
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 576px){
+  .about-section{
+    padding:0 20px; 
+    
+  }
+  .content h1 {
+        font-size: 32px;
+      }
+
+      .content p{
+        max-width: 200px;
+      }
+  }

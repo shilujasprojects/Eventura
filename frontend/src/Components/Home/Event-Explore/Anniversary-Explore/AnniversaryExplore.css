@@ -1,0 +1,429 @@
+/* AnniversaryExplore.css */
+
+.anniversary-explore {
+  background-color: #fff7ee;
+  overflow-x: hidden;
+}
+
+/* HERO */
+
+.anniversary-explore-hero {
+  position: relative;
+  height: 100vh;
+}
+
+.anniversary-explore-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(45%);
+}
+
+.anniversary-explore-overlay {
+  position: absolute;
+  top: 50%;
+  left: 12%;
+  transform: translateY(-50%);
+  color: white;
+}
+
+.anniversary-explore-overlay p {
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+  color: #f1d49b;
+}
+
+.anniversary-explore-overlay h1 {
+  font-size: 85px;
+  line-height: 100px;
+  font-family: "Cinzel", serif;
+  margin-bottom: 35px;
+}
+
+.anniversary-explore-overlay button {
+  border: none;
+  padding: 15px 35px;
+  background-color: #f1d49b;
+  color: #062036;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.anniversary-explore-overlay button:hover {
+  background-color: white;
+}
+
+/* STORY */
+
+.anniversary-explore-story-section {
+  width: 82%;
+  margin: 130px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.anniversary-explore-story-left h2 {
+  font-size: 55px;
+  line-height: 75px;
+  color: #062036;
+  font-family: "Cinzel", serif;
+  margin-bottom: 30px;
+}
+
+.anniversary-explore-story-left p {
+  line-height: 35px;
+  color: #555;
+  margin-bottom: 20px;
+  font-size: 17px;
+}
+
+.anniversary-explore-story-left button {
+  margin-top: 20px;
+  border: none;
+  background-color: #062036;
+  color: white;
+  padding: 15px 35px;
+  cursor: pointer;
+}
+
+.anniversary-explore-story-right {
+  position: relative;
+}
+
+.anniversary-explore-main-img {
+  width: 100%;
+  height: 620px;
+  object-fit: cover;
+}
+
+.anniversary-explore-circle-img {
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  left: -80px;
+  bottom: 40px;
+  border: 10px solid #fff7ee;
+}
+
+/* MARQUEE */
+
+.anniversary-explore-marquee {
+  background-color: #062036;
+  padding: 22px 0;
+  overflow: hidden;
+}
+
+.anniversary-explore-marquee p {
+  white-space: nowrap;
+  color: #f1d49b;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+/* GALLERY */
+
+.anniversary-explore-gallery {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  margin-top: 110px;
+}
+
+.anniversary-explore-gallery-card {
+  background-color: #081f34;
+  color: white;
+  text-align: center;
+}
+
+.anniversary-explore-gallery-card img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+.anniversary-explore-gallery-card h3 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  font-size: 28px;
+  font-family: "Cinzel", serif;
+}
+
+.anniversary-explore-gallery-card p {
+  width: 75%;
+  margin: auto;
+  padding-bottom: 40px;
+  color: #d8d8d8;
+  line-height: 30px;
+}
+
+/* PERFECT SECTION */
+
+.anniversary-explore-perfect-section {
+  width: 82%;
+  margin: 130px auto;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 60px;
+}
+
+.anniversary-explore-perfect-left img {
+  width: 100%;
+  height: 700px;
+  object-fit: cover;
+}
+
+.anniversary-explore-small-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.anniversary-explore-small-grid img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.anniversary-explore-perfect-content {
+  margin-top: 40px;
+}
+
+.anniversary-explore-perfect-content h2 {
+  font-size: 58px;
+  line-height: 75px;
+  font-family: "Cinzel", serif;
+  color: #062036;
+  margin-bottom: 25px;
+}
+
+.anniversary-explore-perfect-content p {
+  color: #555;
+  line-height: 35px;
+  font-size: 17px;
+}
+
+/* PACKAGES */
+
+.anniversary-explore-packages-wrapper {
+  width: 82%;
+  margin: auto;
+  margin-bottom: 130px;
+}
+
+.anniversary-explore-package-heading {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.anniversary-explore-package-heading p {
+  color: #b68d5a;
+  letter-spacing: 4px;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+
+.anniversary-explore-package-heading h2 {
+  font-size: 54px;
+  color: #062036;
+  font-family: "Cinzel", serif;
+}
+
+.anniversary-explore-packages {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 25px;
+}
+
+.anniversary-explore-package-card {
+
+  position: relative;
+
+  padding: 45px 32px;
+
+  border-radius: 28px;
+
+  background:
+    rgba(255,255,255,0.28);
+
+  backdrop-filter:
+    blur(18px);
+
+  border:
+    1px solid rgba(255,255,255,0.4);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.08);
+
+  transition:
+    0.4s ease;
+
+  overflow: hidden;
+}
+
+.anniversary-explore-package-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  background:
+    rgba(241,212,155,0.18);
+
+  border-radius: 50%;
+
+  top: -60px;
+  right: -60px;
+}
+
+.anniversary-explore-package-card:hover {
+  transform: translateY(-10px);
+}
+
+.anniversary-explore-package-card h3 {
+  font-size: 30px;
+  color: #062036;
+  margin-bottom: 15px;
+  font-family: "Cinzel", serif;
+  position: relative;
+  z-index: 2;
+}
+
+.anniversary-explore-package-card h2 {
+  font-size: 46px;
+  color: #b68d5a;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
+}
+
+.anniversary-explore-package-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 35px;
+  position: relative;
+  z-index: 2;
+}
+
+.anniversary-explore-package-card ul li {
+  margin-bottom: 15px;
+  color: #4d5a66;
+  line-height: 28px;
+}
+
+.anniversary-explore-package-card button {
+
+  border: none;
+
+  background: #062036;
+
+  color: white;
+
+  padding: 14px 28px;
+
+  border-radius: 40px;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  position: relative;
+  z-index: 2;
+}
+
+.anniversary-explore-package-card button:hover {
+  background: #f1d49b;
+  color: #062036;
+}
+
+/* PREMIUM */
+
+.premium-package {
+  transform: scale(1.04);
+}
+
+.anniversary-package-tag {
+
+  position: absolute;
+
+  top: 18px;
+  right: 18px;
+
+  background: #062036;
+
+  color: #f1d49b;
+
+  padding: 7px 16px;
+
+  border-radius: 40px;
+
+  font-size: 11px;
+
+  letter-spacing: 1px;
+}
+
+/* TABLET */
+
+@media (max-width: 992px) {
+
+  .anniversary-explore-overlay h1 {
+    font-size: 55px;
+    line-height: 70px;
+  }
+
+  .anniversary-explore-story-section,
+  .anniversary-explore-perfect-section {
+    grid-template-columns: 1fr;
+  }
+
+  .anniversary-explore-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .anniversary-explore-packages {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+/* MOBILE */
+
+@media (max-width: 576px) {
+
+  .anniversary-explore-overlay {
+    left: 8%;
+  }
+
+  .anniversary-explore-overlay h1 {
+    font-size: 38px;
+    line-height: 52px;
+  }
+
+  .anniversary-explore-story-left h2,
+  .anniversary-explore-perfect-content h2 {
+    font-size: 36px;
+    line-height: 52px;
+  }
+
+  .anniversary-explore-circle-img {
+    width: 180px;
+    height: 180px;
+    left: -20px;
+  }
+
+  .anniversary-explore-packages {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-package {
+    transform: scale(1);
+  }
+
+}

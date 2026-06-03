@@ -1,0 +1,106 @@
+/* How we works section */
+
+/* Section background */
+.how-it-works {
+  background: #f1d49b;
+  font-family: Cinzel;
+  color: #062036;
+  padding: 40px  ;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Container */
+/* .container {
+  max-width: 1200px;
+  margin: auto;
+  
+} */
+
+/* Title */
+.work-title {
+  font-size: 60px;
+  font-weight: 600;
+  text-align: center;
+  font-family: "Brush Script MT", "Brush Script Std", "Apple Chancery", "Lucida Handwriting", "Snell Roundhand", cursive;
+  /* color: #1f2933; */
+  margin-bottom: 10px;
+}
+
+/* Subtitle */
+.work-subtitle {
+  font-size: 16px;
+  /* color: #6b7280; */
+ text-align: center;
+  max-width: 600px;
+  margin: 0 auto 60px;
+}
+
+/* Responsive tweak */
+@media (max-width: 576px) {
+  .work-title {
+    font-size: 37px;
+  }
+
+  .work-subtitle{
+    font-size: 14px;
+  }
+}
+
+/* Responsive tweak */
+@media (max-width: 786px) {
+  .work-title {
+    font-size: 45px;
+  }
+
+ 
+}
+
+
+/* Grid */
+.steps-grid {
+  display: grid;
+  text-align: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+}
+
+/* Glass Card */
+.glass-step {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.glass-step:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* Step number */
+.step-number {
+  display: inline-block;
+  font-size: 28px;
+  font-weight: 600;
+  color: #d6b36a; /* Eventura gold */
+  margin-bottom: 16px;
+}
+
+/* Card title */
+.glass-step h4 {
+  font-size: 18px;
+  font-weight: 600;
+  /* color: #1f2933; */
+  margin-bottom: 12px;
+}
+
+/* Card text */
+.glass-step p {
+  font-size: 14px;
+  /* color: #4b5563; */
+  line-height: 1.6;
+}

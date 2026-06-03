@@ -1,0 +1,404 @@
+.birthday-page {
+  margin: 0;
+  font-family: Poppins;
+  background: #fff7ee;
+  color: #062036;
+}
+
+/* birthday-hero */
+
+.birthday-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 10%;
+}
+
+.birthday-hero-text h1 {
+  font-size: 55px;
+  font-family: Great Vibes;
+  color: #062036;
+}
+
+.birthday-hero-text p {
+  margin: 20px 0;
+}
+
+.birthday-hero-text button {
+  padding: 12px 30px;
+  background: #f1d49b;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.birthday-hero-img img {
+  width: 450px;
+  border-radius: 10px;
+}
+
+/* BALLOON */
+
+.balloons {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.balloon {
+  width: 40px;
+  height: 55px;
+  background: #f1d49b;
+  border-radius: 50%;
+  position: absolute;
+  animation: float 12s infinite;
+}
+
+.balloon:nth-child(1) {
+  left: 10%;
+}
+.balloon:nth-child(2) {
+  left: 30%;
+}
+.balloon:nth-child(3) {
+  left: 60%;
+}
+.balloon:nth-child(4) {
+  left: 80%;
+}
+
+@keyframes float {
+  0% {
+    top: 100vh;
+  }
+  100% {
+    top: -10vh;
+  }
+}
+
+/* COUNTDOWN */
+
+.countdown {
+  text-align: center;
+  padding: 80px 10%;
+  background: #062036;
+  color: #fff7ee;
+  font-family: "Courgette", cursive;
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.timer span {
+  font-size: 45px;
+  font-weight: bold;
+  color: #f1d49b;
+}
+
+/* birthday-cards */
+
+.features {
+  padding: 80px 10%;
+  text-align: center;
+  background: #f1d49b;
+}
+
+.features h2 {
+  font-family: "Courgette", cursive;
+  font-weight: bold;
+  font-size: 52px;
+}
+
+.birthday-cards {
+  display: flex;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.birthday-card {
+  background: #fff7ee;
+  border-radius: 10px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: 0.4s;
+  padding: 8px;
+}
+
+.birthday-card:hover {
+  transform: rotateY(10deg) scale(1.12);
+  transition: 0.5 ease-in-out;
+}
+
+.birthday-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* birthday-gallery */
+
+/* .birthday-gallery {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+
+
+.birthday-gallery-grid {
+  columns: 3 250px;
+  column-gap: 15px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.birthday-gallery-grid img {
+  width: 100%;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.birthday-gallery-grid img:hover {
+  transform: scale(1.05);
+} */
+
+.birthday-moments h2 {
+  font-family: "Great Vibes", cursive;
+  font-size: 54px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.birthday-moments{
+padding:80px 10%;
+background:#fff7ee;
+}
+
+.moments-layout{
+display:grid;
+grid-template-columns:1.2fr 0.8fr 1fr;
+align-items:center;
+gap:60px;
+}
+
+/* LEFT COLLAGE */
+
+.birthday-gallery-grid{
+  column-count:3;
+  column-gap:15px;
+}
+
+.birthday-gallery-grid img{
+  width:100%;
+  margin-bottom:15px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+  break-inside:avoid;
+  object-fit:cover;
+  box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+.birthday-gallery-grid img:hover{
+  transform:scale(1.05);
+}
+
+
+
+
+/* CENTER TEXT */
+
+.moments-text{
+text-align:center;
+}
+
+.moments-text h2{
+font-family:"Great Vibes",cursive;
+font-size:46px;
+margin-bottom:20px;
+}
+
+.moments-text p{
+margin-bottom:20px;
+}
+
+.moments-text button{
+padding:10px 25px;
+background:#f1d49b;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* RIGHT VIDEOS */
+
+.moments-videos{
+column-count:2;      /* creates masonry columns */
+column-gap:15px;
+}
+
+.video-card{
+margin-bottom:15px;
+border-radius:12px;
+overflow:hidden;
+width:200px;
+break-inside:avoid;
+box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+.video-card iframe {
+width:100%;
+height:180px;
+
+/* aspect-ratio:16/9;   responsive height */
+border:none;
+display:block;
+}
+
+.moments-caption{
+text-align:center;
+max-width:320px;
+margin:auto;
+}
+
+.caption-text{
+font-size:18px;
+font-style:italic;
+line-height:1.7;
+color:#062036;
+margin-bottom:15px;
+}
+
+.caption-author{
+font-weight:bold;
+color:#f1a24b;
+font-size:16px;
+}
+
+/* LIGHTBOX */
+
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 85%;
+  border-radius: 10px;
+}
+
+.close {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 45px;
+  color: white;
+  cursor: pointer;
+}
+
+/* PACKAGE CARD SECTION */
+
+.birthday-packages {
+  padding: 80px 20px;
+  text-align: center;
+  background: rgb(241, 212, 155);
+  color: #062036;
+}
+
+.birthday-packages h2 {
+  font-family: "Courgette", cursive;
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.package-grid {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.package-card {
+  background: #fff7ee;
+  padding: 30px;
+  width: 260px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.package-card:hover {
+  transform: translateY(-10px);
+  transition: 0.5 ease-in-out;
+}
+
+.package-card h3 {
+  margin-bottom: 20px;
+  font-family: "Great Vibes", cursive;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.package-card ul {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.package-card li {
+  margin-bottom: 8px;
+}
+
+.package-card button {
+  padding: 10px 20px;
+  border: none;
+  background: #062036;
+  color: #fff7ee;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* CAKE SECTION */
+
+.cake {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  padding: 80px 10%;
+  background: #fff7ee;
+}
+
+.cake-text h2 {
+  font-family: "courgette", cursive;
+}
+
+.cake-img img {
+  width: 400px;
+  border-radius: 10px;
+}
+
+.cake-text button {
+  padding: 12px 30px;
+  background: #f1d49b;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+
+

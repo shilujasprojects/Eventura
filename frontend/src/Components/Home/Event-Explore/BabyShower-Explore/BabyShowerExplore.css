@@ -1,0 +1,371 @@
+/* BabyShowerExplore.css */
+
+.baby-shower-explore {
+  background-color: #fff7ee;
+  overflow-x: hidden;
+  padding-bottom: 120px;
+}
+
+/* Hero */
+
+.baby-shower-explore-hero {
+  width: 88%;
+  margin: auto;
+  padding-top: 120px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-bottom: 140px;
+}
+
+.baby-shower-explore-mini-title {
+  letter-spacing: 4px;
+  font-size: 13px;
+  color: #f1d49b;
+  margin-bottom: 20px;
+}
+
+.baby-shower-explore-main-title {
+  font-size: 72px;
+  line-height: 95px;
+  color: #062036;
+  font-family: "Cinzel", serif;
+  margin-bottom: 30px;
+}
+
+.baby-shower-explore-description {
+  font-size: 18px;
+  line-height: 36px;
+  color: #555;
+  margin-bottom: 35px;
+}
+
+.baby-shower-explore-btn {
+  background-color: #062036;
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.baby-shower-explore-btn:hover {
+  background-color: #041625;
+}
+
+/* Hero Images */
+
+.baby-shower-explore-right {
+  position: relative;
+}
+
+.baby-shower-explore-main-image {
+  width: 100%;
+  height: 650px;
+  object-fit: cover;
+}
+
+.baby-shower-explore-floating-image {
+  position: absolute;
+  width: 260px;
+  height: 320px;
+  object-fit: cover;
+  bottom: -60px;
+  left: -80px;
+  border: 12px solid #fff7ee;
+}
+
+/* Story Section */
+
+.baby-shower-explore-story-section {
+  width: 88%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-bottom: 140px;
+}
+
+.baby-shower-explore-story-image img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+}
+
+.baby-shower-explore-story-content h2 {
+  font-size: 55px;
+  line-height: 75px;
+  font-family: "Cinzel", serif;
+  color: #062036;
+  margin-bottom: 25px;
+}
+
+.baby-shower-explore-story-content p {
+  font-size: 17px;
+  line-height: 34px;
+  color: #555;
+}
+
+/* Gallery */
+
+.baby-shower-explore-gallery {
+  width: 88%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 140px;
+}
+
+.baby-shower-explore-gallery-card img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+.baby-shower-explore-gallery-card h4 {
+  margin-top: 20px;
+  text-align: center;
+  color: #062036;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+/* Highlight Section */
+
+.baby-shower-explore-highlight-section {
+  width: 88%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  margin-bottom: 140px;
+}
+
+.baby-shower-explore-highlight-left img {
+  width: 100%;
+  height: 650px;
+  object-fit: cover;
+}
+
+.baby-shower-explore-highlight-right {
+  margin-left: -120px;
+  z-index: 2;
+}
+
+.baby-shower-explore-highlight-box {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 70px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+}
+
+.baby-shower-explore-highlight-box h2 {
+  font-size: 50px;
+  line-height: 70px;
+  font-family: "Cinzel", serif;
+  color: #062036;
+  margin-bottom: 25px;
+}
+
+.baby-shower-explore-highlight-box p {
+  line-height: 34px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* Services */
+
+.baby-shower-explore-services {
+  width: 88%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 140px;
+}
+
+.baby-shower-explore-service-item img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+}
+
+.baby-shower-explore-service-item p {
+  text-align: center;
+  margin-top: 20px;
+  color: #062036;
+  letter-spacing: 2px;
+}
+
+/* Package Heading */
+
+.baby-shower-explore-package-heading {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.baby-shower-explore-package-heading h2 {
+  font-size: 60px;
+  color: #062036;
+  font-family: "Cinzel", serif;
+}
+
+/* Packages */
+
+.baby-shower-explore-packages {
+  width: 88%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.baby-shower-explore-package-card {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.35);
+  padding: 45px 30px;
+  text-align: center;
+  position: relative;
+  transition: 0.4s ease;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+}
+
+.baby-shower-explore-package-card:hover {
+  transform: translateY(-10px);
+}
+
+.baby-shower-explore-package-card h3 {
+  font-size: 34px;
+  font-family: "Cinzel", serif;
+  color: #062036;
+  margin-bottom: 18px;
+}
+
+.baby-shower-explore-package-card h1 {
+  color: #f1d49b;
+  font-size: 48px;
+  margin-bottom: 30px;
+}
+
+.baby-shower-explore-package-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 35px;
+}
+
+.baby-shower-explore-package-card ul li {
+  margin-bottom: 15px;
+  color: #555;
+  line-height: 28px;
+}
+
+.baby-shower-explore-package-card button {
+  background-color: #062036;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.baby-shower-explore-featured-package {
+  transform: scale(1.05);
+  border: 1px solid #f1d49b;
+}
+
+.baby-shower-explore-tag {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background-color: #f1d49b;
+  color: #062036;
+  padding: 6px 14px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+/* Tablet */
+
+@media (max-width: 992px) {
+
+  .baby-shower-explore-hero,
+  .baby-shower-explore-story-section,
+  .baby-shower-explore-highlight-section {
+    grid-template-columns: 1fr;
+  }
+
+  .baby-shower-explore-gallery,
+  .baby-shower-explore-services,
+  .baby-shower-explore-packages {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .baby-shower-explore-main-title {
+    font-size: 52px;
+    line-height: 72px;
+  }
+
+  .baby-shower-explore-highlight-right {
+    margin-left: 0;
+    margin-top: -80px;
+  }
+
+}
+
+/* Mobile */
+
+@media (max-width: 576px) {
+
+  .baby-shower-explore-hero,
+  .baby-shower-explore-story-section,
+  .baby-shower-explore-highlight-section {
+    gap: 40px;
+  }
+
+  .baby-shower-explore-main-title {
+    font-size: 38px;
+    line-height: 55px;
+  }
+
+  .baby-shower-explore-story-content h2,
+  .baby-shower-explore-highlight-box h2,
+  .baby-shower-explore-package-heading h2 {
+    font-size: 34px;
+    line-height: 50px;
+  }
+
+  .baby-shower-explore-gallery,
+  .baby-shower-explore-services,
+  .baby-shower-explore-packages {
+    grid-template-columns: 1fr;
+  }
+
+  .baby-shower-explore-main-image,
+  .baby-shower-explore-story-image img,
+  .baby-shower-explore-highlight-left img {
+    height: 420px;
+  }
+
+  .baby-shower-explore-floating-image {
+    width: 180px;
+    height: 220px;
+    left: -10px;
+    bottom: -40px;
+  }
+
+  .baby-shower-explore-highlight-box {
+    padding: 40px 25px;
+  }
+
+  .baby-shower-explore-featured-package {
+    transform: scale(1);
+  }
+
+}

@@ -1,0 +1,72 @@
+/* Navbar Section */
+
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar-nav {
+  font-family: Cinzel;
+  margin-right: 30px;
+  font-size: Medium;
+  text-transform: uppercase;
+  color: white;
+}
+
+.navbar-nav a:hover {
+  color: #e0bc74;
+}
+
+#book-now {
+  background-color: #d3b679;
+  color: #062036;
+  border: none;
+}
+
+#book-now:hover {
+  background-color: #d6aa5f;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .nav-item {
+    margin-left: 10px;
+  }
+}
+
+.nav-link {
+  position: relative;
+  font-family: Cinzel;
+  margin-right: 30px;
+  font-size: medium;
+  text-transform: uppercase;
+  color: white;
+}
+
+/* Underline animation */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  left: 0;
+  bottom: -6px;
+  background-color: #f1d49b;   /* your gold theme */
+  transition: 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.nav-link:hover::after {
+  width: 100%;
+  display: none;
+}
+
+/* Active link */
+
+.active-link{
+  color: #e0bc74;
+}
+.active-link::after {
+  width: 100%;
+  
+}

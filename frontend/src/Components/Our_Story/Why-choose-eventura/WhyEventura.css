@@ -1,0 +1,59 @@
+/* Why choose eventura  */
+
+.why-choose-event{
+    color: #062036;
+    margin-top: 70px;
+    margin-bottom: 0;
+    background-color: #f1d49b;
+}
+
+.card {
+  background-color: #fff7ee !important;
+  border-radius: 25px !important;
+  margin-bottom: 50px;
+}
+
+.card-icon1 {
+  background-color: #fff7ee;
+  opacity: 0.85;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  transition: 0.3 ease-in;
+  opacity: 0.75;
+}
+
+.card i {
+  font-size: 50px;
+  color: #d3b679;
+}
+.eye {
+  position: relative;
+  font-size: 16px;
+  top: 9px;
+}
+
+.card-para {
+  font-size: 18px;
+}
+
+.card-para span {
+  font-size: 30px;
+  color: #062036;
+}
+
+@media (max-width: 768px) {
+  .divider span {
+    max-width: 100%;
+    font-size: 25px;
+    font-weight: 520;
+  }
+  .card {
+    margin-bottom: 15px;
+  }
+
+  .card-para {
+    font-size: 16px;
+  }
+}

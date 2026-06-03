@@ -1,0 +1,42 @@
+/*  -------------------- Recent Event -------------------- */
+
+.recent-event {
+  color: #062036;
+  background-color: #f1d49b;
+  font-family: Cinzel;
+  padding-bottom: 20px;
+}
+
+.recent-event h2{
+  font-size: 38px;
+  font-family: 'Courgette',Cursive;
+}
+
+@media (max-width: 576px){
+  .recent-event h2{
+    font-size: 32px;
+    
+  }
+}
+
+#view-more {
+  background-color: #d3b679;
+  color: #fff;
+}
+#view-more:hover {
+  background-color: #d6aa5f;
+  color: #062036;
+}
+
+.card-body {
+  padding: 20px ;
+  color: #062036;
+  background-color: #fff7ee !important;
+  border-radius: 10px !important;
+}
+
+.img-card-top {
+  border-radius: 8px 8px 0 0;
+}
+
+

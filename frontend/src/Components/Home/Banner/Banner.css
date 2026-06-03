@@ -1,0 +1,83 @@
+/* ----------------- Banner------------------- */
+
+.banner {
+  background: linear-gradient(135deg, #041c32, #e0bc74);
+  padding: 80px;
+}
+
+.banner-title {
+  font-family: Cinzel;
+  font-weight: 700;
+  font-size: 48px;
+  color: #e0bc74;
+  margin-bottom: 25px;
+}
+
+.banner-text {
+  color: white;
+}
+
+.banner-highlight {
+  font-size: 20px;
+  font-weight: 590;
+  color: #ffffff;
+  margin-bottom: 30px;
+  font-family: 'Courgette',Cursive;
+  color: #fffaf2;
+}
+
+.btn-warn {
+  background-color: #e0bc74 !important;
+  border: none;
+}
+
+.btn-warn:hover {
+  background-color: #d6aa5f;
+}
+
+.banner-image {
+  background-size: cover;
+  width: 350px !important;
+  height: 350px !important;
+  border-radius: 30px;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+@media (max-width: 768px) {
+  .banner {
+    padding: 80px;
+  }
+
+  .banner-title {
+    font-size: 34px;
+  }
+  .banner-image {
+    margin: 15%;
+  }
+}
+
+@media (max-width: 576px) {
+  .banner {
+    padding: 20px;
+  }
+
+  .banner-title {
+    font-size: 30px;
+    margin-top: 30px;
+  }
+
+  .banner-text {
+    font-size: 14px;
+  }
+
+  .banner-highlight {
+    font-size: 14px;
+  }
+  .banner-image {
+    margin: 0;
+    padding-top: 20px;
+  }
+}

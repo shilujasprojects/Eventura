@@ -1,0 +1,56 @@
+
+      /* ----------------- Text Banner -----------------  */
+
+      .text-banner {
+        font-family: Cinzel;
+        color: #fff7ee;
+      }
+
+      .text-banner p {
+        font-size: 20px;
+        margin-top: 10px;
+      }
+
+      .text-banner a {
+        background-color: #d6aa5f;
+        width: 15%;
+        margin-top: 10px;
+      }
+
+      .divider {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .divider::before,
+      .divider::after {
+        flex: 2;
+      }
+
+      @media (max-width: 992px) {
+        .text-banner a {
+          margin-top: 15px;
+          width: 30%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .divider::before,
+        .divider::after {
+          flex: 0.5;
+          display: none;
+        }
+
+        .text-banner span {
+          font-size: 28px;
+        }
+
+        .text-banner p {
+          text-align: left;
+          margin-top: 10px;
+        }
+
+        .text-banner a {
+          width: 100%;
+        }
+      }

@@ -1,0 +1,67 @@
+/* ---------- Banner section ------------  */
+
+  .about-section2 {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 380px;
+  padding: 0 75px;
+  opacity: 0.9;
+  color:#d3b679;
+  font-family: cinzel;
+  background: linear-gradient(
+      to right,
+      rgba(15, 34, 51, 0.95) 30%,
+      rgba(15, 34, 51, 0.85) 40%,
+      rgba(15, 34, 51, 0.3) 60%,
+      transparent 70%
+    ),
+    url('../Story_images/image.png') center / cover no-repeat;
+}
+
+
+.about-section2 p{
+    color: #ccc;
+    font-family: sans-serif;
+    
+
+}
+
+.about-section2 button{
+    border: none;
+    color: black;
+    background-color: #e0bc74;
+    border-radius: 8px;
+    padding: 7px;
+    width: 50%;
+    font-size: 17px;
+    font-family: sans-serif;
+}
+
+.about-section2 button:hover{
+    background-color: #d6aa5f;
+}
+
+@media (max-width: 768px){
+  .about-section2{
+    padding: 4%;
+    
+  }
+  .about-section2 p{
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+
+@media (max-width: 576px){
+  .about-section2{
+    padding: 8%;
+    
+  }
+
+  .about-section2 p{
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}

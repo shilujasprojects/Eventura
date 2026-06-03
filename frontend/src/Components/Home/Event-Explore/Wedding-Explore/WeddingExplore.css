@@ -1,0 +1,544 @@
+ *{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+.wedding-page{
+font-family:'Poppins',sans-serif;
+background:#f1d49b;
+color:#062036;
+}
+
+/* hero-wedding */
+
+.hero-wedding{
+height:90vh;
+background:url("https://images.unsplash.com/photo-1519741497674-611481863552") center/cover no-repeat;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+}
+
+.hero-wedding-content{
+background:rgba(6,32,54,0.75);
+padding:60px;
+border-radius:10px;
+
+color:white;
+}
+
+.hero-wedding h1{
+font-family:'Cinzel',serif;
+font-size:55px;
+text-transform: uppercase;
+margin-bottom:20px;
+text-shadow: 2px 2px 2px #fff7ee;
+/* color:#fff7ee; */
+color: #f1d49b;
+}
+
+.hero-wedding p{
+max-width:600px;
+margin:auto;
+font-size: 30px;
+font-family: 'Great Vibes',cursive;
+/* font-family: 'Courgette',cursive; */
+line-height:1.6;
+}
+
+.hero-wedding button{
+margin-top:25px;
+padding:12px 30px;
+border:none;
+background:#f1d49b;
+color:#062036;
+font-size:16px;
+cursor:pointer;
+border-radius:5px;
+font-weight:500;
+font-family: 'Courgette',cursive;
+}
+
+/* STORY */
+
+.story{
+padding:120px 20px;
+text-align:center;
+max-width:800px;
+
+margin:auto;
+}
+
+.story h2{
+font-size:42px;
+text-transform: uppercase;
+font-weight: 500;
+margin-bottom:20px;
+font-family:Cinzel;
+color:#062036;
+}
+
+.story p{
+line-height:1.8;
+font-size: 18px;
+}
+
+/* wedding-gallery */
+
+.wedding-gallery{
+padding:40px 40px 80px 40px;
+/* background:#f1d49b; */
+}
+
+.wedding-gallery h2{
+margin-bottom:40px;
+font-size:36px;
+font-weight: bold;
+font-family: 'Courgette',cursive;
+color:#062036;
+}
+
+
+/* --- */
+
+
+
+.wedding-gallery-wrapper{
+position:relative;
+display:flex;
+align-items:center;
+}
+
+.wedding-gallery-row{
+display:flex;
+gap:20px;
+overflow:hidden;
+scroll-behavior:smooth;
+}
+
+/* .wedding-gallery-row img{
+height:260px;
+border-radius:10px;
+cursor:pointer;
+transition:0.4s;
+} */
+
+/* Cinematic wedding-gallery hover */
+
+.wedding-gallery-row img{
+height:260px;
+border-radius:10px;
+cursor:pointer;
+transition:0.4s;
+/* box-shadow:0 10px 30px rgba(0,0,0,0.25); */
+}
+
+.wedding-gallery-row img:hover{
+transform:scale(1.08);
+}
+
+
+
+
+/* SCROLL BUTTONS */
+
+.scroll-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+background:#062036;
+color:#fff7ee;
+border:none;
+font-size:28px;
+width:45px;
+height:45px;
+border-radius:50%;
+cursor:pointer;
+z-index:2;
+}
+
+.scroll-btn.left{
+left:-20px;
+}
+
+.scroll-btn.right{
+right:-20px;
+}
+
+/* LIGHTBOX */
+
+.lightbox{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+/* image */
+.lightbox img{
+max-width:90%;
+max-height:85%;
+border-radius:10px;
+position:relative;
+z-index:1001;
+}
+
+/* close button */
+.close{
+position:fixed;
+top:25px;
+right:35px;
+font-size:50px;
+color:white;
+cursor:pointer;
+z-index:2000;
+}
+
+/* VLOGS */
+
+.vlogs{
+padding:80px 40px;
+background:#062036;
+color:white;
+}
+
+.vlogs h2{
+margin-bottom:40px;
+font-weight: bold;
+text-align: center;
+font-family: 'Courgette',cursive;
+font-size:36px;
+color:#fff7ee;
+}
+
+.video-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+gap:30px;
+}
+
+iframe{
+width:100%;
+height:220px;
+border:none;
+border-radius:10px;
+}
+
+/* PACKAGES */
+
+.packages{
+padding:100px 20px;
+text-align:center;
+background:#f1d49b;
+}
+
+.packages h2{
+font-size:60px;
+font-weight: bold;
+margin-bottom:50px;
+color:#062036;
+font-family: 'Great Vibes',cursive;
+}
+
+.package-container{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+}
+
+.card-wedding{
+background: rgba(255, 247, 238, 0.5);
+padding:35px;
+width:260px;
+border-radius:10px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+/* transition:0.3s; */
+}
+
+.card-wedding:hover{
+transform:translateY(-10px);
+transition: 0.5s ease-in-out;
+border:2px solid #062036;
+
+}
+
+.card-wedding h3{
+font-size:28px;
+font-weight: bold;
+margin-bottom:20px;
+font-family: 'Courgette',cursive;
+color:#062036;
+}
+
+.card-wedding ul{
+list-style:none;
+line-height:2;
+margin-bottom:20px;
+}
+
+.card-wedding button{
+padding:10px 20px;
+border:none;
+background:#062036;
+color:#fff7ee;
+cursor:pointer;
+border-radius:5px;
+}
+
+
+
+/* CTA */
+
+.cta{
+padding:120px 20px;
+text-align:center;
+background:#062036;
+color:white;
+}
+
+.cta h2{
+font-size:42px;
+font-weight: bold;
+margin-bottom:30px;
+font-family: 'Courgette',cursive;
+color:#fff7ee;
+}
+
+.cta button{
+padding:14px 32px;
+font-size:18px;
+border:none;
+background:#f1d49b;
+font-family: cursive;
+color:#062036;
+cursor:pointer;
+border-radius:6px;
+}
+
+/* =========================
+TABLET (1024px)
+========================= */
+
+@media (max-width:1024px){
+
+.hero-wedding h1{
+font-size:42px;
+}
+
+.hero-wedding p{
+font-size:24px;
+}
+
+.wedding-gallery-row img{
+height:220px;
+}
+
+.video-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.package-container{
+gap:20px;
+}
+
+.card-wedding{
+width:220px;
+}
+
+}
+
+
+/* =========================
+TABLET SMALL (768px)
+========================= */
+
+@media (max-width:768px){
+
+.hero-wedding{
+height:70vh;
+padding:20px;
+}
+
+.hero-wedding-content{
+padding:35px;
+}
+
+.hero-wedding h1{
+font-size:34px;
+}
+
+.hero-wedding p{
+font-size:22px;
+}
+
+.story{
+padding:80px 20px;
+}
+
+.story h2{
+font-size:34px;
+}
+
+.story p{
+  padding: 15px;
+}
+
+.wedding-gallery{
+padding:30px 20px 60px 20px;
+}
+
+.wedding-gallery h2{
+font-size:30px;
+}
+
+.wedding-gallery-row img{
+height:200px;
+}
+
+.scroll-btn{
+width:38px;
+height:38px;
+font-size:22px;
+}
+
+/* .video-grid{
+grid-template-columns:1fr;
+} */
+
+.packages h2{
+font-size:48px;
+}
+
+.package-container{
+/* flex-direction:column; */
+align-items:center;
+}
+
+.card-wedding{
+width:90%;
+max-width:350px;
+}
+
+.cta h2{
+font-size:34px;
+}
+
+}
+
+
+/* =========================
+MOBILE (480px)
+========================= */
+
+@media (max-width:480px){
+
+.hero-wedding{
+height:60vh;
+}
+
+.hero-wedding-content{
+padding:25px;
+}
+
+.hero-wedding h1{
+font-size:28px;
+}
+
+.hero-wedding p{
+font-size:20px;
+}
+
+.hero-wedding button{
+padding:10px 22px;
+font-size:14px;
+}
+
+.story{
+padding:60px 15px;
+}
+
+.story h2{
+/* font-size:28px; */
+max-width: 100%;
+}
+
+.wedding-gallery h2{
+font-size:26px;
+}
+
+.wedding-gallery-row{
+gap:12px;
+}
+
+.wedding-gallery-row img{
+height:170px;
+}
+
+.scroll-btn{
+display:none;
+}
+
+.vlogs h2{
+  font-size: 25px;
+}
+
+.video-grid{
+grid-template-columns:1fr;
+}
+
+
+.video-grid iframe{
+height:190px;
+}
+
+.packages h2{
+font-size:40px;
+}
+
+.card-wedding{
+padding:25px;
+}
+
+.cta{
+padding:80px 20px;
+}
+
+.cta h2{
+font-size:26px;
+}
+
+.cta button{
+padding:12px 24px;
+font-size:16px;
+}
+
+}
+
+
+/* =========================
+LIGHTBOX RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+.lightbox img{
+max-width:95%;
+max-height:70%;
+}
+
+.close{
+font-size:30px;
+top:20px;
+right:25px;
+}
+
+}

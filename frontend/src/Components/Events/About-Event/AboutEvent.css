@@ -1,0 +1,114 @@
+/* ------------------- About Event ------------ */
+
+
+.about-event{
+ background-color: #f1d49b;
+font-family: Cinzel;
+      
+}
+
+/* Gallery Section */
+
+#gallery-text {
+  font-family: cursive;
+  text-transform: uppercase;
+  font-weight: 00;
+}
+
+.img-gallery {
+  border-radius: 10px;
+}
+
+.img-gallery:hover {
+  box-shadow:
+    rgba(215, 225, 31, 0.16) 0px 10px 36px 0px,
+    rgba(218, 180, 7, 0.06) 0px 0px 0px 1px;
+  transform: translate(-2%, -2%);
+  transition: transform 0.4s ease;
+}
+
+hr {
+  color: #d29110;
+}
+
+/* Side-card */
+
+.side-card {
+  background-color: #fff7ee;
+  padding: 20px;
+  margin-top: 20px;
+  color: #062036;
+  border-radius: 10px;
+  font-family: cinzel;
+}
+
+.side-card:hover {
+  /* opacity: 0.78; */
+  transform: translateY(-1%);
+  transition: transform 0.3s ease;
+}
+
+.side-card .icon i {
+  color: #d3b679;
+  font-size: 20px;
+}
+
+.side-card a {
+  background-color: #d3b679;
+  border: none;
+  color: #fff;
+  width: 100%;
+}
+
+.side-card a:hover {
+  background-color: #d6aa5f;
+  transition: 0.3 ease-in-out;
+}
+
+.side-card img {
+  border-radius: 90%;
+}
+
+@media (max-width: 768px) {
+  #email-id {
+    font-size: 15px;
+  }
+  #planner {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 576px){
+  #planner{
+    font-size: 15px;
+  }
+}
+
+#card-book {
+  background-color: #fff7ee;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.card {
+  border-radius: 8px;
+}
+
+.card:hover {
+  /* opacity: 0.89; */
+  transform: translateY(-3%);
+  transition: transform 0.4s ease;
+}
+
+.card h5 {
+  color: #d3b679;
+}
+
+.card a {
+  margin-left: 100px;
+}
+
+#gallery-text-box {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

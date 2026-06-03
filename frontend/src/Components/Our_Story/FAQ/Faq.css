@@ -1,0 +1,70 @@
+/* FAQ Section */
+
+.faq-glass-section {
+  background: linear-gradient(
+    135deg,
+    rgba(4, 28, 50, 0.95),
+    rgba(4, 28, 50, 0.85)
+  ) !important;
+
+  color: #fff;
+}
+
+/* Title */
+.faq-title {
+  font-family: Cinzel;
+  color: #d3b679;
+  font-size: 2.5rem;
+}
+
+.faq-subtitle {
+  color: #dce4eb;
+  font-style: italic;
+}
+
+/* Glass Cards */
+.glass-card-faq {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+/* Accordion Button */
+.accordion-button {
+  background: transparent !important;
+  color: #fff !important;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #d3b679 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Remove default arrow background */
+.accordion-button::after {
+  filter: invert(1);
+}
+
+/* Body */
+.accordion-body {
+  color: #e9edf1 !important;
+  line-height: 1.7;
+}
+
+/* Remove default borders */
+.accordion-item {
+  border: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 576px) {
+  .faq-title {
+    font-size: 1.9rem;
+  }
+}

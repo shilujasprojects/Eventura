@@ -1,0 +1,161 @@
+/* --------------------- Book Now Section ------------- */
+
+.book-now-section{
+    background: linear-gradient(180deg, #f1d49b, #fff7ee);
+    margin-top: 95px;
+    color: #062036;
+}
+ .main-section{
+      position: relative;
+      
+    }
+
+    .card-box {
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.3s;
+    }
+
+    .card-box:hover,
+    .card-box.active {
+      border-color: #c89b5c;
+      background: #fffaf2;
+    }
+
+    .summary-box {
+      position: sticky;
+      top: 20px;
+    }
+
+    .btn-gold {
+      background: #c89b5c !important;
+      color: #fff !important;
+      border: none;
+    }
+
+    .btn-gold:hover {
+      background: #b1874e !important;
+      color: #eee !important;
+    }
+
+/* Event card */
+.event-card {
+  min-width: 140px;
+  background: #fffaf2;
+  border-radius: 16px;
+  border: 1px solid #e5e5e5;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  text-align: center;
+}
+
+
+
+
+/* Thumbnail image */
+.event-card img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Text */
+.event-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Hover effect */
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: 0.2s ease-in-out;
+  
+
+}
+
+/* Active / selected state */
+.event-card.active {
+  border: 2px solid #b1874e;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+}
+
+/* Form */
+.form-control{
+  background-color: #fffaf2;
+  color: grey;
+}
+
+textarea.form-control {
+  height: 100%;
+}
+
+
+
+.service-card {
+  background: #f2ebe2;
+  border-radius: 20px;
+  padding: 25px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-card.active {
+  border: 2px solid #062036;
+  background: #e0d2c1;
+}
+
+.summary-box {
+  /* background: #062036; */
+  background: linear-gradient(
+    135deg,
+    rgba(4, 28, 50, 0.95),
+    rgba(4, 28, 50, 0.85)
+  );
+  color: #fff7ee;
+  border-radius: 15px;
+}
+
+
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 55px;
+  height: 55px;
+  background-color: #25D366;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  text-decoration: none;
+  z-index: 1000;
+  box-shadow: 0 6px 18px rgba(6, 32, 54, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 28px rgba(6, 32, 54, 0.45);
+  color: #fff;
+}
+
+
+@media (max-width: 768px){
+  .event-card img{
+    height: 90px;
+  }
+  
+}

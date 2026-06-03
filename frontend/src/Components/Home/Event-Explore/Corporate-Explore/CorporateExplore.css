@@ -1,0 +1,620 @@
+/* CorporateExplore.css */
+
+.corporate-explore {
+  background-color: #fff7ee;
+  overflow-x: hidden;
+}
+
+/* HERO */
+
+.corporate-explore-hero {
+  position: relative;
+  height: 95vh;
+}
+
+.corporate-explore-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(40%);
+}
+
+.corporate-explore-overlay {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
+  color: white;
+}
+
+.corporate-explore-overlay p {
+  color: #f1d49b;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+}
+
+.corporate-explore-overlay h1 {
+  font-size: 78px;
+  line-height: 95px;
+  font-family: "Cinzel", serif;
+  margin-bottom: 30px;
+}
+
+.corporate-explore-overlay button {
+
+  border: none;
+
+  padding: 15px 35px;
+
+  background-color: #f1d49b;
+
+  color: #062036;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.corporate-explore-overlay button:hover {
+  background-color: white;
+}
+
+/* WELCOME */
+
+.corporate-explore-welcome-section {
+
+  width: 82%;
+
+  margin: 120px auto;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1.2fr 1fr;
+
+  gap: 35px;
+
+  align-items: center;
+}
+
+.corporate-explore-welcome-left img,
+.corporate-explore-welcome-right img {
+
+  width: 100%;
+
+  height: 380px;
+
+  object-fit: cover;
+}
+
+.corporate-explore-welcome-center {
+
+  background-color: white;
+
+  padding: 70px 45px;
+
+  text-align: center;
+
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+}
+
+.corporate-explore-welcome-center p {
+
+  color: #b68d5a;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 20px;
+
+  font-size: 13px;
+}
+
+.corporate-explore-welcome-center h2 {
+
+  font-size: 48px;
+
+  line-height: 68px;
+
+  color: #062036;
+
+  font-family: "Cinzel", serif;
+
+  margin-bottom: 20px;
+}
+
+.corporate-explore-welcome-center span {
+
+  display: block;
+
+  color: #777;
+
+  margin-bottom: 30px;
+}
+
+.corporate-explore-welcome-center button {
+
+  border: none;
+
+  padding: 14px 35px;
+
+  background-color: #062036;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+/* FEATURE */
+
+.corporate-explore-feature-image {
+  position: relative;
+  margin-bottom: 120px;
+}
+
+.corporate-explore-feature-image img {
+  width: 100%;
+  height: 700px;
+  object-fit: cover;
+  filter: brightness(50%);
+}
+
+.corporate-explore-feature-content {
+
+  position: absolute;
+
+  top: 50%;
+
+  left: 10%;
+
+  transform: translateY(-50%);
+
+  width: 40%;
+
+  color: white;
+}
+
+.corporate-explore-feature-content h2 {
+
+  font-size: 62px;
+
+  line-height: 80px;
+
+  font-family: "Cinzel", serif;
+
+  margin-bottom: 30px;
+}
+
+.corporate-explore-feature-content p {
+
+  line-height: 35px;
+
+  color: #efefef;
+
+  font-size: 17px;
+}
+
+/* BRANDS */
+
+.corporate-explore-brands {
+
+  text-align: center;
+
+  margin-bottom: 120px;
+}
+
+.corporate-explore-brands p {
+
+  letter-spacing: 3px;
+
+  color: #b68d5a;
+
+  margin-bottom: 40px;
+}
+
+.corporate-explore-brand-logos {
+
+  display: flex;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 60px;
+}
+
+.corporate-explore-brand-logos span {
+
+  font-size: 28px;
+
+  font-family: "Cinzel", serif;
+
+  color: #062036;
+}
+
+/* SERVICES */
+
+.corporate-explore-services-section {
+
+  width: 82%;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 60px;
+
+  margin-bottom: 120px;
+}
+
+.corporate-explore-services-left h2 {
+
+  font-size: 58px;
+
+  line-height: 75px;
+
+  color: #062036;
+
+  font-family: "Cinzel", serif;
+
+  margin-bottom: 30px;
+}
+
+.corporate-explore-services-left p {
+
+  line-height: 35px;
+
+  color: #555;
+
+  margin-bottom: 30px;
+}
+
+.corporate-explore-services-left button {
+
+  border: none;
+
+  padding: 15px 35px;
+
+  background-color: #062036;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+.corporate-explore-services-right {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 25px;
+}
+
+.corporate-explore-service-card {
+
+  background-color: white;
+
+  padding: 35px;
+
+  border-left: 4px solid #f1d49b;
+
+  box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+}
+
+.corporate-explore-service-card h3 {
+
+  font-size: 28px;
+
+  color: #062036;
+
+  font-family: "Cinzel", serif;
+
+  margin-bottom: 15px;
+}
+
+.corporate-explore-service-card p {
+  color: #666;
+  line-height: 30px;
+}
+
+/* GALLERY */
+
+.corporate-explore-gallery {
+
+  width: 82%;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(3,1fr);
+
+  gap: 25px;
+
+  margin-bottom: 120px;
+}
+
+.corporate-explore-gallery img {
+
+  width: 100%;
+
+  height: 450px;
+
+  object-fit: cover;
+}
+
+/* PACKAGES */
+
+.corporate-explore-packages-wrapper {
+
+  width: 82%;
+
+  margin: auto;
+
+  margin-bottom: 140px;
+}
+
+.corporate-explore-package-heading {
+
+  text-align: center;
+
+  margin-bottom: 70px;
+}
+
+.corporate-explore-package-heading p {
+
+  color: #b68d5a;
+
+  letter-spacing: 4px;
+
+  margin-bottom: 18px;
+}
+
+.corporate-explore-package-heading h2 {
+
+  font-size: 56px;
+
+  color: #062036;
+
+  font-family: "Cinzel", serif;
+}
+
+/* GRID */
+
+.corporate-explore-packages {
+
+  display: grid;
+
+  grid-template-columns: repeat(4,1fr);
+
+  gap: 25px;
+}
+
+/* CARD */
+
+.corporate-explore-package-card {
+
+  position: relative;
+
+  padding: 45px 30px;
+
+  border-radius: 28px;
+
+  background:
+    rgba(255,255,255,0.28);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
+  border:
+    1px solid rgba(255,255,255,0.4);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.08);
+
+  transition:
+    0.4s ease;
+
+  overflow: hidden;
+}
+
+.corporate-explore-package-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  background:
+    rgba(241,212,155,0.18);
+
+  border-radius: 50%;
+
+  top: -60px;
+  right: -60px;
+}
+
+.corporate-explore-package-card:hover {
+  transform: translateY(-10px);
+}
+
+.corporate-explore-package-card h3,
+.corporate-explore-package-card h2,
+.corporate-explore-package-card ul,
+.corporate-explore-package-card button {
+  position: relative;
+  z-index: 2;
+}
+
+.corporate-explore-package-card h3 {
+
+  font-size: 30px;
+
+  color: #062036;
+
+  margin-bottom: 15px;
+
+  font-family: "Cinzel", serif;
+}
+
+.corporate-explore-package-card h2 {
+
+  font-size: 45px;
+
+  color: #b68d5a;
+
+  margin-bottom: 28px;
+}
+
+.corporate-explore-package-card ul {
+
+  list-style: none;
+
+  padding: 0;
+
+  margin-bottom: 35px;
+}
+
+.corporate-explore-package-card ul li {
+
+  margin-bottom: 15px;
+
+  color: #4d5a66;
+
+  line-height: 28px;
+}
+
+.corporate-explore-package-card button {
+
+  border: none;
+
+  background: #062036;
+
+  color: white;
+
+  padding: 14px 28px;
+
+  border-radius: 40px;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.corporate-explore-package-card button:hover {
+  background: #f1d49b;
+  color: #062036;
+}
+
+/* PREMIUM */
+
+.premium-package {
+
+  transform:
+    scale(1.04);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(241,212,155,0.20),
+      rgba(255,255,255,0.35)
+    );
+}
+
+.corporate-package-tag {
+
+  position: absolute;
+
+  top: 18px;
+  right: 18px;
+
+  background: #062036;
+
+  color: #f1d49b;
+
+  padding: 7px 16px;
+
+  border-radius: 40px;
+
+  font-size: 11px;
+
+  letter-spacing: 1px;
+
+  z-index: 3;
+}
+
+/* TABLET */
+
+@media (max-width: 992px) {
+
+  .corporate-explore-overlay h1,
+  .corporate-explore-feature-content h2,
+  .corporate-explore-services-left h2 {
+
+    font-size: 45px;
+    line-height: 60px;
+  }
+
+  .corporate-explore-welcome-section,
+  .corporate-explore-services-section {
+
+    grid-template-columns: 1fr;
+  }
+
+  .corporate-explore-feature-content {
+    width: 70%;
+  }
+
+  .corporate-explore-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .corporate-explore-packages {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+/* MOBILE */
+
+@media (max-width: 576px) {
+
+  .corporate-explore-overlay {
+    left: 8%;
+  }
+
+  .corporate-explore-overlay h1 {
+
+    font-size: 38px;
+    line-height: 52px;
+  }
+
+  .corporate-explore-welcome-center h2,
+  .corporate-explore-feature-content h2,
+  .corporate-explore-services-left h2 {
+
+    font-size: 34px;
+    line-height: 50px;
+  }
+
+  .corporate-explore-feature-content {
+    width: 85%;
+  }
+
+  .corporate-explore-packages {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-package {
+    transform: scale(1);
+  }
+
+}

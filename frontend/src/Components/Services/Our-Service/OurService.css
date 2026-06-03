@@ -1,0 +1,72 @@
+/* ----------------- Our Services Section -------------------- */
+
+
+ @media (max-width: 576px) {
+
+  .divider::before,
+  .divider::after {
+    flex: 0.5;
+    display: none;
+}
+ }
+
+ .our-service-card{
+    background-color: #f1d49b;
+    border-radius: none;
+ }
+
+
+
+.service-image-card {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.service-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* Overlay */
+.service-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.service-overlay h4 {
+  color: #fff;
+  font-family: Cinzel;
+  font-size: 22px;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.4s ease;
+}
+
+/* Hover Effects */
+.service-image-card:hover img {
+  transform: scale(1.1);
+}
+
+.service-image-card:hover .service-overlay {
+  opacity: 1;
+}
+
+.service-image-card:hover .service-overlay h4 {
+  transform: translateY(0);
+}
