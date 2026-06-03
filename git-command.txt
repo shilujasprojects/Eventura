@@ -1,0 +1,50 @@
+2. Create a new branch
+
+For example:
+
+git checkout -b feature/current-task
+
+or
+
+git checkout -b development
+
+This creates the branch and switches to it.
+
+3. Verify you're on the new branch
+git branch
+
+Output:
+
+* feature/current-task
+  main
+
+The * indicates your current branch.
+
+4. Continue your work
+
+Any new commits will go only to feature/current-task.
+
+git add .
+git commit -m "Added new feature"
+5. Switch back to the backup branch anytime
+git checkout main
+
+You'll see the original code as it was when you created the branch.
+
+6. Push the new branch to GitHub (when authentication is fixed)
+git push -u origin feature/current-task
+
+A common professional setup is:
+
+main                ← stable/backup branch
+feature/auth        ← authentication work
+feature/payment     ← payment work
+feature/ui-redesign ← UI changes
+
+You can see all branches with:
+
+git branch
+
+and all local + remote branches with:
+
+git branch -a

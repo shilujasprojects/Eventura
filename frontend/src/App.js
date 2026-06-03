@@ -14,7 +14,7 @@ import BirthdayExplore from './Components/Home/Event-Explore/Birthday-Explore/Bi
 import FuneralExplore from './Components/Home/Event-Explore/Funeral-Explore/FuneralExplore';
 import BabyShowerExplore from './Components/Home/Event-Explore/BabyShower-Explore/BabyShowerExplore';
 import Auth from './Components/Auth/Auth';
-import LiquidBackground from './Components/Auth/LiquidBackground';
+
 import EngagementExplore from './Components/Home/Event-Explore/Engagement-Explore/EngagementExplore';
 import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Explore/HousewarmingExplore';
 import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
@@ -37,7 +37,7 @@ function App() {
       <Routes>
             <Route path ='/' element={<Home />} />
             <Route path='/loginSign' element={<Auth />} />
-            <Route path='liquidBackground' element={<LiquidBackground />} />
+           
             <Route path ='/events' element={<Events />} />
             <Route path ='/services' element={<Services />} />
             <Route path ='/about' element={<Story />} />

@@ -1,13 +1,23 @@
-import React from 'react'
-import Admin from '../Components/Admin/Admin'
+import Sidebar from "../Components/Admin/Sidebar/Sidebar";
+import AdminNavbar from "../Components/Admin/AdminNavbar/AdminNavbar";
+import AdminDashboardCards from "../Components/Admin/DashboardCards/AdminDashboardCards";
 
+import "../App.css";
 
-const AdminDashboard = () => {
+function AdminDashboard() {
   return (
-    <div>
-      <Admin />
+    <div className="adminDashboard">
+      <Sidebar />
+
+      <div className="adminDashboardContent">
+        <AdminNavbar />
+
+        <div className="adminDashboardBody">
+          <AdminDashboardCards />
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default AdminDashboard
+export default AdminDashboard;

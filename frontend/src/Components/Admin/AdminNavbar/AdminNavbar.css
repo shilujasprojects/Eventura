@@ -1,0 +1,155 @@
+.admin-navbar {
+  height: 90px;
+
+  background-color: #061521;
+
+  border-bottom: 1px solid rgba(241, 212, 155, 0.1);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+}
+
+/* Left */
+
+.navbar-left h2 {
+  margin: 0;
+  margin-top: 5px;
+  font-family: Cinzel;
+  color: #fff7ee;
+  font-size: 1.6rem;
+}
+
+.navbar-left p {
+  margin: 0;
+  color: #8a9ba8;
+  font-size: 0.9rem;
+}
+
+/* Right */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Search */
+
+.search-box {
+  width: 280px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 15px;
+
+  background-color: #0d2131;
+
+  border: 1px solid rgba(241, 212, 155, 0.1);
+
+  border-radius: 10px;
+
+  color: #8a9ba8;
+}
+
+.search-box input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  color: #fff7ee;
+}
+
+.search-box input::placeholder {
+  color: #8a9ba8;
+}
+
+/* Icons */
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  background-color: #0d2131;
+  color: #fff7ee;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 0.3s;
+}
+
+.icon-btn:hover {
+  color: #f1d49b;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background-color: #f1d49b;
+
+  position: absolute;
+  margin-top: -15px;
+  margin-left: 15px;
+}
+
+/* Profile */
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 8px 12px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.profile-section:hover {
+  background-color: rgba(241, 212, 155, 0.08);
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background-color: #f1d49b;
+  color: #061521;
+
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-details h6 {
+  margin: 0;
+  color: #fff7ee;
+}
+
+.profile-details span {
+  color: #8a9ba8;
+  font-size: 0.8rem;
+}

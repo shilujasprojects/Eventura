@@ -1,0 +1,60 @@
+.adminDashboardCards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.adminDashboardCards-card {
+  background: #0d2131;
+
+  border: 1px solid rgba(241, 212, 155, 0.08);
+
+  border-radius: 16px;
+
+  padding: 24px;
+
+  transition: all 0.3s ease;
+}
+
+.adminDashboardCards-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(241, 212, 155, 0.3);
+}
+
+.adminDashboardCards-icon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(241, 212, 155, 0.1);
+
+  color: #f1d49b;
+
+  margin-bottom: 18px;
+}
+
+.adminDashboardCards-card h2 {
+  color: #fff7ee;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.adminDashboardCards-card p {
+  color: #8a9ba8;
+  margin-bottom: 15px;
+}
+
+.adminDashboardCards-growth {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #4ade80;
+  font-size: 0.85rem;
+}
