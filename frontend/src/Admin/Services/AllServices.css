@@ -1,0 +1,195 @@
+.allServices {
+  padding: 25px;
+}
+
+/* Header */
+
+.allServices-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.allServices-header h2 {
+  color: #fff7ee;
+
+  margin: 0;
+}
+
+.allServices-header p {
+  color: #8a9ba8;
+
+  margin-top: 5px;
+}
+
+/* Add Button */
+
+.allServices-addBtn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 12px 18px;
+
+  background-color: #f1d49b;
+
+  color: #062036;
+
+  border: none;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: 0.3s;
+}
+
+.allServices-addBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Search */
+
+.allServices-searchBox {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  height: 50px;
+
+  padding: 0 15px;
+
+  background-color: #0d2131;
+
+  border: 1px solid rgba(241, 212, 155, 0.1);
+
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+
+  color: #8a9ba8;
+}
+
+.allServices-searchBox input {
+  flex: 1;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #fff7ee;
+}
+
+.allServices-searchBox input::placeholder {
+  color: #8a9ba8;
+}
+
+/* Table */
+
+.allServices-tableWrapper {
+  background-color: #0d2131;
+
+  border: 1px solid rgba(241, 212, 155, 0.1);
+
+  border-radius: 15px;
+
+  overflow: hidden;
+}
+
+.allServices-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.allServices-table thead {
+  background-color: rgba(241, 212, 155, 0.05);
+}
+
+.allServices-table th {
+  text-align: left;
+
+  padding: 18px;
+
+  color: #f1d49b;
+
+  font-size: 0.9rem;
+}
+
+.allServices-table td {
+  padding: 18px;
+
+  color: #fff7ee;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Status */
+
+.allServices-status {
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 0.8rem;
+}
+
+.allServices-status.active {
+  background-color: rgba(74, 222, 128, 0.15);
+
+  color: #4ade80;
+}
+
+.allServices-status.inactive {
+  background-color: rgba(239, 68, 68, 0.15);
+
+  color: #ef4444;
+}
+
+/* Actions */
+
+.allServices-actions {
+  display: flex;
+
+  gap: 10px;
+}
+
+.allServices-actions button {
+  width: 35px;
+
+  height: 35px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background-color: #061521;
+
+  color: #fff7ee;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: 0.3s;
+}
+
+.allServices-actions button:hover {
+  color: #f1d49b;
+}

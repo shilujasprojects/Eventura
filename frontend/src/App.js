@@ -19,7 +19,14 @@ import EngagementExplore from './Components/Home/Event-Explore/Engagement-Explor
 import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Explore/HousewarmingExplore';
 import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
 import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
-import AdminDashboard from './Pages/AdminDashboard';
+import AdminDashboard from './Pages/Admin/Dashboard';
+import AdminEvent from './Pages/Admin/Events/Event';
+import AddEvent from './Pages/Admin/Events/AddEvent';
+import AdminPackage from './Pages/Admin/Packages/Package';
+import AddPackage from './Pages/Admin/Packages/AddPackage';
+import AdminService from './Pages/Admin/Services/Service'
+import AddService from './Pages/Admin/Services/AddService';
+
 
 
 function App() {
@@ -53,6 +60,12 @@ function App() {
             <Route path='/anniversary-explore' element={<AnniversaryExplore />} />
             <Route path='/corporate-explore' element={<CorporateExplore /> } />
             <Route path='/adminDashboard' element={<AdminDashboard /> } />
+            <Route path='/adminEvents' element={<AdminEvent />} />
+            <Route path='/addEvents' element={<AddEvent />} />
+            <Route path='/adminPackages' element={<AdminPackage />} />
+            <Route path='/addPackage' element={<AddPackage />} />
+            <Route path='/adminServices' element={<AdminService />}/>
+            <Route path='/addService' element={<AddService />} />
            
         </Routes>
       

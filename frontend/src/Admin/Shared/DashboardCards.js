@@ -7,9 +7,9 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import "./AdminDashboardCards.css";
+import "./Admin.css";
 
-const AdminDashboardCards = () => {
+const DashboardCards = () => {
   const stats = [
     {
       label: "Total Bookings",
@@ -66,4 +66,4 @@ const AdminDashboardCards = () => {
   );
 };
 
-export default AdminDashboardCards;
+export default DashboardCards;

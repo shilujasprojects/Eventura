@@ -1,0 +1,109 @@
+.addService {
+  padding: 25px;
+}
+
+/* Header */
+
+.addService-header {
+  margin-bottom: 25px;
+}
+
+.addService-header h2 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+}
+
+.addService-header p {
+  color: #8a9ba8;
+}
+
+/* Card */
+
+.addService-card {
+  background-color: #0d2131;
+
+  border: 1px solid rgba(241, 212, 155, 0.1);
+
+  border-radius: 16px;
+
+  padding: 30px;
+
+  max-width: 1000px;
+}
+
+/* Grid */
+
+.addService-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px;
+}
+
+/* Form Group */
+
+.addService-formGroup {
+  display: flex;
+
+  flex-direction: column;
+
+  margin-bottom: 20px;
+}
+
+.addService-formGroup label {
+  color: #f1d49b;
+
+  margin-bottom: 8px;
+
+  font-size: 0.9rem;
+}
+
+.addService-formGroup input,
+.addService-formGroup textarea,
+.addService-formGroup select {
+  background-color: #061521;
+
+  border: 1px solid rgba(241, 212, 155, 0.15);
+
+  border-radius: 10px;
+
+  padding: 12px 15px;
+
+  color: #fff7ee;
+
+  outline: none;
+}
+
+.addService-formGroup input::placeholder,
+.addService-formGroup textarea::placeholder {
+  color: #8a9ba8;
+}
+
+.addService-formGroup textarea {
+  resize: vertical;
+}
+
+/* Button */
+
+.addService-submitBtn {
+  background-color: #f1d49b;
+
+  color: #062036;
+
+  border: none;
+
+  padding: 14px 20px;
+
+  border-radius: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.addService-submitBtn:hover {
+  transform: translateY(-2px);
+}

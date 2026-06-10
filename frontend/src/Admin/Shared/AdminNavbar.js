@@ -6,7 +6,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-import "./AdminNavbar.css";
+import "./Admin.css";
 
 const AdminNavbar = () => {
   return (

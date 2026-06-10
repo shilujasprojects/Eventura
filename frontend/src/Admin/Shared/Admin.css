@@ -1,0 +1,413 @@
+/* =====================================================
+   SIDEBAR CSS
+===================================================== */
+
+/* Sidebar Container */
+
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: #061521;
+  color: #fff7ee;
+
+  display: flex;
+  flex-direction: column;
+
+  border-right: 1px solid rgba(241, 212, 155, 0.1);
+
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+/* Logo */
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 20px;
+}
+
+.sidebar-logo-img {
+  width: 70px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.sidebar-brand {
+  margin: 0;
+
+  font-family: "Cinzel", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+
+  color: #fff7ee;
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Menu Section */
+
+.sidebar-menu-section {
+  margin-bottom: 20px;
+}
+
+.sidebar-menu-title {
+  color: #8a9ba8;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  letter-spacing: 1px;
+
+  padding: 0 20px;
+
+  margin-bottom: 10px;
+}
+
+/* Navigation Item */
+
+.sidebar-nav-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px 20px;
+
+  color: #fff7ee;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-nav-item:hover,
+.sidebar-nav-active {
+  color: #f1d49b;
+
+  background: linear-gradient(
+    90deg,
+    rgba(241, 212, 155, 0.1),
+    transparent
+  );
+
+  border-left: 3px solid #f1d49b;
+}
+
+/* Badge */
+
+.sidebar-menu-badge {
+  background-color: #f1d49b;
+  color: #061521;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  padding: 3px 8px;
+
+  border-radius: 20px;
+}
+
+/* Footer */
+
+.sidebar-footer {
+  margin-top: auto;
+
+  padding: 20px;
+
+  border-top: 1px solid rgba(241, 212, 155, 0.1);
+}
+
+/* Logout Button */
+
+.sidebar-logout-btn {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 12px;
+
+  background: transparent;
+  color: #fff7ee;
+
+  border: 1px solid rgba(241, 212, 155, 0.3);
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.sidebar-logout-btn:hover {
+  background-color: #f1d49b;
+  color: #061521;
+  border-color: #f1d49b;
+}
+
+/* ==========================================
+   EVENT MANAGEMENT SUBMENU
+========================================== */
+
+.sidebar-submenu {
+  margin-left: 40px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.sidebar-submenu-item {
+  padding: 10px 15px;
+  color: #8a9ba8;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-submenu-item:hover {
+  color: #f1d49b;
+}
+
+.sidebar-submenu-item.sidebar-nav-active {
+  color: #f1d49b;
+  font-weight: 600;
+}
+
+/* =====================================================
+   DASHBOARD CARDS CSS
+===================================================== */
+
+.adminDashboardCards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.adminDashboardCards-card {
+  background: #0d2131;
+
+  border: 1px solid rgba(241, 212, 155, 0.08);
+
+  border-radius: 16px;
+
+  padding: 24px;
+
+  transition: all 0.3s ease;
+}
+
+.adminDashboardCards-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(241, 212, 155, 0.3);
+}
+
+.adminDashboardCards-icon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(241, 212, 155, 0.1);
+
+  color: #f1d49b;
+
+  margin-bottom: 18px;
+}
+
+.adminDashboardCards-card h2 {
+  color: #fff7ee;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.adminDashboardCards-card p {
+  color: #8a9ba8;
+  margin-bottom: 15px;
+}
+
+.adminDashboardCards-growth {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #4ade80;
+  font-size: 0.85rem;
+}
+
+/* =====================================================
+   ADMIN NAVBAR CSS
+===================================================== */
+
+.admin-navbar {
+  height: 90px;
+
+  background-color: #061521;
+
+  border-bottom: 1px solid rgba(241, 212, 155, 0.1);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+}
+
+/* Left */
+
+.navbar-left h2 {
+  margin: 0;
+  margin-top: 5px;
+  font-family: Cinzel;
+  color: #fff7ee;
+  font-size: 1.6rem;
+}
+
+.navbar-left p {
+  margin: 0;
+  color: #8a9ba8;
+  font-size: 0.9rem;
+}
+
+/* Right */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Search */
+
+.search-box {
+  width: 280px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 15px;
+
+  background-color: #0d2131;
+
+  border: 1px solid rgba(241, 212, 155, 0.1);
+
+  border-radius: 10px;
+
+  color: #8a9ba8;
+}
+
+.search-box input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  color: #fff7ee;
+}
+
+.search-box input::placeholder {
+  color: #8a9ba8;
+}
+
+/* Icons */
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  background-color: #0d2131;
+  color: #fff7ee;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 0.3s;
+}
+
+.icon-btn:hover {
+  color: #f1d49b;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background-color: #f1d49b;
+
+  position: absolute;
+  margin-top: -15px;
+  margin-left: 15px;
+}
+
+/* Profile */
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 8px 12px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.profile-section:hover {
+  background-color: rgba(241, 212, 155, 0.08);
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background-color: #f1d49b;
+  color: #061521;
+
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-details h6 {
+  margin: 0;
+  color: #fff7ee;
+}
+
+.profile-details span {
+  color: #8a9ba8;
+  font-size: 0.8rem;
+}
