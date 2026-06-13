@@ -1,5 +1,5 @@
 .addService {
-  padding: 25px;
+  padding: 0px;
 }
 
 /* Header */
@@ -28,7 +28,7 @@
 
   padding: 30px;
 
-  max-width: 1000px;
+  max-width: 1500px;
 }
 
 /* Grid */
@@ -36,7 +36,7 @@
 .addService-grid {
   display: grid;
 
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 
   gap: 20px;
 }
@@ -75,9 +75,14 @@
   outline: none;
 }
 
+.addService-formGroup textarea{
+  max-height: max-content;
+}
+
 .addService-formGroup input::placeholder,
 .addService-formGroup textarea::placeholder {
   color: #8a9ba8;
+  padding: 0px;
 }
 
 .addService-formGroup textarea {
@@ -93,7 +98,7 @@
 
   border: none;
 
-  padding: 14px 20px;
+  padding: 12px;
 
   border-radius: 10px;
 

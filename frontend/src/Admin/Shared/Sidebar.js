@@ -122,6 +122,18 @@ const Sidebar = () => {
 
           {showEventManagement && (
             <div className="sidebar-submenu">
+               <div
+                className={`sidebar-submenu-item ${
+                  location.pathname === "/adminCategoryEvent"
+                    ? "sidebar-nav-active"
+                    : ""
+                }`}
+                onClick={() =>
+                  navigate("/adminCategoryEvent")
+                }
+              >
+                Category Events
+              </div>
               <div
                 className={`sidebar-submenu-item ${
                   location.pathname === "/adminEvents"

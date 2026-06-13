@@ -1,4 +1,4 @@
-.addEvent {
+.addCategory {
   padding: 0;
 }
 
@@ -6,16 +6,16 @@
    HEADER
 =================================== */
 
-.addEvent-header {
+.addCategory-header {
   margin-bottom: 25px;
 }
 
-.addEvent-header h2 {
+.addCategory-header h2 {
   color: #fff7ee;
   margin-bottom: 5px;
 }
 
-.addEvent-header p {
+.addCategory-header p {
   color: #8a9ba8;
 }
 
@@ -23,7 +23,7 @@
    CARD
 =================================== */
 
-.addEvent-card {
+.addCategory-card {
   background-color: #0d2131;
 
   border: 1px solid rgba(241, 212, 155, 0.1);
@@ -32,17 +32,17 @@
 
   padding: 30px;
 
-  max-width: 1200px;
+  max-width: 1000px;
 }
 
 /* ===================================
-   GRID ROW
+   ROW
 =================================== */
 
-.addEvent-formRow {
+.addCategory-formRow {
   display: grid;
 
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 2fr 1fr 2fr;
 
   gap: 20px;
 
@@ -53,14 +53,14 @@
    FORM GROUP
 =================================== */
 
-.addEvent-formGroup {
+.addCategory-formGroup {
   display: flex;
   flex-direction: column;
 
   margin-bottom: 20px;
 }
 
-.addEvent-formGroup label {
+.addCategory-formGroup label {
   color: #f1d49b;
 
   margin-bottom: 8px;
@@ -68,9 +68,9 @@
   font-size: 0.9rem;
 }
 
-.addEvent-formGroup input,
-.addEvent-formGroup textarea,
-.addEvent-formGroup select {
+.addCategory-formGroup input,
+.addCategory-formGroup select,
+.addCategory-formGroup textarea {
   background-color: #061521;
 
   border: 1px solid rgba(241, 212, 155, 0.15);
@@ -84,74 +84,23 @@
   outline: none;
 }
 
-.addEvent-formGroup input::placeholder,
-.addEvent-formGroup textarea::placeholder {
+.addCategory-formGroup input::placeholder,
+.addCategory-formGroup textarea::placeholder {
   color: #8a9ba8;
   padding: 0px;
 }
 
-.addEvent-formGroup textarea {
+.addCategory-formGroup textarea {
   resize: vertical;
   max-height: max-content;
 }
-
-
-/* ===================================
-   PACKAGES
-=================================== */
-
-.addEvent-packages {
-  margin-top: 20px;
-}
-
-.addEvent-packages h4 {
-  color: #f1d49b;
-
-  margin-bottom: 15px;
-
-  font-size: 1rem;
-}
-
-.addEvent-packagesGrid {
-  display: grid;
-
-  grid-template-columns: repeat(4, 1fr);
-
-  gap: 12px;
-}
-
-.addEvent-packageItem {
-  display: flex;
-  align-items: center;
-
-  gap: 8px;
-
-  padding: 12px 15px;
-
-  background-color: #061521;
-
-  border: 1px solid rgba(241, 212, 155, 0.1);
-
-  border-radius: 10px;
-
-  color: #fff7ee;
-
-  cursor: pointer;
-}
-
-.addEvent-packageItem input[type="checkbox"] {
-  margin: 5px;
-  width: 16px;
-  height: 16px;
-}
-
 
 /* ===================================
    BUTTON
 =================================== */
 
-.addEvent-submitBtn {
-  margin-top: 25px;
+.addCategory-submitBtn {
+  margin-top: 10px;
 
   background-color: #f1d49b;
 
@@ -170,6 +119,6 @@
   transition: 0.3s;
 }
 
-.addEvent-submitBtn:hover {
+.addCategory-submitBtn:hover {
   transform: translateY(-2px);
 }

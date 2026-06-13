@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import "./AddPackages.css";
 
 const AddPackages = () => {
@@ -28,32 +27,29 @@ const AddPackages = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log({
+    const packageData = {
       services: selectedServices,
-    });
+    };
+
+    console.log(packageData);
   };
 
   return (
     <div className="addPackage">
-
       {/* Header */}
 
       <div className="addPackage-header">
-
         <h2>Add Package</h2>
-
         <p>Create a new package for Eventura</p>
-
       </div>
 
       {/* Card */}
 
       <div className="addPackage-card">
-
         <form onSubmit={handleSubmit}>
+          {/* Row 1 */}
 
           <div className="addPackage-grid">
-
             <div className="addPackage-formGroup">
               <label>Package Name</label>
 
@@ -95,30 +91,26 @@ const AddPackages = () => {
                 <option>Inactive</option>
               </select>
             </div>
-
           </div>
 
-          <div className="addPackage-formGroup">
-            <label>Package Image</label>
+          {/* Row 2 */}
+    
+            <div className="addPackage-formGroup addPackage-description">
+              <label>Description</label>
 
-            <input type="file" />
-          </div>
+              <textarea
+                rows="4"
+                placeholder="Enter Package Description"
+              />
+            </div>
+          
 
-          <div className="addPackage-formGroup">
-            <label>Description</label>
+          {/* Services */}
 
-            <textarea
-              rows="4"
-              placeholder="Enter Package Description"
-            />
-          </div>
-
-          <div className="addPackage-formGroup">
-
-            <label>Services Included</label>
+          <div className="addPackage-services">
+            <h4>Services Included</h4>
 
             <div className="addPackage-servicesGrid">
-
               {services.map((service) => (
                 <label
                   key={service}
@@ -134,9 +126,7 @@ const AddPackages = () => {
                   {service}
                 </label>
               ))}
-
             </div>
-
           </div>
 
           <button
@@ -145,11 +135,8 @@ const AddPackages = () => {
           >
             Save Package
           </button>
-
         </form>
-
       </div>
-
     </div>
   );
 };

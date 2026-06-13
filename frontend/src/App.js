@@ -20,6 +20,8 @@ import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Ex
 import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
 import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
 import AdminDashboard from './Pages/Admin/Dashboard';
+import AdminCategoryEvent from './Pages/Admin/CategoryEvent/CategoryEvent';
+import AddCategoryEvent from './Pages/Admin/CategoryEvent/AddCategoryEvent';
 import AdminEvent from './Pages/Admin/Events/Event';
 import AddEvent from './Pages/Admin/Events/AddEvent';
 import AdminPackage from './Pages/Admin/Packages/Package';
@@ -60,6 +62,8 @@ function App() {
             <Route path='/anniversary-explore' element={<AnniversaryExplore />} />
             <Route path='/corporate-explore' element={<CorporateExplore /> } />
             <Route path='/adminDashboard' element={<AdminDashboard /> } />
+            <Route path='/adminCategoryEvent' element={<AdminCategoryEvent />}/>
+            <Route path='/addCategoryEvent' element={<AddCategoryEvent />} />
             <Route path='/adminEvents' element={<AdminEvent />} />
             <Route path='/addEvents' element={<AddEvent />} />
             <Route path='/adminPackages' element={<AdminPackage />} />

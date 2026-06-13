@@ -2,139 +2,160 @@ import React, { useState } from "react";
 import "./AddEvents.css";
 
 const AddEvent = () => {
-  const [eventData, setEventData] = useState({
-    eventName: "",
-    price: "",
-    shortDescription: "",
-    description: "",
-    status: "Active",
-    bannerImage: null,
-  });
+  const [selectedPackages, setSelectedPackages] = useState([]);
 
-  const handleChange = (e) => {
-    setEventData({
-      ...eventData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const packages = [
+    "Basic Package",
+    "Premium Package",
+    "Luxury Package",
+    "Royal Package",
+  ];
 
-  const handleImageChange = (e) => {
-    setEventData({
-      ...eventData,
-      bannerImage: e.target.files[0],
-    });
+  const handlePackageChange = (pkg) => {
+    setSelectedPackages((prev) =>
+      prev.includes(pkg)
+        ? prev.filter((item) => item !== pkg)
+        : [...prev, pkg]
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(eventData);
-
-    // API Call Here
+    console.log({
+      packages: selectedPackages,
+    });
   };
 
   return (
     <div className="addEvent">
+      {/* Header */}
 
-      {/* Page Header */}
       <div className="addEvent-header">
         <h2>Add Event</h2>
         <p>Create a new event for Eventura</p>
       </div>
 
-      {/* Form Card */}
+      {/* Card */}
+
       <div className="addEvent-card">
-
         <form onSubmit={handleSubmit}>
+          {/* Row 1 */}
 
-          {/* Event Name */}
-          <div className="addEvent-formGroup">
-            <label>Event Name</label>
+          <div className="addEvent-formRow">
+            <div className="addEvent-formGroup">
+              <label>Event Name</label>
 
-            <input
-              type="text"
-              name="eventName"
-              placeholder="Enter event name"
-              value={eventData.eventName}
-              onChange={handleChange}
-            />
+              <input
+                type="text"
+                placeholder="Enter Event Name"
+              />
+            </div>
+
+            <div className="addEvent-formGroup">
+              <label>Event Category</label>
+
+              <select>
+                <option>Wedding</option>
+                <option>Birthday</option>
+                <option>Engagement</option>
+                <option>Baby Shower</option>
+                <option>Anniversary</option>
+                <option>Housewarming</option>
+                <option>Corporate Event</option>
+                <option>Funeral Service</option>
+              </select>
+            </div>
+
+            <div className="addEvent-formGroup">
+              <label>Starting Price</label>
+
+              <input
+                type="number"
+                placeholder="Enter Price"
+              />
+            </div>
+
+            <div className="addEvent-formGroup">
+              <label>Status</label>
+
+              <select>
+                <option>Active</option>
+                <option>Inactive</option>
+              </select>
+            </div>
           </div>
 
-          {/* Price */}
-          <div className="addEvent-formGroup">
-            <label>Starting Price</label>
+          {/* Row 2 */}
 
-            <input
-              type="number"
-              name="price"
-              placeholder="Enter price"
-              value={eventData.price}
-              onChange={handleChange}
-            />
+          <div className="addEvent-formRow">
+            <div className="addEvent-formGroup">
+              <label>Cover Image</label>
+
+              <input type="file" />
+            </div>
+
+            <div className="addEvent-formGroup">
+              <label>Gallery Images (Optional)</label>
+
+              <input type="file" multiple />
+            </div>
           </div>
 
           {/* Short Description */}
+
           <div className="addEvent-formGroup">
             <label>Short Description</label>
 
             <textarea
               rows="3"
-              name="shortDescription"
-              placeholder="Short event description"
-              value={eventData.shortDescription}
-              onChange={handleChange}
+              placeholder="Enter Short Description"
             />
           </div>
 
-          {/* Full Description */}
+          {/* Long Description */}
+
           <div className="addEvent-formGroup">
-            <label>Full Description</label>
+            <label>Long Description</label>
 
             <textarea
-              rows="5"
-              name="description"
-              placeholder="Full event description"
-              value={eventData.description}
-              onChange={handleChange}
+              rows="6"
+              placeholder="Enter Full Event Description"
             />
           </div>
 
-          {/* Status */}
-          <div className="addEvent-formGroup">
-            <label>Status</label>
+          {/* Packages */}
 
-            <select
-              name="status"
-              value={eventData.status}
-              onChange={handleChange}
-            >
-              <option>Active</option>
-              <option>Inactive</option>
-            </select>
+          <div className="addEvent-packages">
+            <h4>Available Packages</h4>
+
+            <div className="addEvent-packagesGrid">
+              {packages.map((pkg) => (
+                <label
+                  key={pkg}
+                  className="addEvent-packageItem"
+                >
+                  <input
+                    type="checkbox"
+                    onChange={() =>
+                      handlePackageChange(pkg)
+                    }
+                  />
+
+                  {pkg}
+                </label>
+              ))}
+            </div>
           </div>
 
-          {/* Banner Image */}
-          <div className="addEvent-formGroup">
-            <label>Banner Image</label>
-
-            <input
-              type="file"
-              onChange={handleImageChange}
-            />
-          </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
             className="addEvent-submitBtn"
           >
             Create Event
           </button>
-
         </form>
-
       </div>
-
     </div>
   );
 };

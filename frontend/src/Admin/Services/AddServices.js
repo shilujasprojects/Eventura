@@ -41,19 +41,6 @@ const AddServices = () => {
               />
             </div>
 
-          </div>
-
-          <div className="addService-formGroup">
-            <label>Short Description</label>
-
-            <textarea
-              rows="4"
-              placeholder="Enter Service Description"
-            />
-          </div>
-
-          <div className="addService-grid">
-
             <div className="addService-formGroup">
               <label>Banner Image</label>
 
@@ -69,6 +56,15 @@ const AddServices = () => {
               </select>
             </div>
 
+          </div>
+
+          <div className="addService-formGroup">
+            <label>Short Description</label>
+
+            <textarea
+              rows="4"
+              placeholder="Enter Service Description"
+            />
           </div>
 
           <div className="addService-formGroup">
