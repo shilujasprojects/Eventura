@@ -28,6 +28,8 @@ import AdminPackage from './Pages/Admin/Packages/Package';
 import AddPackage from './Pages/Admin/Packages/AddPackage';
 import AdminService from './Pages/Admin/Services/Service'
 import AddService from './Pages/Admin/Services/AddService';
+import ViewService from './Admin/Services/ViewServices';
+import EditService from './Admin/Services/EditServices';
 
 
 
@@ -70,6 +72,8 @@ function App() {
             <Route path='/addPackage' element={<AddPackage />} />
             <Route path='/adminServices' element={<AdminService />}/>
             <Route path='/addService' element={<AddService />} />
+            <Route path='/viewService/:id' element={<ViewService />} />
+            <Route path="/editService/:id" element={<EditService />} />
            
         </Routes>
       
