@@ -7,8 +7,11 @@ import {
   Trash2,
 } from "lucide-react";
 
-import "./AllPackages.css";
+import Swal from "sweetalert2";
+
+import "./Packages.css";
 import { useNavigate } from "react-router-dom";
+import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
 const AllPackages = () => {
   const packages = [
@@ -17,31 +20,66 @@ const AllPackages = () => {
       name: "Royal Wedding Package",
       category: "Wedding",
       services: 8,
+      description: "A complete luxury wedding package.",
       price: "₹75,000",
       status: "Active",
+      createdAt: "08 Jun 2026",
     },
     {
       id: 2,
       name: "Birthday Premium",
       category: "Birthday",
       services: 5,
+      description: "A complete luxury wedding package.",
       price: "₹25,000",
       status: "Active",
+      createdAt: "08 Jun 2026",
     },
     {
       id: 3,
       name: "Corporate Elite",
       category: "Corporate",
       services: 10,
+      description: "A complete luxury wedding package.",
       price: "₹1,20,000",
       status: "Inactive",
+      createdAt: "08 Jun 2026",
     },
   ];
+
+  const handleDelete = (id) => {
+  Swal.fire({
+    title: "Delete Package?",
+    text: "This package will be permanently removed.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#ef4444",
+    cancelButtonColor: "#6b7280",
+    confirmButtonText: "Delete",
+    cancelButtonText: "Cancel",
+  }).then((result) => {
+    if (result.isConfirmed) {
+
+      // Delete API Call Here
+      console.log("Delete Package:", id);
+
+      Swal.fire({
+        icon: "success",
+        title: "Deleted",
+        text: "Package deleted successfully.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    }
+  });
+};
 
   const navigate = useNavigate();
 
   return (
-    <div className="allPackages">
+    <>
+      <AdminLayout>
+        <div className="allPackages">
 
       {/* Header */}
 
@@ -84,8 +122,10 @@ const AllPackages = () => {
               <th>Package Name</th>
               <th>Category</th>
               <th>Services</th>
+              
               <th>Price</th>
               <th>Status</th>
+              <th>CreatedAt</th>
               <th>Actions</th>
             </tr>
 
@@ -101,6 +141,8 @@ const AllPackages = () => {
                 <td>{pkg.category}</td>
 
                 <td>{pkg.services} Services</td>
+
+               
 
                 <td>{pkg.price}</td>
 
@@ -119,18 +161,22 @@ const AllPackages = () => {
                 </td>
 
                 <td>
+                  {pkg.createdAt}
+                </td>
+
+                <td>
 
                   <div className="allPackages-actions">
 
-                    <button>
+                    <button onClick={() => navigate(`/viewPackage/${pkg.id}`)}>
                       <Eye size={16} />
                     </button>
 
-                    <button>
+                    <button onClick={() => navigate(`/editPackage/${pkg.id}`)}>
                       <Pencil size={16} />
                     </button>
 
-                    <button>
+                    <button  onClick={() => handleDelete(pkg.id)}>
                       <Trash2 size={16} />
                     </button>
 
@@ -148,6 +194,8 @@ const AllPackages = () => {
       </div>
 
     </div>
+      </AdminLayout>
+    </>
   );
 };
 

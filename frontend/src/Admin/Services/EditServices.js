@@ -1,12 +1,15 @@
 import React from "react";
 import { Image, Save, ArrowLeft } from "lucide-react";
-import "./EditServices.css";
+import "./Services.css";
 import { useNavigate } from "react-router-dom";
+import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
 const EditServices = () => {
     const navigate = useNavigate();
   return (
-    <div className="editServices">
+    <>
+    <AdminLayout>
+      <div className="editServices">
 
       {/* Header */}
 
@@ -118,6 +121,9 @@ const EditServices = () => {
       </div>
 
     </div>
+    </AdminLayout>
+    
+    </>
   );
 };
 

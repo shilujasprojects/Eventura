@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import "./AddEvents.css";
+import "./Events.css";
+import { useNavigate } from "react-router-dom";
+import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
 const AddEvent = () => {
   const [selectedPackages, setSelectedPackages] = useState([]);
@@ -13,9 +15,7 @@ const AddEvent = () => {
 
   const handlePackageChange = (pkg) => {
     setSelectedPackages((prev) =>
-      prev.includes(pkg)
-        ? prev.filter((item) => item !== pkg)
-        : [...prev, pkg]
+      prev.includes(pkg) ? prev.filter((item) => item !== pkg) : [...prev, pkg],
     );
   };
 
@@ -27,8 +27,12 @@ const AddEvent = () => {
     });
   };
 
+  const navigate = useNavigate();
+
   return (
-    <div className="addEvent">
+    <>
+      <AdminLayout>
+        <div className="addEvent">
       {/* Header */}
 
       <div className="addEvent-header">
@@ -46,10 +50,7 @@ const AddEvent = () => {
             <div className="addEvent-formGroup">
               <label>Event Name</label>
 
-              <input
-                type="text"
-                placeholder="Enter Event Name"
-              />
+              <input type="text" placeholder="Enter Event Name" />
             </div>
 
             <div className="addEvent-formGroup">
@@ -70,10 +71,7 @@ const AddEvent = () => {
             <div className="addEvent-formGroup">
               <label>Starting Price</label>
 
-              <input
-                type="number"
-                placeholder="Enter Price"
-              />
+              <input type="number" placeholder="Enter Price" />
             </div>
 
             <div className="addEvent-formGroup">
@@ -104,24 +102,18 @@ const AddEvent = () => {
 
           {/* Short Description */}
 
-          <div className="addEvent-formGroup">
-            <label>Short Description</label>
+          <div className="addEvent-descriptionRow">
+            <div className="addEvent-formGroup">
+              <label>Short Description</label>
 
-            <textarea
-              rows="3"
-              placeholder="Enter Short Description"
-            />
-          </div>
+              <textarea rows="5" placeholder="Enter Short Description" />
+            </div>
 
-          {/* Long Description */}
+            <div className="addEvent-formGroup">
+              <label>Long Description</label>
 
-          <div className="addEvent-formGroup">
-            <label>Long Description</label>
-
-            <textarea
-              rows="6"
-              placeholder="Enter Full Event Description"
-            />
+              <textarea rows="5" placeholder="Enter Full Event Description" />
+            </div>
           </div>
 
           {/* Packages */}
@@ -131,15 +123,10 @@ const AddEvent = () => {
 
             <div className="addEvent-packagesGrid">
               {packages.map((pkg) => (
-                <label
-                  key={pkg}
-                  className="addEvent-packageItem"
-                >
+                <label key={pkg} className="addEvent-packageItem">
                   <input
                     type="checkbox"
-                    onChange={() =>
-                      handlePackageChange(pkg)
-                    }
+                    onChange={() => handlePackageChange(pkg)}
                   />
 
                   {pkg}
@@ -148,15 +135,24 @@ const AddEvent = () => {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="addEvent-submitBtn"
-          >
-            Create Event
-          </button>
+          <div className="addEvent-btnGroup">
+            <button
+              type="button"
+              className="addEvent-cancelBtn"
+              onClick={() => navigate("/adminEvents")}
+            >
+              Cancel
+            </button>
+
+            <button type="submit" className="addEvent-submitBtn">
+              Create Event
+            </button>
+          </div>
         </form>
       </div>
     </div>
+      </AdminLayout>
+    </>
   );
 };
 

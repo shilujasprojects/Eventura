@@ -2,7 +2,8 @@ import React from "react";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import "./ViewServices.css";
+import "./Services.css";
+import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
 const ViewServices = () => {
   const navigate = useNavigate();
@@ -26,7 +27,9 @@ const ViewServices = () => {
   };
 
   return (
-    <div className="viewService">
+    <>
+      <AdminLayout>
+        <div className="viewService">
       <div className="viewService-header">
         <div>
           <h2>Service Details</h2>
@@ -113,6 +116,8 @@ const ViewServices = () => {
 
       </div>
     </div>
+      </AdminLayout>
+    </>
   );
 };
 

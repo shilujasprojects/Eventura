@@ -1,0 +1,649 @@
+/* =====================================================
+   EVENT MODULE - COMMON CSS
+   Includes:
+   1. Add Event
+   2. All Events
+   3. Edit Event
+   4. View Event
+===================================================== */
+
+
+/* =====================================================
+   ADD EVENT PAGE
+===================================================== */
+
+.addEvent {
+  padding: 0;
+}
+
+/* Header */
+
+.addEvent-header {
+  margin-bottom: 25px;
+}
+
+.addEvent-header h2 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+}
+
+.addEvent-header p {
+  color: #8a9ba8;
+}
+
+/* Card */
+
+.addEvent-card {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 1200px;
+}
+
+/* Grid */
+
+.addEvent-formRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.addEvent-descriptionRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Form */
+
+.addEvent-formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.addEvent-formGroup label {
+  color: #f1d49b;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.addEvent-formGroup input,
+.addEvent-formGroup textarea,
+.addEvent-formGroup select {
+  background-color: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 10px;
+  padding: 12px 15px;
+  color: #fff7ee;
+  outline: none;
+}
+
+.addEvent-formGroup input::placeholder,
+.addEvent-formGroup textarea::placeholder {
+  color: #8a9ba8;
+  padding: 0;
+}
+
+.addEvent-formGroup textarea {
+  resize: vertical;
+  max-height: max-content;
+}
+
+/* Packages */
+
+.addEvent-packages {
+  margin-top: 20px;
+}
+
+.addEvent-packages h4 {
+  color: #f1d49b;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.addEvent-packagesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.addEvent-packageItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 15px;
+  background-color: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 10px;
+  color: #fff7ee;
+  cursor: pointer;
+}
+
+.addEvent-packageItem input[type="checkbox"] {
+  margin: 5px;
+  width: 16px;
+  height: 16px;
+}
+
+/* Buttons */
+
+.addEvent-btnGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.addEvent-cancelBtn {
+  background-color: transparent;
+  color: #8a9ba8;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  padding: 14px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addEvent-cancelBtn:hover {
+  background-color: #061521;
+  color: #fff7ee;
+}
+
+.addEvent-submitBtn {
+  background-color: #f1d49b;
+  color: #062036;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addEvent-submitBtn:hover {
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   ALL EVENTS PAGE
+===================================================== */
+
+.allEvents {
+  padding: 0;
+}
+
+.allEvents-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.allEvents-header h2 {
+  color: #fff7ee;
+  margin: 0;
+}
+
+.allEvents-header p {
+  color: #8a9ba8;
+  margin-top: 5px;
+}
+
+.allEvents-addBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background-color: #f1d49b;
+  color: #062036;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.allEvents-addBtn:hover {
+  transform: translateY(-2px);
+}
+
+.allEvents-searchBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 15px;
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 12px;
+  margin-bottom: 25px;
+  color: #8a9ba8;
+}
+
+.allEvents-searchBox input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff7ee;
+}
+
+.allEvents-searchBox input::placeholder {
+  color: #8a9ba8;
+  padding: 0;
+}
+
+.allEvents-tableWrapper {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.allEvents-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.allEvents-table thead {
+  background-color: rgba(241, 212, 155, 0.05);
+}
+
+.allEvents-table th {
+  text-align: left;
+  padding: 18px;
+  color: #f1d49b;
+  font-size: 0.9rem;
+}
+
+.allEvents-table td {
+  padding: 18px;
+  color: #fff7ee;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.allEvents-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.allEvents-status.active {
+  background-color: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+.allEvents-status.inactive {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.allEvents-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+}
+
+.allEvents-packageCount {
+  background-color: rgba(241, 212, 155, 0.1);
+  color: #f1d49b;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.allEvents-table td,
+.allEvents-table th {
+  vertical-align: middle;
+}
+
+.allEvents-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.allEvents-actions button {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 8px;
+  background-color: #061521;
+  color: #fff7ee;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.allEvents-actions button:hover {
+  color: #f1d49b;
+}
+
+
+/* =====================================================
+   EDIT EVENT PAGE
+===================================================== */
+
+.editEvent {
+  padding: 0;
+}
+
+.editEvent-header {
+  margin-bottom: 25px;
+}
+
+.editEvent-header h2 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+}
+
+.editEvent-header p {
+  color: #8a9ba8;
+}
+
+.editEvent-card {
+  background: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 18px;
+  padding: 30px;
+}
+
+.editEvent-formRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.editEvent-descriptionRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.editEvent-formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.editEvent-formGroup label {
+  color: #f1d49b;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.editEvent-formGroup input,
+.editEvent-formGroup textarea,
+.editEvent-formGroup select {
+  background: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.12);
+  color: #fff7ee;
+  padding: 13px 15px;
+  border-radius: 10px;
+  outline: none;
+}
+
+.editEvent-formGroup textarea {
+  resize: none;
+}
+
+.editEvent-packages {
+  margin-top: 25px;
+}
+
+.editEvent-packages h4 {
+  color: #f1d49b;
+  margin-bottom: 15px;
+}
+
+.editEvent-packagesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.editEvent-packageItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #061521;
+  padding: 14px;
+  border-radius: 10px;
+  color: #fff7ee;
+  cursor: pointer;
+}
+
+.editEvent-btnGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.editEvent-cancelBtn {
+  background: transparent;
+  color: #fff7ee;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.editEvent-submitBtn {
+  background: #f1d49b;
+  color: #062036;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editEvent-cancelBtn:hover,
+.editEvent-submitBtn:hover {
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   VIEW EVENT PAGE
+===================================================== */
+
+.viewEvent {
+  padding: 0;
+}
+
+.viewEvent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.viewEvent-header h2 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+}
+
+.viewEvent-header p {
+  color: #8a9ba8;
+}
+
+.viewEvent-headerActions {
+  display: flex;
+  gap: 10px;
+}
+
+.viewEvent-backBtn,
+.viewEvent-editBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.viewEvent-backBtn {
+  background: #061521;
+  color: #fff7ee;
+}
+
+.viewEvent-editBtn {
+  background: #f1d49b;
+  color: #062036;
+}
+
+.viewEvent-backBtn:hover,
+.viewEvent-editBtn:hover {
+  transform: translateY(-2px);
+}
+
+.viewEvent-topGrid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.viewEvent-detailsCard,
+.viewEvent-card {
+  background: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 18px;
+  padding: 25px;
+}
+
+.viewEvent-imageCard img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.viewEvent-titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.viewEvent-titleRow h3 {
+  color: #f1d49b;
+  margin: 0;
+}
+
+.viewEvent-status {
+  padding: 8px 15px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.viewEvent-status.active {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+.viewEvent-status.inactive {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.viewEvent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.viewEvent-infoItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff7ee;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+}
+
+.viewEvent-card {
+  margin-bottom: 20px;
+}
+
+.viewEvent-card h3 {
+  color: #f1d49b;
+  margin-bottom: 15px;
+}
+
+.viewEvent-card p {
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+
+.viewEvent-packages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.viewEvent-package {
+  padding: 10px 15px;
+  border-radius: 25px;
+  background: rgba(241, 212, 155, 0.1);
+  color: #f1d49b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.viewEvent-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.viewEvent-gallery img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.viewEvent-gallery img:hover {
+  transform: scale(1.03);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 992px) {
+
+  .addEvent-formRow,
+  .addEvent-packagesGrid,
+  .editEvent-formRow,
+  .editEvent-descriptionRow,
+  .editEvent-packagesGrid,
+  .viewEvent-topGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewEvent-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}

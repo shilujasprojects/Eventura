@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import "./AddPackages.css";
+import "./Packages.css";
+import { useNavigate } from "react-router-dom";
+import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
 const AddPackages = () => {
-  const [selectedServices, setSelectedServices] =
-    useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
 
   const services = [
     "Catering",
@@ -20,7 +21,7 @@ const AddPackages = () => {
     setSelectedServices((prev) =>
       prev.includes(service)
         ? prev.filter((item) => item !== service)
-        : [...prev, service]
+        : [...prev, service],
     );
   };
 
@@ -34,110 +35,108 @@ const AddPackages = () => {
     console.log(packageData);
   };
 
+  const navigate = useNavigate();
+
   return (
-    <div className="addPackage">
-      {/* Header */}
+    <>
+      <AdminLayout>
+        <div className="addPackage">
+          {/* Header */}
 
-      <div className="addPackage-header">
-        <h2>Add Package</h2>
-        <p>Create a new package for Eventura</p>
-      </div>
-
-      {/* Card */}
-
-      <div className="addPackage-card">
-        <form onSubmit={handleSubmit}>
-          {/* Row 1 */}
-
-          <div className="addPackage-grid">
-            <div className="addPackage-formGroup">
-              <label>Package Name</label>
-
-              <input
-                type="text"
-                placeholder="Enter Package Name"
-              />
-            </div>
-
-            <div className="addPackage-formGroup">
-              <label>Event Category</label>
-
-              <select>
-                <option>Wedding</option>
-                <option>Birthday</option>
-                <option>Engagement</option>
-                <option>Baby Shower</option>
-                <option>Anniversary</option>
-                <option>Housewarming</option>
-                <option>Corporate</option>
-                <option>Funeral</option>
-              </select>
-            </div>
-
-            <div className="addPackage-formGroup">
-              <label>Package Price</label>
-
-              <input
-                type="number"
-                placeholder="Enter Price"
-              />
-            </div>
-
-            <div className="addPackage-formGroup">
-              <label>Status</label>
-
-              <select>
-                <option>Active</option>
-                <option>Inactive</option>
-              </select>
-            </div>
+          <div className="addPackage-header">
+            <h2>Add Package</h2>
+            <p>Create a new package for Eventura</p>
           </div>
 
-          {/* Row 2 */}
-    
-            <div className="addPackage-formGroup addPackage-description">
-              <label>Description</label>
+          {/* Card */}
 
-              <textarea
-                rows="4"
-                placeholder="Enter Package Description"
-              />
-            </div>
-          
+          <div className="addPackage-card">
+            <form onSubmit={handleSubmit}>
+              {/* Row 1 */}
 
-          {/* Services */}
+              <div className="addPackage-grid">
+                <div className="addPackage-formGroup">
+                  <label>Package Name</label>
 
-          <div className="addPackage-services">
-            <h4>Services Included</h4>
+                  <input type="text" placeholder="Enter Package Name" />
+                </div>
 
-            <div className="addPackage-servicesGrid">
-              {services.map((service) => (
-                <label
-                  key={service}
-                  className="addPackage-serviceItem"
+                <div className="addPackage-formGroup">
+                  <label>Event Category</label>
+
+                  <select>
+                    <option>Wedding</option>
+                    <option>Birthday</option>
+                    <option>Engagement</option>
+                    <option>Baby Shower</option>
+                    <option>Anniversary</option>
+                    <option>Housewarming</option>
+                    <option>Corporate</option>
+                    <option>Funeral</option>
+                  </select>
+                </div>
+
+                <div className="addPackage-formGroup">
+                  <label>Package Price</label>
+
+                  <input type="number" placeholder="Enter Price" />
+                </div>
+
+                <div className="addPackage-formGroup">
+                  <label>Status</label>
+
+                  <select>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 2 */}
+
+              <div className="addPackage-formGroup addPackage-description">
+                <label>Description</label>
+
+                <textarea rows="4" placeholder="Enter Package Description" />
+              </div>
+
+              {/* Services */}
+
+              <div className="addPackage-services">
+                <h4>Services Included</h4>
+
+                <div className="addPackage-servicesGrid">
+                  {services.map((service) => (
+                    <label key={service} className="addPackage-serviceItem">
+                      <input
+                        type="checkbox"
+                        onChange={() => handleServiceChange(service)}
+                      />
+
+                      {service}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="addPackage-btnGroup">
+                <button
+                  type="button"
+                  className="addPackage-cancelBtn"
+                  onClick={() => navigate("/adminPackages")}
                 >
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      handleServiceChange(service)
-                    }
-                  />
+                  Cancel
+                </button>
 
-                  {service}
-                </label>
-              ))}
-            </div>
+                <button type="submit" className="addPackage-submitBtn">
+                  Create Package
+                </button>
+              </div>
+            </form>
           </div>
-
-          <button
-            type="submit"
-            className="addPackage-submitBtn"
-          >
-            Save Package
-          </button>
-        </form>
-      </div>
-    </div>
+        </div>
+      </AdminLayout>
+    </>
   );
 };
 
