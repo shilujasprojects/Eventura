@@ -11,7 +11,7 @@
 }
 
 .adminDashboardBody {
-  padding: 30px;
+  padding: 25px;
   background-color: #061521;
   min-height: calc(100vh - 80px);
 }

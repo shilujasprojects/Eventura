@@ -1,0 +1,623 @@
+/* =========================================================
+   CATEGORY EVENT MODULE
+   =========================================================
+
+   1. ADD CATEGORY PAGE
+      (.addCategory*)
+
+   2. ALL CATEGORY PAGE
+      (.allCategory*)
+
+   3. EDIT CATEGORY PAGE
+      (.editCategory*)
+
+   4. VIEW CATEGORY PAGE
+      (.viewCategory*)
+
+========================================================= */
+
+
+
+/* =========================================================
+   1. ADD CATEGORY PAGE
+   File: AddCategoryEvents.css
+========================================================= */
+
+.addCategory {
+  padding: 0;
+}
+
+/* Header */
+
+.addCategory-header {
+  margin-bottom: 25px;
+}
+
+.addCategory-header h2 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+}
+
+.addCategory-header p {
+  color: #8a9ba8;
+}
+
+/* Card Container */
+
+.addCategory-card {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+/* Form Row */
+
+.addCategory-formRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Form Fields */
+
+.addCategory-formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.addCategory-formGroup label {
+  color: #f1d49b;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.addCategory-formGroup input,
+.addCategory-formGroup select,
+.addCategory-formGroup textarea {
+  background-color: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 10px;
+  padding: 12px 15px;
+  color: #fff7ee;
+  outline: none;
+}
+
+.addCategory-formGroup input::placeholder,
+.addCategory-formGroup textarea::placeholder {
+  color: #8a9ba8;
+  padding: 0;
+}
+
+.addCategory-formGroup textarea {
+  resize: vertical;
+  max-height: max-content;
+}
+
+/* Buttons */
+
+.addCategory-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.addCategory-cancelBtn {
+  background: transparent;
+  color: #8a9ba8;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 14px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addCategory-cancelBtn:hover {
+  border-color: rgba(241, 212, 155, 0.3);
+  color: #fff7ee;
+}
+
+.addCategory-submitBtn {
+  background-color: #f1d49b;
+  color: #062036;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addCategory-submitBtn:hover {
+  transform: translateY(-2px);
+}
+
+
+
+/* =========================================================
+   2. ALL CATEGORY PAGE
+   File: AllCategoryEvents.css
+========================================================= */
+
+.allCategory {
+  padding: 0px;
+}
+
+/* Header */
+
+.allCategory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.allCategory-header h2 {
+  color: #fff7ee;
+  margin: 0;
+}
+
+.allCategory-header p {
+  color: #8a9ba8;
+  margin-top: 5px;
+}
+
+/* Add Button */
+
+.allCategory-addBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background-color: #f1d49b;
+  color: #062036;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.allCategory-addBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Search Box */
+
+.allCategory-searchBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 15px;
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 12px;
+  margin-bottom: 25px;
+  color: #8a9ba8;
+}
+
+.allCategory-searchBox input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff7ee;
+}
+
+.allCategory-searchBox input::placeholder {
+  color: #8a9ba8;
+  padding: 0;
+}
+
+/* Table */
+
+.allCategory-tableWrapper {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.allCategory-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.allCategory-table thead {
+  background-color: rgba(241, 212, 155, 0.05);
+}
+
+.allCategory-table th {
+  text-align: left;
+  padding: 18px;
+  color: #f1d49b;
+  font-size: 0.9rem;
+}
+
+.allCategory-table td {
+  padding: 18px;
+  color: #fff7ee;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+/* Category Image */
+
+.allCategory-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+}
+
+/* Description */
+
+.allCategory-description {
+  max-width: 300px;
+  color: #c9d1d9;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Status Badge */
+
+.allCategory-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.allCategory-status.active {
+  background-color: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+.allCategory-status.inactive {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+/* Action Buttons */
+
+.allCategory-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.allCategory-actions button {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 8px;
+  background-color: #061521;
+  color: #fff7ee;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.allCategory-actions button:hover {
+  color: #f1d49b;
+  background-color: #102739;
+}
+
+
+
+/* =========================================================
+   3. EDIT CATEGORY PAGE
+   File: EditCategoryEvent.css
+========================================================= */
+
+.editCategory {
+  padding: 0;
+}
+
+/* Header */
+
+.editCategory-header {
+  margin-bottom: 25px;
+}
+
+.editCategory-header h2 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+}
+
+.editCategory-header p {
+  color: #8a9ba8;
+}
+
+/* Card */
+
+.editCategory-card {
+  background: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+}
+
+/* Form Layout */
+
+.editCategory-formRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.editCategory-formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.editCategory-formGroup label {
+  color: #f1d49b;
+  margin-bottom: 8px;
+}
+
+.editCategory-formGroup input,
+.editCategory-formGroup select,
+.editCategory-formGroup textarea {
+  background: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 10px;
+  padding: 12px 15px;
+  color: #fff7ee;
+  outline: none;
+}
+
+/* Buttons */
+
+.editCategory-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.editCategory-cancelBtn {
+  background: transparent;
+  border: 1px solid rgba(241, 212, 155, 0.2);
+  color: #fff7ee;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.editCategory-submitBtn {
+  background: #f1d49b;
+  color: #062036;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+
+/* =========================================================
+   4. VIEW CATEGORY PAGE
+   File: ViewCategoryEvent.css
+========================================================= */
+
+.viewCategory {
+  padding: 0;
+}
+
+/* Header */
+
+.viewCategory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.viewCategory-header h2 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.viewCategory-header p {
+  color: #8a9ba8;
+}
+
+.viewCategory-headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Status Badge */
+
+.viewCategory-status {
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.viewCategory-status.active {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.viewCategory-status.inactive {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+/* Buttons */
+
+.viewCategory-backBtn,
+.viewCategory-editBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.viewCategory-backBtn {
+  background: #061521;
+  color: #fff7ee;
+}
+
+.viewCategory-editBtn {
+  background: #f1d49b;
+  color: #062036;
+}
+
+.viewCategory-backBtn:hover,
+.viewCategory-editBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Banner Image */
+
+.viewCategory-bannerCard {
+  background: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+
+.viewCategory-bannerCard img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Information Card */
+
+.viewCategory-infoCard {
+  background: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.viewCategory-infoCard h3 {
+  color: #f1d49b;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+/* Information Grid */
+
+.viewCategory-infoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.infoBox {
+  background: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.08);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: 0.3s;
+}
+
+.infoBox:hover {
+  border-color: rgba(241, 212, 155, 0.25);
+  transform: translateY(-3px);
+}
+
+.infoBox svg {
+  color: #f1d49b;
+}
+
+.infoBox span {
+  color: #8a9ba8;
+  font-size: 0.85rem;
+}
+
+.infoBox strong {
+  color: #fff7ee;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Description Card */
+
+.viewCategory-descriptionCard {
+  background: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 18px;
+  padding: 25px;
+}
+
+.viewCategory-descriptionCard h3 {
+  color: #f1d49b;
+  margin-bottom: 15px;
+}
+
+.viewCategory-descriptionCard p {
+  color: #cbd5e1;
+  line-height: 1.9;
+  font-size: 0.95rem;
+}
+
+
+
+/* =========================================================
+   RESPONSIVE STYLES
+   Used by All Category & View Category Pages
+========================================================= */
+
+@media (max-width: 992px) {
+
+  .allCategory-tableWrapper {
+    overflow-x: auto;
+  }
+
+  .allCategory-table {
+    min-width: 900px;
+  }
+
+  .viewCategory-infoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .viewCategory-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .viewCategory-infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewCategory-bannerCard img {
+    height: 250px;
+  }
+
+  .viewCategory-headerActions {
+    flex-wrap: wrap;
+  }
+}

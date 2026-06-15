@@ -20,16 +20,29 @@ import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Ex
 import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
 import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
 import AdminDashboard from './Pages/Admin/Dashboard';
-import AdminCategoryEvent from './Pages/Admin/CategoryEvent/CategoryEvent';
-import AddCategoryEvent from './Pages/Admin/CategoryEvent/AddCategoryEvent';
-import AdminEvent from './Pages/Admin/Events/Event';
-import AddEvent from './Pages/Admin/Events/AddEvent';
-import AdminPackage from './Pages/Admin/Packages/Package';
-import AddPackage from './Pages/Admin/Packages/AddPackage';
-import AdminService from './Pages/Admin/Services/Service'
-import AddService from './Pages/Admin/Services/AddService';
+import ViewCategoryEvents from './Admin/Categories/ViewCategoryEvents';
+import EditCategoryEvents from './Admin/Categories/EditCategoryEvents';
+import AllCategoryEvents from './Admin/Categories/AllCategoryEvents';
+import AddCategoryEvents from './Admin/Categories/AddCategoryEvents';
+import AllEvents from './Admin/Events/AllEvents';
+import AddEvents from './Admin/Events/AddEvents';
+import EditEvent from './Admin/Events/EditEvents';
+import ViewEvents from './Admin/Events/ViewEvents';
+import AllPackages from './Admin/Packages/AllPackages';
+import AddPackages from './Admin/Packages/AddPackages';
+import AllServices from './Admin/Services/AllServices';
+import AddServices from './Admin/Services/AddServices';
 import ViewService from './Admin/Services/ViewServices';
 import EditService from './Admin/Services/EditServices';
+import ViewPackages from './Admin/Packages/ViewPackages';
+import EditPackages from './Admin/Packages/EditPackages';
+
+
+
+
+
+
+
 
 
 
@@ -64,14 +77,20 @@ function App() {
             <Route path='/anniversary-explore' element={<AnniversaryExplore />} />
             <Route path='/corporate-explore' element={<CorporateExplore /> } />
             <Route path='/adminDashboard' element={<AdminDashboard /> } />
-            <Route path='/adminCategoryEvent' element={<AdminCategoryEvent />}/>
-            <Route path='/addCategoryEvent' element={<AddCategoryEvent />} />
-            <Route path='/adminEvents' element={<AdminEvent />} />
-            <Route path='/addEvents' element={<AddEvent />} />
-            <Route path='/adminPackages' element={<AdminPackage />} />
-            <Route path='/addPackage' element={<AddPackage />} />
-            <Route path='/adminServices' element={<AdminService />}/>
-            <Route path='/addService' element={<AddService />} />
+            <Route path='/adminCategoryEvent' element={<AllCategoryEvents />}/>
+            <Route path='/addCategoryEvent' element={<AddCategoryEvents />} />
+            <Route path='/viewCategoryEvent/:id' element={<ViewCategoryEvents />} />
+            <Route path="/editCategoryEvent/:id" element={<EditCategoryEvents />} />
+            <Route path='/adminEvents' element={<AllEvents />} />
+            <Route path='/addEvents' element={<AddEvents />} />
+            <Route path='/viewEvents/:id' element={<ViewEvents />}/>
+            <Route path='/editEvents/:id' element={<EditEvent />}/>
+            <Route path='/adminPackages' element={<AllPackages />} />
+            <Route path='/addPackage' element={<AddPackages />} />
+            <Route path='/viewPackage/:id' element={<ViewPackages />} />
+            <Route path='/editPackage/:id' element={<EditPackages />}/>
+            <Route path='/adminServices' element={<AllServices />}/>
+            <Route path='/addService' element={<AddServices />} />
             <Route path='/viewService/:id' element={<ViewService />} />
             <Route path="/editService/:id" element={<EditService />} />
            
