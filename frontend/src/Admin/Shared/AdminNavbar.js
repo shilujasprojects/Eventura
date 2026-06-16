@@ -7,8 +7,12 @@ import {
 } from "lucide-react";
 
 import "./Admin.css";
+import { useNavigate } from "react-router-dom";
 
 const AdminNavbar = () => {
+
+  const navigate = useNavigate();
+  
   return (
     <nav className="admin-navbar">
 
@@ -37,7 +41,7 @@ const AdminNavbar = () => {
         </button>
 
         {/* Settings */}
-        <button className="icon-btn">
+        <button className="icon-btn" onClick={() => navigate('/settings')}>
           <Settings size={20} />
         </button>
 

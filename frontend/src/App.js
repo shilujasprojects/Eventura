@@ -37,7 +37,18 @@ import EditService from './Admin/Services/EditServices';
 import ViewPackages from './Admin/Packages/ViewPackages';
 import EditPackages from './Admin/Packages/EditPackages';
 
+import ManageBookings from './Admin/Bookings/ManageBookings';
+import ManageClients from './Admin/Clients/ManageClients';
+import ManagePayments from './Admin/Payments/ManagePayments';
+import ManageVendors from './Admin/Vendors/ManageVendors';
 
+import AddVendors from './Admin/Vendors/AddVendors';
+import EditVendor from './Admin/Vendors/EditVendors';
+import ReportsAnalytics from './Admin/Reports_Analytics/ReportsAnalytics';
+
+import ManageCMS from './Admin/Content_CMS/ManageCMS';
+import ManageInquiries from './Admin/Inquiries_Support/ManageInquiries';
+import ManageSettings from './Admin/Settings/ManageSettings';
 
 
 
@@ -93,7 +104,16 @@ function App() {
             <Route path='/addService' element={<AddServices />} />
             <Route path='/viewService/:id' element={<ViewService />} />
             <Route path="/editService/:id" element={<EditService />} />
-           
+           <Route path="/bookings" element={<ManageBookings />} />
+           <Route path='/clients' element={<ManageClients />} />
+           <Route path='/payments' element={<ManagePayments />}/>
+           <Route path='/vendors' element={<ManageVendors /> }/>
+           <Route path='/addVendors' element={<AddVendors /> }/>
+           <Route path='/editVendors/:id' element={<EditVendor /> } />
+           <Route path='/reports' element={<ReportsAnalytics />} />
+           <Route path='/Cms' element={<ManageCMS/>}/>
+           <Route path='/support' element={<ManageInquiries /> } />
+           <Route path='/settings' element={<ManageSettings />} />
         </Routes>
       
     </>

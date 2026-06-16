@@ -276,6 +276,7 @@
 
 .allPackages-searchBox input::placeholder {
   color: #8a9ba8;
+  padding: 0;
 }
 
 .allPackages-filterSelect {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Save, ArrowLeft } from "lucide-react";
+import {  Save, ArrowLeft } from "lucide-react";
 import "./Services.css";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";

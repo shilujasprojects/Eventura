@@ -1,0 +1,380 @@
+/* =====================================================
+   CLIENTS MANAGEMENT TAB SYSTEM COMPONENT STYLES
+===================================================== */
+
+.allClients {
+  padding: 0;
+}
+
+/* Header Structuring */
+.allClients-header {
+  margin-bottom: 25px;
+}
+
+.allClients-header h2 {
+  color: #fff7ee;
+  margin: 0 0 5px 0;
+}
+
+.allClients-header p {
+  color: #8a9ba8;
+  margin: 0;
+}
+
+/* Global Search Component */
+.allClients-searchBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 50px;
+  padding: 0 15px;
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 12px;
+  margin-bottom: 25px;
+  color: #8a9ba8;
+}
+
+.allClients-searchBox input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff7ee;
+  font-size: 0.95rem;
+}
+
+.allClients-searchBox input::placeholder{
+    padding: 0;
+}
+
+/* Dynamic Filter Sub-tab Switches */
+.allClients-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(241, 212, 155, 0.08);
+  padding-bottom: 8px;
+}
+
+/* Core Data Table Layout */
+.allClients-tableWrapper {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.allClients-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.allClients-table thead {
+  background-color: rgba(241, 212, 155, 0.05);
+}
+
+.allClients-table th {
+  text-align: left;
+  padding: 18px;
+  color: #f1d49b;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.allClients-table td {
+  padding: 18px;
+  color: #fff7ee;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+/* Custom Profile Layout Blocks inside Row */
+.client-profile-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.client-table-avatar {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid rgba(241, 212, 155, 0.2);
+}
+
+.client-title-meta, .client-contact-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.client-primary-name {
+  color: #fff7ee;
+  font-size: 0.95rem;
+}
+
+.client-uid-tag {
+  font-family: monospace;
+  color: #8a9ba8;
+  font-size: 0.8rem;
+}
+
+.client-contact-meta small {
+  color: #8a9ba8;
+  margin-top: 2px;
+}
+
+.client-count-badge {
+  background-color: rgba(241, 212, 155, 0.1);
+  color: #f1d49b;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.gold-text-value {
+  color: #f1d49b;
+  font-weight: 600;
+}
+
+/* Operational Actions Control Interface */
+.allClients-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.client-action-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.client-action-btn.view-btn {
+  background-color: #061521;
+  color: #fff7ee;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+}
+
+.client-action-btn.view-btn:hover {
+  color: #f1d49b;
+  transform: translateY(-1px);
+}
+
+.client-action-btn.toggle-btn.suspend {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.client-action-btn.toggle-btn.suspend:hover {
+  background-color: #ef4444;
+  color: #fff7ee;
+}
+
+.client-action-btn.toggle-btn.activate {
+  background-color: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+}
+
+.client-action-btn.toggle-btn.activate:hover {
+  background-color: #4ade80;
+  color: #062036;
+}
+
+/* System Exception View Defaults */
+.table-empty-state {
+  padding: 50px 20px;
+  text-align: center;
+  color: #8a9ba8;
+}
+
+.empty-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.table-empty-state h3 {
+  color: #fff7ee;
+  margin-bottom: 5px;
+}
+
+/* =====================================================
+   CLIENT DETAILED SUMMARY MANIFEST MODAL CARDS
+===================================================== */
+.clientModal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(6, 21, 33, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+  padding: 20px;
+}
+
+.clientModal-card {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 600px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+.clientModal-header {
+  background-color: rgba(241, 212, 155, 0.02);
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clientModal-header h3 { color: #fff7ee; margin: 0; }
+
+.clientModal-body {
+  padding: 25px;
+}
+
+/* Profile Master Info Card Hero element */
+.clientModal-hero {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: #061521;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(241, 212, 155, 0.08);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.clientModal-hero img {
+  width: 75px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #f1d49b;
+}
+
+.clientModal-hero h4 { color: #fff7ee; margin: 0 0 4px 0; font-size: 1.2rem; }
+.clientModal-hero p { color: #8a9ba8; margin: 0 0 5px 0; font-size: 0.9rem; }
+
+.status-pill-badge {
+  position: absolute;
+  top: 20px; right: 20px;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.status-pill-badge.active { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.status-pill-badge.suspended { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+/* Business Multi-Metric Counters Block layout */
+.clientModal-metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.metric-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.metric-title {
+  display: block;
+  color: #8a9ba8;
+  font-size: 0.75rem;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.metric-value {
+  color: #fff7ee;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* History Core Log Section Listing */
+.clientModal-historySection h5 {
+  color: #f1d49b;
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.no-history-txt { color: #8a9ba8; font-style: italic; font-size: 0.9rem; }
+
+.history-list {
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #061521;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border-left: 3px solid rgba(241, 212, 155, 0.3);
+}
+
+.history-main-info, .history-price-status {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-main-info strong { color: #fff7ee; font-size: 0.9rem; }
+.history-main-info small { color: #8a9ba8; font-size: 0.75rem; margin-top: 2px; }
+.history-price-status { text-align: right; }
+.history-price-status strong { color: #f1d49b; font-size: 0.9rem; }
+.history-status-lbl { color: #8a9ba8; font-size: 0.7rem; text-transform: uppercase; }
+
+/* Control Footers */
+.clientModal-footer {
+  padding: 20px 25px;
+  background-color: rgba(6, 21, 33, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.clientModal-closeBtn {
+  background-color: transparent;
+  color: #8a9ba8;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.clientModal-closeBtn:hover { background-color: #061521; color: #fff7ee; }
+
+/* Responsive Media Breakdown Scaling */
+@media (max-width: 768px) {
+  .clientModal-metricsGrid { grid-template-columns: 1fr; }
+  .allClients-table th:nth-child(4), .allClients-table td:nth-child(4),
+  .allClients-table th:nth-child(5), .allClients-table td:nth-child(5) { display: none; }
+  .clientModal-hero { flex-direction: column; text-align: center; }
+  .status-pill-badge { position: relative; top: 5px; right: 0; display: inline-block; }
+}
