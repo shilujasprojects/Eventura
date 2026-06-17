@@ -6,8 +6,7 @@ import {
   Star, 
   TrendingUp, 
   TrendingDown,
-  Clock, 
-  CheckCircle2, 
+  Clock,  
   PlusCircle, 
   ArrowRight,
   ShieldAlert,
@@ -72,7 +71,7 @@ const DashboardCards = () => {
   };
 
   return (
-    
+    <AdminLayout>
       <div className="adminDashboard">
         
         {}
@@ -225,6 +224,7 @@ const DashboardCards = () => {
         </div>
 
       </div>
+    </AdminLayout>
     
   );
 };

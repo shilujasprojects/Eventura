@@ -19,7 +19,7 @@ import EngagementExplore from './Components/Home/Event-Explore/Engagement-Explor
 import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Explore/HousewarmingExplore';
 import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
 import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
-import AdminDashboard from './Pages/Admin/Dashboard';
+import DashboardCards from './Admin/Shared/DashboardCards';
 import ViewCategoryEvents from './Admin/Categories/ViewCategoryEvents';
 import EditCategoryEvents from './Admin/Categories/EditCategoryEvents';
 import AllCategoryEvents from './Admin/Categories/AllCategoryEvents';
@@ -49,6 +49,7 @@ import ReportsAnalytics from './Admin/Reports_Analytics/ReportsAnalytics';
 import ManageCMS from './Admin/Content_CMS/ManageCMS';
 import ManageInquiries from './Admin/Inquiries_Support/ManageInquiries';
 import ManageSettings from './Admin/Settings/ManageSettings';
+
 
 
 
@@ -87,7 +88,7 @@ function App() {
             <Route path='/housewarming-explore' element={<HousewarmingExplore />} />
             <Route path='/anniversary-explore' element={<AnniversaryExplore />} />
             <Route path='/corporate-explore' element={<CorporateExplore /> } />
-            <Route path='/adminDashboard' element={<AdminDashboard /> } />
+            <Route path='/adminDashboard' element={<DashboardCards />  } />
             <Route path='/adminCategoryEvent' element={<AllCategoryEvents />}/>
             <Route path='/addCategoryEvent' element={<AddCategoryEvents />} />
             <Route path='/viewCategoryEvent/:id' element={<ViewCategoryEvents />} />
