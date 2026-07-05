@@ -10,131 +10,105 @@ import {
   Briefcase,
   MapPin,
   User,
-  AlertTriangle,
+  ImageOff,
+  Pencil,
+  Plus,
+  Loader2,
 } from "lucide-react";
 import "./Vendors.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { useNavigate } from "react-router-dom";
-
-// Mock Vendor Database linked to Eventura service categories
-const INITIAL_VENDORS = [
-  {
-    id: "EV-VEN-2026-001",
-    name: "Malabar Catering Co.",
-    serviceCategory: "Catering",
-    contactPerson: "Faisal Rahman",
-    email: "malabar.catering@example.com",
-    phone: "+91 98460 12345",
-    location: "Kochi, Kerala",
-    rating: 4.8,
-    status: "Active", // Options: Active, Busy, Suspended
-    assignedEventsCount: 14,
-    recentAssignment: {
-      bookingId: "EV-2026-9401",
-      eventName: "Royal Heritage Wedding",
-      date: "24 Oct 2026",
-    },
-  },
-  {
-    id: "EV-VEN-2026-002",
-    name: "Lumiere Photography",
-    serviceCategory: "Photography",
-    contactPerson: "Thomas Kurian",
-    email: "lumiere.photo@example.com",
-    phone: "+91 94470 98765",
-    location: "Trivandrum, Kerala",
-    rating: 4.9,
-    status: "Busy", // Currently assigned to an active event today
-    assignedEventsCount: 22,
-    recentAssignment: {
-      bookingId: "EV-2026-9402",
-      eventName: "Neon Beats Birthday",
-      date: "05 Nov 2026",
-    },
-  },
-  {
-    id: "EV-VEN-2026-003",
-    name: "Elite Stage Decorators",
-    serviceCategory: "Decoration",
-    contactPerson: "Suresh Nair",
-    email: "elite.decor@example.com",
-    phone: "+91 99460 55511",
-    location: "Calicut, Kerala",
-    rating: 4.2,
-    status: "Active",
-    assignedEventsCount: 8,
-    recentAssignment: null,
-  },
-  {
-    id: "EV-VEN-2026-004",
-    name: "Vibe DJ & Sound Solutions",
-    serviceCategory: "DJ & Music",
-    contactPerson: "DJ Akhil",
-    email: "vibe.sounds@example.com",
-    phone: "+91 98950 44411",
-    location: "Kochi, Kerala",
-    rating: 3.9,
-    status: "Suspended", // Account flagged/on hold due to service issues
-    assignedEventsCount: 5,
-    recentAssignment: null,
-  },
-];
-
-
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const ManageVendors = () => {
-  const [vendors, setVendors] = useState(INITIAL_VENDORS);
+  const navigate = useNavigate();
+
+  const [vendors, setVendors] = useState([]);
   const [filteredVendors, setFilteredVendors] = useState([]);
-  const [activeTab, setActiveTab] = useState("All"); // Options: All, Active, Busy, Suspended
+  const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Modal Controller
+  // Modal state
   const [selectedVendor, setSelectedVendor] = useState(null);
+  // Lightbox state — tracks which image URL to show full screen
+  const [lightboxImage, setLightboxImage] = useState(null);
 
-  const navigate = useNavigate();
   useEffect(() => {
+    fetchVendors();
+  }, []);
+
+  // Re-filter whenever vendors list, active tab, or search query changes
+  useEffect(() => {
+    let result = [...vendors];
+
+    if (activeTab !== "All") {
+      result = result.filter((vendor) => vendor.status === activeTab);
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (vendor) =>
+          vendor.name?.toLowerCase().includes(query) ||
+          vendor.vendorId?.toLowerCase().includes(query) ||
+          vendor.serviceCategory?.serviceName?.toLowerCase().includes(query)||
+          vendor.location?.toLowerCase().includes(query) ||
+          vendor.contactPerson?.toLowerCase().includes(query)
+      );
+    }
+
+    setFilteredVendors(result);
+  }, [vendors, activeTab, searchQuery]);
+
+  const fetchVendors = async () => {
     setIsLoading(true);
-    const timer = setTimeout(() => {
-      let result = vendors;
-
-      // Filter by Tabs
-      if (activeTab !== "All") {
-        result = result.filter((v) => v.status === activeTab);
-      }
-
-      // Filter by Search Query (Match name, service category, location, or vendor ID)
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        result = result.filter(
-          (v) =>
-            v.name.toLowerCase().includes(query) ||
-            v.id.toLowerCase().includes(query) ||
-            v.serviceCategory.toLowerCase().includes(query) ||
-            v.location.toLowerCase().includes(query),
-        );
-      }
-
-      setFilteredVendors(result);
+    try {
+      const response = await axios.get("http://localhost:5000/api/vendors");
+      setVendors(response.data.data);
+    } catch (error) {
+      console.error("Fetch vendors error:", error);
+      toast.error("Failed to fetch vendors");
+    } finally {
       setIsLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [activeTab, searchQuery, vendors]);
-
-  const handleToggleStatus = (vendorId, nextStatus) => {
-    setVendors((prev) =>
-      prev.map((v) => (v.id === vendorId ? { ...v, status: nextStatus } : v)),
-    );
-    if (selectedVendor?.id === vendorId) {
-      setSelectedVendor((prev) => ({ ...prev, status: nextStatus }));
     }
   };
+
+  const handleToggleStatus = async (id, status) => {
+    try {
+      await axios.patch(`http://localhost:5000/api/vendors/status/${id}`, {
+        status,
+      });
+
+      toast.success(
+        status === "Active" ? "Vendor activated successfully" : "Vendor suspended"
+      );
+
+      // Close modal and refresh
+      setSelectedVendor(null);
+      fetchVendors();
+    } catch (error) {
+      console.error("Toggle status error:", error);
+      toast.error("Failed to update vendor status");
+    }
+  };
+
+  // Helper: build full image URL
+  const getImageUrl = (imageName) => {
+    if (!imageName) return null;
+    return `http://localhost:5000/uploads/${imageName}`;
+  };
+
+  // Tab count helpers
+  const countByStatus = (status) =>
+    vendors.filter((v) => v.status === status).length;
 
   return (
     <AdminLayout>
       <div className="allVendors">
-        {/* Title Header */}
+
+        {/* Page Header */}
         <div className="allVendors-header">
           <div>
             <h2>Service Vendors Directory</h2>
@@ -143,80 +117,63 @@ const ManageVendors = () => {
               and audit active operations.
             </p>
           </div>
+          <button
+            className="add-vendor-btn"
+            onClick={() => navigate("/addVendors")}
+          >
+            <Plus size={16} />
+            Add Vendor
+          </button>
         </div>
 
-        {/* Search Bar Row */}
+        {/* Search Bar */}
         <div className="allVendors-searchBox">
           <Search size={18} className="search-icon-svg" />
           <input
             type="text"
-            placeholder="Search vendors by ID, service type, location, or name..."
+            placeholder="Search by name, ID, category, location, or contact..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           {searchQuery && (
-            <button className="clear-search" onClick={() => setSearchQuery("")}>
+            <button
+              className="clear-search-btn"
+              onClick={() => setSearchQuery("")}
+              title="Clear search"
+            >
               &times;
             </button>
           )}
         </div>
 
-        {/* Sub-tab Navigation */}
+        {/* Status Tabs */}
         <div className="allVendors-tabs">
-          <button
-            className={activeTab === "All" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setActiveTab("All")}
-          >
-            All Vendors <span className="tab-count">{vendors.length}</span>
-          </button>
-          <button
-            className={activeTab === "Active" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setActiveTab("Active")}
-          >
-            Active{" "}
-            <span className="tab-count">
-              {vendors.filter((v) => v.status === "Active").length}
-            </span>
-          </button>
-          <button
-            className={activeTab === "Busy" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setActiveTab("Busy")}
-          >
-            Busy / Assigned{" "}
-            <span className="tab-count">
-              {vendors.filter((v) => v.status === "Busy").length}
-            </span>
-          </button>
-          <button
-            className={activeTab === "Suspended" ? "tab-btn active" : "tab-btn"}
-            onClick={() => setActiveTab("Suspended")}
-          >
-            Suspended{" "}
-            <span className="tab-count">
-              {vendors.filter((v) => v.status === "Suspended").length}
-            </span>
-          </button>
-          <button onClick={() => navigate('/addVendors') }>
-            Add Vendors
-          </button>
+          {["All", "Active", "Busy", "Suspended"].map((tab) => (
+            <button
+              key={tab}
+              className={`tab-btn ${activeTab === tab ? "active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab === "Busy" ? "Busy / Assigned" : tab}
+              <span className="tab-count">
+                {tab === "All" ? vendors.length : countByStatus(tab)}
+              </span>
+            </button>
+          ))}
         </div>
 
-        {}
-        {/* Main Table Wrapper */}
+        {/* Data Table */}
         <div className="allVendors-tableWrapper">
           {isLoading ? (
             <div className="table-loading-state">
-              <div className="spinner"></div>
+              <Loader2 size={32} className="spin-icon" />
               <p>Syncing partner directory...</p>
             </div>
           ) : filteredVendors.length === 0 ? (
             <div className="table-empty-state">
               <Briefcase size={40} className="empty-state-icon" />
-              <h3>No Vendors Discovered</h3>
-              <p>
-                We found no vendor logs matching your current configuration
-                filters.
-              </p>
+              <h3>No Vendors Found</h3>
+              <p>No vendor records match your current filters.</p>
             </div>
           ) : (
             <table className="allVendors-table">
@@ -225,6 +182,7 @@ const ManageVendors = () => {
                   <th>Vendor ID</th>
                   <th>Company Name</th>
                   <th>Service Type</th>
+                  <th>Rate</th>
                   <th>Contact Person</th>
                   <th>Location</th>
                   <th>Performance</th>
@@ -234,23 +192,24 @@ const ManageVendors = () => {
               </thead>
               <tbody>
                 {filteredVendors.map((vendor) => (
-                  <tr key={vendor.id}>
-                    <td className="vendor-id-cell">{vendor.id}</td>
+                  <tr key={vendor._id}>
+                    <td className="vendor-id-cell">
+                      {vendor.vendorId || "N/A"}
+                    </td>
                     <td>
                       <div className="vendor-title-cell">
                         <strong className="vendor-primary-name">
                           {vendor.name}
                         </strong>
-                        <span className="vendor-meta-email">
-                          {vendor.email}
-                        </span>
+                        <span className="vendor-meta-email">{vendor.email}</span>
                       </div>
                     </td>
                     <td>
                       <span className="vendor-category-badge">
-                        {vendor.serviceCategory}
+                        {vendor.serviceCategory?.serviceName || "N/A"}
                       </span>
                     </td>
+                    <td>₹{vendor.rate?.toLocaleString() || 0}</td>
                     <td>
                       <div className="contact-person-meta">
                         <strong>{vendor.contactPerson}</strong>
@@ -266,31 +225,40 @@ const ManageVendors = () => {
                     <td>
                       <div className="rating-badge-container">
                         <Star size={14} className="star-icon" fill="#f1d49b" />
-                        <span>{vendor.rating.toFixed(1)}</span>
+                        <span>{(vendor.rating || 0).toFixed(1)}</span>
                       </div>
                     </td>
                     <td>
-                      <span
-                        className={`status-pill ${vendor.status.toLowerCase()}`}
-                      >
+                      <span className={`status-pill ${vendor.status?.toLowerCase()}`}>
                         {vendor.status}
                       </span>
                     </td>
                     <td>
                       <div className="allVendors-actions">
+                        {/* View details modal */}
                         <button
                           className="allEvents-actions-btn action-view"
                           onClick={() => setSelectedVendor(vendor)}
-                          title="Inspect Vendor Profile"
+                          title="View Vendor Profile"
                         >
                           <Eye size={16} />
                         </button>
 
+                        {/* Edit */}
+                        <button
+                          className="allEvents-actions-btn action-edit"
+                          onClick={() => navigate(`/editVendors/${vendor._id}`)}
+                          title="Edit Vendor"
+                        >
+                          <Pencil size={16} />
+                        </button>
+
+                        {/* Toggle suspend / activate */}
                         {vendor.status !== "Suspended" ? (
                           <button
                             className="allEvents-actions-btn action-reject"
                             onClick={() =>
-                              handleToggleStatus(vendor.id, "Suspended")
+                              handleToggleStatus(vendor._id, "Suspended")
                             }
                             title="Suspend Vendor"
                           >
@@ -300,7 +268,7 @@ const ManageVendors = () => {
                           <button
                             className="allEvents-actions-btn action-approve"
                             onClick={() =>
-                              handleToggleStatus(vendor.id, "Active")
+                              handleToggleStatus(vendor._id, "Active")
                             }
                             title="Activate Vendor"
                           >
@@ -316,8 +284,7 @@ const ManageVendors = () => {
           )}
         </div>
 
-        {}
-        {/* Detailed Vendor Inspection Modal */}
+        {/* ── Vendor Detail Modal ── */}
         {selectedVendor && (
           <div
             className="bookingModal-overlay"
@@ -327,8 +294,9 @@ const ManageVendors = () => {
               className="bookingModal-card"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Modal Header */}
               <div className="bookingModal-header">
-                <h3>Vendor Audit: {selectedVendor.id}</h3>
+                <h3>Vendor Audit: {selectedVendor.vendorId}</h3>
                 <button
                   className="closeModal-btn"
                   onClick={() => setSelectedVendor(null)}
@@ -337,127 +305,119 @@ const ManageVendors = () => {
                 </button>
               </div>
 
+              {/* Modal Body */}
               <div className="bookingModal-body">
-                {/* Profile Card Hero row */}
+
+                {/* Hero Row: Image + Name + Category */}
                 <div className="vendorModal-hero">
-                  <div className="vendorModal-iconBox">
-                    <Briefcase size={30} className="hero-briefcase" />
+
+                  {/* Vendor image or fallback */}
+                  <div className="vendorModal-imgBox">
+                    {selectedVendor.image ? (
+                      <img
+                        src={getImageUrl(selectedVendor.image)}
+                        alt={selectedVendor.name}
+                        className="vendorModal-img clickable"
+                        onClick={() =>
+                          setLightboxImage(getImageUrl(selectedVendor.image))
+                        }
+                        title="Click to enlarge"
+                        onError={(e) => {
+                          // If image fails to load, swap to fallback
+                          e.target.style.display = "none";
+                          e.target.nextSibling.style.display = "flex";
+                        }}
+                      />
+                    ) : null}
+
+                    {/* Fallback shown when no image or image fails */}
+                    <div
+                      className="vendorModal-imgFallback"
+                      style={{ display: selectedVendor.image ? "none" : "flex" }}
+                    >
+                      <ImageOff size={28} />
+                      <span>No Image</span>
+                    </div>
                   </div>
-                  <div>
+
+                  <div className="vendorModal-heroInfo">
                     <h4>{selectedVendor.name}</h4>
                     <span className="vendor-category-badge">
-                      {selectedVendor.serviceCategory}
+                      {selectedVendor.serviceCategory?.serviceName || "N/A"}
                     </span>
                     <p className="vendor-modal-loc">
-                      <MapPin size={13} className="loc-icon" />{" "}
+                      <MapPin size={13} className="loc-icon" />
                       {selectedVendor.location}
                     </p>
                   </div>
+
                   <div className="vendorModal-badgeContainer">
                     <span
-                      className={`status-pill ${selectedVendor.status.toLowerCase()}`}
+                      className={`status-pill ${selectedVendor.status?.toLowerCase()}`}
                     >
                       {selectedVendor.status}
                     </span>
                   </div>
                 </div>
 
-                {/* Contact Information & Analytics */}
+                {/* Info Grid */}
                 <div className="bookingModal-grid">
+
                   <div className="bookingModal-infoBlock">
                     <label>Primary Contact</label>
-                    <p
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <User size={14} className="loc-icon" />{" "}
-                      <strong>{selectedVendor.contactPerson}</strong>
+                    <p>
+                      <User size={13} className="loc-icon" />
+                      &nbsp;<strong>{selectedVendor.contactPerson}</strong>
                     </p>
-                    <p
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Phone size={13} className="loc-icon" />{" "}
-                      {selectedVendor.phone}
+                    <p>
+                      <Phone size={13} className="loc-icon" />
+                      &nbsp;{selectedVendor.phone}
                     </p>
-                    <p
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <Mail size={13} className="loc-icon" />{" "}
-                      {selectedVendor.email}
+                    <p>
+                      <Mail size={13} className="loc-icon" />
+                      &nbsp;{selectedVendor.email}
                     </p>
                   </div>
+
                   <div className="bookingModal-infoBlock">
+                    <label>Pricing</label>
+                    <p className="mb-3">
+                      <strong>Starting Rate: </strong>
+                      ₹{selectedVendor.rate?.toLocaleString() || 0}
+                    </p>
                     <label>Service Performance</label>
                     <p>
-                      <strong>Total Assignments:</strong>{" "}
-                      {selectedVendor.assignedEventsCount} Events
+                      <strong>Total Assignments: </strong>
+                      {selectedVendor.assignedEventsCount || 0} Events
                     </p>
-                    <p
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                      }}
-                    >
+                    <p style={{ display: "flex", alignItems: "center", gap: "5px" }}>
                       <strong>Quality Rating:</strong>
-                      <span
-                        className="rating-badge-container"
-                        style={{ display: "inline-flex", padding: "2px 8px" }}
-                      >
-                        <Star size={12} className="star-icon" fill="#f1d49b" />{" "}
-                        {selectedVendor.rating.toFixed(1)}
+                      <span className="rating-badge-container" style={{ display: "inline-flex", padding: "2px 8px" }}>
+                        <Star size={12} className="star-icon" fill="#f1d49b" />
+                        &nbsp;{(selectedVendor.rating || 0).toFixed(1)}
                       </span>
                     </p>
                   </div>
+
                 </div>
 
-                {/* Assignment Information */}
-                <div className="vendor-assignment-section">
-                  <label>Active Project Allocation</label>
-                  {selectedVendor.recentAssignment ? (
-                    <div className="active-assignment-box">
-                      <div className="assignment-lbl">
-                        <strong>
-                          {selectedVendor.recentAssignment.eventName}
-                        </strong>
-                        <span>
-                          Assignment Code:{" "}
-                          {selectedVendor.recentAssignment.bookingId}
-                        </span>
-                      </div>
-                      <div className="assignment-date">
-                        <span>{selectedVendor.recentAssignment.date}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="no-assignment-box">
-                      <CheckCircle size={22} className="available-icon" />
-                      <span>
-                        Vendor is currently open for task assignment and
-                        upcoming events.
-                      </span>
-                    </div>
-                  )}
-                </div>
+                {/* About / Bio section */}
+                {selectedVendor.about && (
+                  <div className="vendorModal-about">
+                    <label>About / Bio</label>
+                    <p>{selectedVendor.about}</p>
+                  </div>
+                )}
+
               </div>
 
+              {/* Modal Footer */}
               <div className="bookingModal-footer">
                 {selectedVendor.status === "Suspended" ? (
                   <button
                     className="btn-approve-submit"
                     onClick={() =>
-                      handleToggleStatus(selectedVendor.id, "Active")
+                      handleToggleStatus(selectedVendor._id, "Active")
                     }
                   >
                     Reinstate Vendor Account
@@ -466,7 +426,7 @@ const ManageVendors = () => {
                   <button
                     className="btn-reject-trigger"
                     onClick={() =>
-                      handleToggleStatus(selectedVendor.id, "Suspended")
+                      handleToggleStatus(selectedVendor._id, "Suspended")
                     }
                   >
                     Suspend Vendor Account
@@ -479,9 +439,36 @@ const ManageVendors = () => {
                   Dismiss Panel
                 </button>
               </div>
+
             </div>
           </div>
         )}
+
+        {/* ── Global Lightbox (for modal image click) ── */}
+        {lightboxImage && (
+          <div
+            className="lightbox-overlay"
+            onClick={() => setLightboxImage(null)}
+          >
+            <div
+              className="lightbox-content"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="lightbox-close-btn"
+                onClick={() => setLightboxImage(null)}
+              >
+                &times;
+              </button>
+              <img
+                src={lightboxImage}
+                alt="Full Size Preview"
+                className="lightbox-img"
+              />
+            </div>
+          </div>
+        )}
+
       </div>
     </AdminLayout>
   );

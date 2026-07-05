@@ -389,8 +389,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f1d49b;
-  color: #062036;
+  background: linear-gradient(135deg, #062036, #f1d49b);
+  color: #fff7ee;
   border: none;
   border-radius: 10px;
   padding: 12px 18px;
