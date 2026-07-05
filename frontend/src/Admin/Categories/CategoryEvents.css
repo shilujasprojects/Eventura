@@ -172,8 +172,8 @@
   align-items: center;
   gap: 8px;
   padding: 12px 18px;
-  background-color: #f1d49b;
-  color: #062036;
+  background: linear-gradient(135deg, #062036, #f1d49b);
+  color: #fff7ee;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -258,10 +258,13 @@
 /* Description */
 
 .allCategory-description {
-  max-width: 300px;
-  color: #c9d1d9;
-  font-size: 0.9rem;
-  line-height: 1.5;
+    width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.6;
+
 }
 
 /* Status Badge */
@@ -524,7 +527,7 @@
 
 .viewCategory-infoGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
@@ -620,4 +623,212 @@
   .viewCategory-headerActions {
     flex-wrap: wrap;
   }
+}
+
+
+/* =========================================================
+   SHARED ADDITIONS — validation, lightbox, image preview
+========================================================= */
+
+/* Required asterisk */
+.required {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+/* Inline error message */
+.error-msg {
+  color: #ef4444;
+  font-size: 0.78rem;
+  margin-top: 5px;
+}
+
+/* Red border on invalid inputs */
+.input-error {
+  border-color: #ef4444 !important;
+}
+
+/* Image preview thumbnail (Add / Edit pages) */
+.image-preview-wrapper {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.image-preview-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid rgba(241, 212, 155, 0.3);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.image-preview-thumb:hover {
+  border-color: #f1d49b;
+  transform: scale(1.05);
+}
+
+.image-preview-hint {
+  color: #8a9ba8;
+  font-size: 0.75rem;
+}
+
+/* No-image placeholder (Edit page) */
+.no-image-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  border: 2px dashed rgba(241, 212, 155, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a9ba8;
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 5px;
+}
+
+/* Lightbox overlay */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lightbox-box {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox-box img {
+  display: block;
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 16px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #fff7ee;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  z-index: 10;
+}
+
+.lightbox-close:hover {
+  background: #ef4444;
+}
+
+/* View page — banner clickable */
+.viewCategory-banner-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.viewCategory-banner-img:hover {
+  opacity: 0.9;
+}
+
+/* View page — no image banner */
+.viewCategory-no-image-banner {
+  width: 100%;
+  height: 200px;
+  align-items: center;
+  justify-content: center;
+  color: #8a9ba8;
+  font-size: 1rem;
+  border-radius: 18px;
+  border: 2px dashed rgba(241, 212, 155, 0.1);
+}
+
+/* All page — no image cell */
+.allCategory-no-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  border: 1px dashed rgba(241, 212, 155, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a9ba8;
+  font-size: 0.65rem;
+  text-align: center;
+}
+
+/* All page — delete button accent */
+.allCategory-actions button.delete-btn:hover {
+  color: #ef4444;
+}
+
+/* Search clear button */
+.search-clear-btn {
+  background: transparent;
+  border: none;
+  color: #8a9ba8;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+}
+
+.search-clear-btn:hover {
+  color: #ef4444;
+}
+
+/* Search result count */
+.search-result-count {
+  color: #8a9ba8;
+  font-size: 0.85rem;
+  margin-top: 12px;
+  text-align: right;
+}
+
+/* Empty table row */
+.allCategory-empty {
+  text-align: center;
+  color: #8a9ba8;
+  padding: 40px !important;
+  font-size: 0.95rem;
+}
+
+/* Loading / not-found text on View page */
+.view-loading {
+  color: #8a9ba8;
+  padding: 40px;
+  text-align: center;
+  font-size: 1rem;
 }
