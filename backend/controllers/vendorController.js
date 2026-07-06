@@ -1,6 +1,7 @@
 const Vendor = require("../models/Vendor");
 
 
+
 // Add Vendor
 // exports.addVendor = async (req, res) => {
 //   try {
@@ -64,8 +65,8 @@ exports.getAllVendors = async (req, res) => {
     });
 
     // ADD THIS TEMPORARILY
-    console.log("First vendor serviceCategory:", 
-      JSON.stringify(vendors[0]?.serviceCategory, null, 2));
+    // console.log("First vendor serviceCategory:", 
+    //   JSON.stringify(vendors[0]?.serviceCategory, null, 2));
 
     res.status(200).json({
       success: true,
