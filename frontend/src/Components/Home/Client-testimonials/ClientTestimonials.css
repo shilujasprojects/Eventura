@@ -8,6 +8,7 @@
   );
 
   text-align: center;
+  overflow: visible;
 }
 
 .client h2 {
@@ -18,9 +19,86 @@
   font-size: 48px;
 }
 
+/* ------------------- Custom carousel (no Bootstrap JS/CSS) ------------------- */
+
+.client-carousel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: visible; /* the ONLY thing hidden is the track wrapper below */
+}
+
+/* This is the single element allowed to clip horizontally — it hides the
+   off-screen slides sitting to the left/right, nothing else. It never
+   clips vertically because height is driven by content, not fixed. */
+.client-carousel-track-wrapper {
+  flex: 1 1 auto;
+  overflow: hidden;
+  height: auto;
+}
+
+.client-carousel-track {
+  display: flex;
+  align-items: flex-start;
+  transition: transform 0.5s ease-in-out;
+}
+
+.client-carousel-slide {
+  flex: 0 0 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.client-carousel-control {
+  flex: 0 0 auto;
+  background: transparent;
+  border: none;
+  color: #fff7ee;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 10px;
+  line-height: 1;
+  transition: opacity 0.2s ease;
+}
+
+.client-carousel-control:hover {
+  opacity: 0.7;
+}
+
+.client-carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.client-carousel-indicators button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.client-carousel-indicators button.active {
+  background-color: #fff7ee;
+  transform: scale(1.2);
+}
+
+/* ------------------------------ Card itself ----------------------------- */
+
 .client-card {
-  /* background-color: rgb(209, 208, 208); */
   background-color: #fff;
+  height: auto;
+  min-height: 480px; /* keeps every slide the same height so nothing clips
+                         mid-transition — adjust if your longest review grows */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 40px !important;
   box-shadow:
     rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px,
@@ -34,8 +112,13 @@
   opacity: 0.98;
 }
 
+/* Flex row that never wraps — keeps all 5 stars on one line at any width */
 .stars {
   margin: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 .stars i {
@@ -53,16 +136,105 @@
   margin: 25px auto 15px auto;
 }
 
-
+/* Initials avatar — used instead of a photo since clients don't upload one */
+.profile-initials {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #062036;
+  color: #e1af4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Cinzel;
+  font-weight: 700;
+  font-size: 32px;
+  margin: 25px auto 15px auto;
+}
 
 .client .card-para {
   font-style: italic;
   padding: 10px;
+  text-transform: capitalize;
 }
 
 .client .card-title {
   color: #062036;
+  text-transform: capitalize;
+  margin-bottom: 4px;
 }
 .client .card-text {
   color: gray;
+  text-transform: capitalize;
+  margin-bottom: 0;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .client h2 {
+    font-size: 34px;
+  }
+  .stars i {
+    font-size: 22px;
+  }
+  .profile-image,
+  .profile-initials {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-initials {
+    font-size: 26px;
+    margin: 20px auto 12px auto;
+  }
+  .client-card {
+    min-height: 420px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .client {
+    padding: 30px 0 40px 0;
+  }
+  .client h2 {
+    font-size: 26px;
+  }
+  .client p {
+    font-size: 14px;
+  }
+  .client-card {
+    padding: 10px !important;
+    padding-bottom: 25px !important;
+    min-height: 380px;
+  }
+  .stars {
+    margin: 10px;
+  }
+  .stars i {
+    font-size: 25px !important;
+    margin-right: 2px;
+  }
+  .profile-image,
+  .profile-initials {
+    width: 65px;
+    height: 65px;
+  }
+  .profile-initials {
+    font-size: 20px;
+    margin: 12px auto 8px auto;
+  }
+  .client .card-para {
+    font-size: 14px;
+    padding: 6px;
+  }
+  .client .card-title {
+    font-size: 18px;
+  }
+  .client .card-text {
+    font-size: 13px;
+  }
+  .client-carousel-control {
+    font-size: 22px;
+    padding: 6px;
+  }
 }

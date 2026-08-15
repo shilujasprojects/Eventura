@@ -1,0 +1,728 @@
+.dashboard-container {
+  max-width: auto;
+  margin:  0 5%;
+  padding: 30px 20px 60px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* HEADER */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: linear-gradient(135deg, #062036, #0a2f4d);
+  padding: 26px 32px;
+  border-radius: 14px;
+  margin-top: 80px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 24px rgba(6, 32, 54, 0.2);
+}
+
+.dashboard-header h1 {
+  font-family: Cinzel;
+  color: #f1d49b;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid #f1d49b;
+  color: #f1d49b;
+  padding: 8px 22px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.25s ease-in-out;
+}
+
+.logout-btn:hover {
+  background: #f1d49b;
+  color: #062036;
+}
+
+/* SECTIONS */
+.dashboard-section {
+  margin-bottom: 34px;
+}
+
+.dashboard-section h2 {
+  font-family: Cinzel;
+  color: #062036;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e1af4a;
+}
+
+.section-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.section-heading-row h2 {
+  margin-bottom: 0;
+}
+
+.edit-info-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  /* background: transparent; */
+  border: 1px solid #f1d49b;
+   background: linear-gradient(135deg, #062036, #0a2f4d);
+  color: #fff7ee;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  margin-bottom: 18px;
+}
+
+.edit-info-btn:hover {
+  background: linear-gradient(135deg, #062036, #0a2f4d);
+  color: #f1d49b;
+}
+
+/* INFO CARD */
+.info-card {
+  background: #fff8ec;
+  border: 1px solid #ecdfc2;
+  border-left: 4px solid #e1af4a;
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 10px rgba(6, 32, 54, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 40px;
+}
+
+.info-card p {
+  margin: 0;
+  color: #333;
+  flex: 1 1 200px;
+}
+
+.info-card strong {
+  color: #062036;
+}
+
+/* CARD GRID */
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.dashboard-card {
+  background: #fff8ec;
+  border: 1px solid #ecdfc2;
+  border-left: 4px solid #e1af4a;
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 10px rgba(6, 32, 54, 0.06);
+  transition: 0.2s ease-in-out;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(6, 32, 54, 0.1);
+}
+
+.dashboard-card p {
+  margin: 6px 0;
+  color: #333;
+}
+
+.dashboard-card strong {
+  color: #062036;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.booking-id {
+  font-weight: 700;
+  color: #062036;
+  letter-spacing: 0.3px;
+}
+
+/* STATUS BADGES */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.status-pending { background: #fdf1d6; color: #8a6d1d; }
+.status-readyforapproval { background: #dbe9fd; color: #1c5c9c; }
+.status-confirmed { background: #dcf3e3; color: #1f7a43; }
+.status-completed { background: #dcedf7; color: #1c5c85; }
+.status-closed { background: #e7e7ea; color: #52525b; }
+.status-cancelled { background: #fbe0df; color: #a12f2a; }
+.status-new { background: #e6e4fb; color: #40399e; }
+.status-in-progress { background: #fdf1d6; color: #8a6d1d; }
+.status-resolved { background: #dcf3e3; color: #1f7a43; }
+
+/* INQUIRY REPLIES */
+.replies {
+  margin-top: 12px;
+  border-top: 1px dashed #e0d3ae;
+  padding-top: 10px;
+}
+
+.reply {
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.admin-reply {
+  color: #062036;
+  font-weight: 600;
+}
+
+.client-reply {
+  color: #555;
+  font-style: italic;
+}
+
+.dashboard-loading {
+  text-align: center;
+  margin-top: 100px;
+  font-family: Cinzel;
+  color: #062036;
+  font-size: 1.1rem;
+}
+
+/* =====================================================
+   REVIEW MODAL
+===================================================== */
+.write-review-btn {
+  margin-top: 12px;
+  background: #062036;
+  color: #fff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.write-review-btn:hover:not(:disabled) {
+  background: #0a2f4d;
+}
+
+.write-review-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.review-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.review-stars .star-filled {
+  color: #e1af4a;
+}
+
+.reviewed-badge {
+  display: inline-block;
+  margin-top: 12px;
+  color: #1f7a43;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.review-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 32, 54, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: overlayFade 0.2s ease-in-out;
+}
+
+.review-modal-card {
+  background: #fff8ec;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  padding: 33px 33px 27px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalPop 0.2s ease-in-out;
+  margin-top: 90px;
+}
+
+.review-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  color: #062036;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  border-radius: 50%;
+  transition: 0.2s ease-in-out;
+}
+
+.review-modal-close:hover {
+  background: rgba(6, 32, 54, 0.08);
+}
+
+.review-modal-header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.review-modal-header h3 {
+  font-family: Cinzel;
+  color: #062036;
+  font-size: 1.3rem;
+  margin: 0 0 8px;
+}
+
+.review-modal-header p {
+  color: #8a7a52;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.review-modal-form .form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.review-modal-form label {
+  display: block;
+  font-weight: 600;
+  color: #062036;
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.review-modal-form .star-picker {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+ 
+}
+
+.review-modal-form .star-picker svg {
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+  color: #ddd0ac;
+}
+
+.review-modal-form .star-picker svg.star-filled {
+  color: #e1af4a;
+  transform: scale(1.08);
+}
+
+.review-modal-form .star-picker svg:hover {
+  transform: scale(1.15);
+}
+
+.rating-label {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #8a7a52;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.review-modal-form textarea,
+.review-modal-form input[type="text"],
+.review-modal-form input[type="tel"],
+.review-modal-form input[type="email"],
+.review-modal-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd0ac;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+  background: #fff;
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
+.review-modal-form textarea {
+  resize: vertical;
+  max-height: 150px;
+}
+
+.review-modal-form textarea:focus,
+.review-modal-form input:focus {
+  border-color: #e1af4a;
+  box-shadow: 0 0 8px rgba(225, 175, 74, 0.35);
+}
+
+.review-modal-form textarea.has-error,
+.review-modal-form input.has-error {
+  border-color: #c0392b;
+  padding: 10px;
+}
+
+.review-modal-form input:disabled {
+  background: #f3ede0;
+  color: #8a7a52;
+  cursor: not-allowed;
+}
+
+/* .field-error {
+  display: block;
+  color: #c0392b;
+  font-size: 0.78rem;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.field-hint {
+  display: block;
+  color: #8a7a52;
+  font-size: 0.75rem;
+  margin-top: 6px;
+} */
+
+.field-hint,
+.field-error {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.field-hint {
+  color: #8a7a52;
+}
+
+.field-error {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.review-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancel-review-btn {
+  background: transparent;
+  border: 1px solid #999;
+  color: #555;
+  padding: 9px 20px;
+  margin-top: 13px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.cancel-review-btn:hover {
+  background: #f2f2f2;
+}
+
+@keyframes overlayFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.suspended-banner {
+  background: #fbe0df;
+  color: #a12f2a;
+  border: 1px solid #f3b7b3;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.payment-status-row {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.payment-status-item {
+  flex: 1 1 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.payment-pill {
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.payment-not-paid { background: #fbe0df; color: #a12f2a; }
+.payment-pending { background: #fdf1d6; color: #8a6d1d; }
+.payment-paid { background: #dcf3e3; color: #1f7a43; }
+
+.payment-failed { background: #fbe0df; color: #a12f2a; }
+.payment-refunded { background: #e6e4fb; color: #40399e; }
+
+.cancellation-note {
+  background: #fbe0df;
+  color: #a12f2a;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+/* =====================================================
+   RESPONSIVE — large tablets / small desktops
+===================================================== */
+@media (max-width: 992px) {
+  .dashboard-container {
+    padding: 24px 18px 50px;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+/* =====================================================
+   RESPONSIVE — tablets
+===================================================== */
+@media (max-width: 768px) {
+  .dashboard-header {
+    margin-top: 90px;
+    padding: 20px 22px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .logout-btn {
+    align-self: flex-end;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .info-card {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .review-modal-card {
+    padding: 28px 24px 24px;
+    margin-top: 130px;
+  }
+  .cancel-review-btn{
+  margin: 12px 0px 0px;
+}
+
+.edit-info-btn{
+  padding: 5px 12px;
+}
+
+}
+
+
+
+
+/* =====================================================
+   RESPONSIVE — small phones
+===================================================== */
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 16px 12px 40px;
+  }
+
+  .dashboard-header {
+    margin-top: 90px;
+    padding: 16px 16px;
+    border-radius: 10px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .dashboard-section h2 {
+    font-size: 1rem;
+  }
+
+  .card-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dashboard-card {
+    padding: 14px 16px;
+  }
+
+  .card-top {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .payment-status-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .payment-status-item {
+    flex: 1 1 auto;
+  }
+
+  .write-review-btn,
+  .cancel-review-btn {
+    width: 100%;
+    margin: 6px 0px 0px;
+    text-align: center;
+  }
+
+  .review-modal-card {
+    padding: 24px 18px 20px;
+    border-radius: 12px;
+    margin-top: 150px;
+  }
+
+  .review-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .review-modal-actions button {
+    width: 100%;
+  }
+
+  .star-picker svg {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 0;
+  }
+
+
+  .suspended-banner {
+    padding: 12px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+/* Wider modal specifically for Edit Profile (has more fields than the review modal) */
+.edit-profile-card {
+  max-width: 640px;
+}
+
+/* Generic 2-column row — used for Full Name+Phone, Email+Current Password,
+   New Password+Confirm New Password in the Edit Profile modal */
+.field-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.field-row-2 .form-row {
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+/* PASSWORD FIELD — eye-toggle, matches Auth.css pattern */
+.review-modal-form .password-field {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-modal-form .password-field input {
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  box-sizing: border-box;
+}
+
+.review-modal-form .password-field span {
+  position: absolute;
+  right: 12px;
+  top: 15px;
+  transform: none;
+  cursor: pointer;
+  color: #8a7a52;
+}
+
+.review-modal-form .password-field span:hover {
+  color: #062036;
+}
+
+/* Stack back to one column on narrow screens so fields stay usable */
+@media (max-width: 600px) {
+  .edit-profile-card {
+    max-width: 480px;
+  }
+  .field-row-2 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+.payment-partially-refunded {
+  background: #e6e4fb;
+  color: #40399e;
+}

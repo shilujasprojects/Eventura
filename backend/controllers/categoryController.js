@@ -26,10 +26,23 @@ exports.createCategory = async (req, res) => {
 };
 
 // Read All Categories
+// exports.getCategory = async (req, res) => {
+//   try {
+//     const categories = await Category.find().sort({ createdAt: -1 });
+
+//     res.json(categories);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
+// Read All Categories
 exports.getCategory = async (req, res) => {
   try {
-    const categories = await Category.find().sort({ createdAt: -1 });
+    const filter = {};
+    if (req.query.status) filter.status = req.query.status;
 
+    const categories = await Category.find(filter).sort({ createdAt: -1 });
     res.json(categories);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -26,7 +26,7 @@ const ViewCategoryEvents = () => {
     const fetchCategory = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/category/view-category/${id}`
+          `http://localhost:5000/api/category/view-category/${id}`,
         );
         setCategory(res.data.data);
       } catch (error) {
@@ -79,13 +79,6 @@ const ViewCategoryEvents = () => {
               <p>Category Details</p>
             </div>
             <div className="viewCategory-headerActions">
-              <span
-                className={`viewCategory-status ${
-                  category.status === "Active" ? "active" : "inactive"
-                }`}
-              >
-                {category.status}
-              </span>
               <button
                 className="viewCategory-backBtn"
                 onClick={() => navigate(-1)}
@@ -93,6 +86,14 @@ const ViewCategoryEvents = () => {
                 <ArrowLeft size={18} />
                 Back
               </button>
+              <span
+                className={`viewCategory-status ${
+                  category.status === "Active" ? "active" : "inactive"
+                }`}
+              >
+                {category.status}
+              </span>
+
               <button
                 className="viewCategory-editBtn"
                 onClick={() => navigate(`/editCategoryEvent/${category._id}`)}

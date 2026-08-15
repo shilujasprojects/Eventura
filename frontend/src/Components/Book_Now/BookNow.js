@@ -1,381 +1,730 @@
-import React, { useState } from "react";
-import "./BookNow.css";
-import birthdayCeleb from "./Book_Now_Images/birthday-celeb.jpg";
-import anniversaryCouple2 from "./Book_Now_Images/anniversary-couple2.jpg";
-import babyShowerShoe from "./Book_Now_Images/baby-shower-shoe.jpg";
-import CorporateEvent from "./Book_Now_Images/corporate-event.jpg";
-import CoupleMarraige from "./Book_Now_Images/couple-marraige.jpg";
-import funeralFlower from "./Book_Now_Images/funeral_flower_2.jpg";
-import houseWarming from "./Book_Now_Images/house-warming.jpg";
-import ringExchange from "./Book_Now_Images/ring-exchange.jpg";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import "./BookNow.css";
+
+// 👈 Update this if your login page's route is different
+const LOGIN_ROUTE = "/loginSign";
 
 function BookNow() {
-
-  const [selectedServices, setSelectedServices] = useState([]);   // Serivce selection - selectedServices = array; It stores multiple selected services. 
-
-  const [selectedEvent, setSelectedEvent] = useState('Wedding');    // Event card selection
-
   const navigate = useNavigate();
 
-  const services = [
-    "Catering",
-    "Decoration & Styling",
-    "Photo & Video",
-    "Makeup & Styling",
-    "Music & Entertainment",
-    "Rentals Outfits",
-    "Furniture & Equipment",
-    "Travel & Guest Management",
-    "Accessories & Event Props",
-    "Custom Cakes & Bakery",
-    "Kids Entertainment",
-    "Planning & Coordination ",
-  ];
+  // ── Logged-in client detection ────────────────────────────
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedRole = localStorage.getItem("role");
+  const loggedInClient = storedRole === "client" ? storedUser : null;
 
-  const events = [
-    { name : 'Wedding', image : CoupleMarraige},
-    { name : 'Birthday', image : birthdayCeleb },
-    { name : 'Engagement' , image : ringExchange },
-    { name: 'Baby Shower', image : babyShowerShoe },
-    { name : 'Anniversary', image : anniversaryCouple2 },
-    { name : 'Corporate', image : CorporateEvent },
-    { name : 'Housewarming', image : houseWarming },
-    { name : 'Funeral Services' , image : funeralFlower},
-  ]
-
-  const toggleService = (service) => {              //service = the item user clicked.
-    if (selectedServices.includes(service)) {           // .includes() checks: “Is this service already inside the array?”
-      setSelectedServices(selectedServices.filter((s) => s !== service));   // .filter() creates a new array removing that service.
-    } else {
-      setSelectedServices([...selectedServices, service]);  // ...selectedServices = spread operator; It copies old array and adds new service.
+  // ── Gate: must be logged in as a client to even open this page.
+  // If not, send them to login/signup and remember to bring them
+  // straight back here once they're in.
+  useEffect(() => {
+    if (!loggedInClient) {
+      sessionStorage.setItem("postLoginRedirect", "/booknow");
+      toast.info("Please login or sign up to book an event.");
+      navigate(LOGIN_ROUTE);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [checkingStatus, setCheckingStatus] = useState(!!loggedInClient);
+  const [isSuspended, setIsSuspended] = useState(false);
+
+  useEffect(() => {
+    if (!loggedInClient) return;
+
+    const checkStatus = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/public/clients/${loggedInClient._id}/status`
+        );
+        setIsSuspended(res.data.status === "Suspended");
+      } catch (error) {
+        // If the check itself fails, don't block booking on a network hiccup —
+        // the backend still enforces the suspended check when the booking is submitted.
+        console.error("Could not verify account status", error);
+      } finally {
+        setCheckingStatus(false);
+      }
+    };
+
+    checkStatus();
+  }, [loggedInClient]);
+
+  // Step 1: Category
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // Step 2: Event (under selected category)
+  const [events, setEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // Step 3: Package (under selected category) — or "custom"
+  const [packages, setPackages] = useState([]);
+  const [packagesLoading, setPackagesLoading] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+
+  const [services, setServices] = useState([]);
+  const [selectedExtraServices, setSelectedExtraServices] = useState([]);
+
+  const [formData, setFormData] = useState({
+    eventDate: "",
+    startTime: "",
+    endTime: "",
+    city: "",
+    venueName: "",
+    guestCount: "",
+    budgetRange: "₹50,000 – ₹1,00,000",
+    specialRequirements: "",
+    // Prefilled from the logged-in client, if any — still editable in case
+    // they're booking on someone else's behalf or want to correct a detail.
+    fullName: loggedInClient?.fullName || "",
+    phone: loggedInClient?.phone || "",
+    email: loggedInClient?.email || "",
+    whatsappUpdates: false,
+  });
+
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const isCustom = selectedPackage === "custom";
+
+  // ── Fetch active categories on load ──────────────────────
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/category?status=Active");
+        setCategories(res.data);
+      } catch (error) {
+        toast.error("Failed to load event categories. Please refresh the page.");
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // ── Fetch active services once (used only for custom builds) ──
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/services?status=Active");
+        setServices(res.data.data);
+      } catch (error) {
+        console.error("Failed to load services", error);
+      }
+    };
+    fetchServices();
+  }, []);
+
+  // ── Fetch active events whenever category changes ────────
+  useEffect(() => {
+    if (!selectedCategory) {
+      setEvents([]);
+      setSelectedEvent(null);
+      return;
+    }
+
+    const fetchEvents = async () => {
+      setEventsLoading(true);
+      setSelectedEvent(null);
+      setPackages([]);
+      setSelectedPackage(null);
+      setSelectedExtraServices([]);
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/events?category=${selectedCategory._id}&status=Active`
+        );
+        setEvents(res.data.data);
+      } catch (error) {
+        toast.error("Failed to load events for this category.");
+      } finally {
+        setEventsLoading(false);
+      }
+    };
+    fetchEvents();
+  }, [selectedCategory]);
+
+  // ── Fetch active packages whenever an event is selected ──
+  useEffect(() => {
+    if (!selectedEvent) {
+      setPackages([]);
+      setSelectedPackage(null);
+      return;
+    }
+
+    const fetchPackages = async () => {
+      setPackagesLoading(true);
+      setSelectedPackage(null);
+      setSelectedExtraServices([]);
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/packages?category=${selectedCategory._id}&status=Active`
+        );
+        setPackages(res.data.data);
+      } catch (error) {
+        toast.error("Failed to load packages for this event.");
+      } finally {
+        setPackagesLoading(false);
+      }
+    };
+    fetchPackages();
+  }, [selectedEvent]);
+
+  // ── If no packages exist for this category, auto-switch to custom build ──
+  useEffect(() => {
+    if (!packagesLoading && selectedEvent && packages.length === 0) {
+      setSelectedPackage("custom");
+    }
+  }, [packagesLoading, packages, selectedEvent]);
+
+  // Reset service selection whenever switching between a real package and custom
+  useEffect(() => {
+    setSelectedExtraServices([]);
+  }, [selectedPackage]);
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const toggleExtraService = (service) => {
+    setSelectedExtraServices((prev) => {
+      const exists = prev.find((s) => s.service === service._id);
+      if (exists) return prev.filter((s) => s.service !== service._id);
+      return [
+        ...prev,
+        { service: service._id, serviceName: service.serviceName, price: service.servicePrice },
+      ];
+    });
+  };
+
+  const packagePrice = !isCustom && selectedPackage ? selectedPackage.finalPrice : 0;
+  const extraServicesTotal = selectedExtraServices.reduce((sum, s) => sum + s.price, 0);
+  const estimatedTotal = packagePrice + extraServicesTotal;
+
+  const validate = () => {
+    const newErrors = {};
+    const nameRegex = /^[a-zA-Z\s]{3,50}$/;
+    const cityRegex = /^[a-zA-Z\s]{2,40}$/;
+    const phoneRegex = /^[6-9]\d{9}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!selectedCategory) newErrors.category = "Please select an event category.";
+    if (!selectedEvent) newErrors.event = "Please select an event.";
+
+    if (isCustom && selectedExtraServices.length === 0) {
+      newErrors.package = "Select at least one service for your custom booking.";
+    }
+
+    if (!formData.eventDate) {
+      newErrors.eventDate = "Event date is required.";
+    } else {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const chosenDate = new Date(formData.eventDate);
+      const oneDayMs = 24 * 60 * 60 * 1000;
+
+      if (chosenDate < today) {
+        newErrors.eventDate = "Event date cannot be in the past.";
+      } else if (chosenDate - today < oneDayMs) {
+        newErrors.eventDate = "Please book at least 1 day in advance.";
+      }
+    }
+
+    if (!formData.startTime) newErrors.startTime = "Start time is required.";
+    if (!formData.endTime) newErrors.endTime = "End time is required.";
+    if (formData.startTime && formData.endTime && formData.startTime >= formData.endTime) {
+      newErrors.endTime = "End time must be after start time.";
+    }
+
+    if (!formData.city.trim()) {
+      newErrors.city = "City is required.";
+    } else if (!cityRegex.test(formData.city.trim())) {
+      newErrors.city = "City should only contain letters (2–40 characters).";
+    }
+
+    if (formData.venueName.trim() && formData.venueName.trim().length < 3) {
+      newErrors.venueName = "Venue name should be at least 3 characters.";
+    }
+
+    if (!formData.guestCount) {
+      newErrors.guestCount = "Guest count is required.";
+    } else if (!Number.isInteger(Number(formData.guestCount)) || Number(formData.guestCount) < 1) {
+      newErrors.guestCount = "Enter a valid guest count.";
+    } else if (Number(formData.guestCount) > 5000) {
+      newErrors.guestCount = "Guest count seems too high. Please contact us directly for events this size.";
+    }
+
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required.";
+    } else if (!nameRegex.test(formData.fullName.trim())) {
+      newErrors.fullName = "Name should only contain letters (3–50 characters).";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required.";
+    } else if (!phoneRegex.test(formData.phone.trim())) {
+      newErrors.phone = "Enter a valid 10-digit phone number.";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email = "Enter a valid email address.";
+    }
+
+    if (formData.specialRequirements.length > 500) {
+      newErrors.specialRequirements = "Please keep this under 500 characters.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleReview = () => {
-  const bookingData = {
-    eventType: selectedEvent, 
-    date: document.getElementById("eventDate")?.value,
-    startTime: document.getElementById("startTime")?.value,
-    endTime: document.getElementById("endTime")?.value,
-    city: document.getElementById("city")?.value,
-    guestCount: document.getElementById("guestCount")?.value,
-    services: selectedServices,
-    fullName: document.getElementById("fullName")?.value,
-    phone: document.getElementById("phone")?.value,
-    email: document.getElementById("email")?.value,
+    if (submitting) return;
+
+    if (!validate()) {
+      toast.error("Please fix the highlighted fields before continuing.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const bookingData = {
+      event: selectedEvent._id,
+      eventName: selectedEvent.eventName,
+      categoryName: selectedCategory.categoryName,
+      coverImage: selectedEvent.coverImage,
+
+      isCustomPackage: isCustom,
+      package: isCustom ? null : selectedPackage._id,
+      packageName: isCustom ? "Custom Package" : selectedPackage.packageName,
+      packagePrice,
+
+      extraServices: selectedExtraServices,
+      extraServicesTotal,
+      totalAmount: estimatedTotal,
+
+      ...formData,
+      fullName: formData.fullName.trim(),
+      city: formData.city.trim(),
+      budgetRange: isCustom ? formData.budgetRange : "",
+    };
+
+    localStorage.setItem("eventBooking", JSON.stringify(bookingData));
+    navigate("/booksummary");
   };
 
-  localStorage.setItem("eventBooking", JSON.stringify(bookingData));
+  // ── Not logged in — the effect above is already redirecting; render
+  // nothing but a brief placeholder so the form never flashes on screen ──
+  if (!loggedInClient) {
+    return (
+      <div className="container-fluid book-now-section">
+        <div className="container main-section py-5">
+          <p className="text-center">Redirecting you to login...</p>
+        </div>
+      </div>
+    );
+  }
 
-  navigate("/booksummary");
-};
+  // ── Gate: suspended clients see a blocker instead of the booking flow ──
+  if (checkingStatus) {
+    return (
+      <div className="container-fluid book-now-section">
+        <div className="container main-section py-5">
+          <p className="text-center">Checking your account...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isSuspended) {
+    return (
+      <div className="container-fluid book-now-section">
+        <div className="container main-section py-5">
+          <div className="suspended-blocker">
+            <h4>Account Suspended</h4>
+            <p>
+              Your account is currently suspended, so new bookings can't be made right now.
+              Please contact our support team to reactivate your account before booking an event.
+            </p>
+            <a href="https://wa.me/9114155238886" target="_blank" rel="noopener noreferrer" className="btn btn-gold px-4 py-2 mt-2">
+              Contact Support
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="container-fluid book-now-section">
         <div className="container main-section py-4 py-md-5">
-          {/* EVENT TYPE */}
+          {/* STEP 1: CATEGORY */}
           <div className="mb-4">
-            <h4 className="mb-3">Select Event Type</h4>
+            <h4 className="mb-3">Select Event Category</h4>
 
-            {/* <div className="row g-3">
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${selectedEvent === "Wedding" ? 'active' : "" }`} // className="event-card active"- if condition is true
-                      onClick={() => {setSelectedEvent("Wedding")}}                            // className="event-card " - if condition is false
-                >
-                  
-                  <img src={CoupleMarraige} alt="Wedding" />
-                  <p>Wedding</p>
-                </div>
-              </div>
-
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${selectedEvent === "Birthday" ? "active" : "" }`}
-                     onClick = {() => {setSelectedEvent ("Birthday")}}
-                >
-                  <img src={birthdayCeleb} alt="Birthday" />
-                  <p>Birthday</p>
-                </div>
-              </div>
-
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${ selectedEvent === "Engagement" ? "active" : "" }`}
-                     onClick = {() => {setSelectedEvent("Engagement")}}
-                >
-                  <img src={ringExchange} alt="Engagement" />
-                  <p>Engagement</p>
-                </div>
-              </div>
-
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${selectedEvent === "Baby Shower" ? "active" : "" }`}
-                    onClick ={() => {setSelectedEvent("Baby Shower")}}
-                >
-                  <img src={babyShowerShoe} alt="Baby Shower" />
-                  <p>Baby Shower</p>
-                </div>
-              </div>
-
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${selectedEvent === 'Anniversary' ? "active" : "" }`}
-                     onClick={() => {setSelectedEvent("Anniversary")}}
-                >
-                  <img src={anniversaryCouple2} alt="Anniversary" />
-                  <p>Anniversary</p>
-                </div>
-              </div>
-
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${selectedEvent === 'Corporate' ? "active" : "" }`}
-                     onClick ={() => {setSelectedEvent("Corporate")}}
-                >
-                  <img src={CorporateEvent} alt="Corporate" />
-                  <p>Corporate</p>
-                </div>
-              </div>
-
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${selectedEvent === "Housewarming" ? "active" : "" }`}
-                     onClick ={() => {setSelectedEvent("Housewarming")}}
-                >
-                  <img src={houseWarming} alt="Housewarming" />
-                  <p>Housewarming</p>
-                </div>
-              </div>
-
-              <div className="col-6 col-sm-4 col-md-3 col-lg-2">
-                <div className={`event-card ${selectedEvent === 'Funeral Services' ? "active" : "" }`}
-                     onClick ={() => {setSelectedEvent("Funeral Services")}}
-                >
-                  <img src={funeralFlower} alt="Funeral Services" />
-                  <p>Funeral Services</p>
-                </div>
-              </div>
-            </div> */}
-
-            <div className='row g-3'>
-              {
-                events.map((event) =>(
-                  <div key={event.name} className="col-6 col-sm-4 col-md-3 event-main">
-                    <div className={`event-card ${selectedEvent === event.name ? "active" : ""}`}
-                         onClick ={() =>{ setSelectedEvent(event.name)}}
+            {categoriesLoading ? (
+              <p>Loading categories...</p>
+            ) : categories.length === 0 ? (
+              <p className="text-muted">No categories available right now. Please check back later.</p>
+            ) : (
+              <div className="row g-3">
+                {categories.map((category) => (
+                  <div key={category._id} className="col-6 col-sm-4 col-md-3 event-main">
+                    <div
+                      className={`event-card ${selectedCategory?._id === category._id ? "active" : ""}`}
+                      onClick={() => setSelectedCategory(category)}
                     >
-                      <img src={event.image} alt={event.name} />
-                      <p>{event.name}</p>
-
+                      <img src={`http://localhost:5000/uploads/${category.image}`} alt={category.categoryName} />
+                      <p>{category.categoryName}</p>
                     </div>
                   </div>
-                ))
-              }
-            </div>
+                ))}
+              </div>
+            )}
+            {errors.category && <small className="error-text">{errors.category}</small>}
           </div>
 
-          
+          {/* STEP 2: EVENT */}
+          {selectedCategory && (
+            <div className="mb-4">
+              <h4 className="mb-3">Select Event</h4>
 
-          {/* EVENT DETAILS */}
-          <div className="mb-4">
-            <h4 className="mb-3">Event Details</h4>
-            <div className="row g-3">
-              <div className="col-md-6">
-                <label>Date</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  id="eventDate"
-                  required
-                />
-              </div>
-              <div className="col-md-3">
-                <label>Start Time</label>
-                <input
-                  type="time"
-                  className="form-control"
-                  id="startTime"
-                  required
-                />
-              </div>
-              <div className="col-md-3">
-                <label>End Time</label>
-                <input
-                  type="time"
-                  className="form-control"
-                  id="endTime"
-                  required
-                />
-              </div>
-              <div className="col-md-6">
-                <label>City</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="city"
-                  required
-                />
-              </div>
-              <div className="col-md-6">
-                <label>Venue Name (optional)</label>
-                <input type="text" className="form-control" />
-              </div>
-              <div className="col-md-6">
-                <label>Guest Count</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="guestCount"
-                  placeholder="Enter number of guests"
-                  min="100"
-                  required
-                />
-                <small className="text-muted">Approximate guest count</small>
-              </div>
-              <div className="col-md-6">
-                <label>Event Type</label>
-                <select className="form-select">
-                  <option>Indoor</option>
-                  <option>Outdoor</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* SERVICES */}
-          <div className="mb-4">
-            <h4 className="mb-3">Select Services</h4>
-           
-            <div className="row">
-              {/* LEFT SIDE - SERVICES */}
-              <div className="col-lg-9">
-                {/* <h2 className="mb-4">Select Services</h2> */}
-
+              {eventsLoading ? (
+                <p>Loading events...</p>
+              ) : events.length === 0 ? (
+                <p className="text-muted">No events available under this category yet.</p>
+              ) : (
                 <div className="row g-3">
-                  {services.map((service, index) => (
-                    <div className="col-md-4" key={index}>
+                  {events.map((event) => (
+                    <div key={event._id} className="col-6 col-sm-4 col-md-3 event-main">
                       <div
-                        className={`service-card ${
-                          selectedServices.includes(service) ? "active" : ""
-                        }`}
-                        onClick={() => toggleService(service)}
+                        className={`event-card ${selectedEvent?._id === event._id ? "active" : ""}`}
+                        onClick={() => setSelectedEvent(event)}
                       >
-                        <h5>{service}</h5>
+                        <img src={`http://localhost:5000/uploads/${event.coverImage}`} alt={event.eventName} />
+                        <p>{event.eventName}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              )}
+              {errors.event && <small className="error-text">{errors.event}</small>}
+            </div>
+          )}
 
-              {/* RIGHT SIDE - SUMMARY */}
-              <div className="col-lg-3  mt-4 mt-lg-0">
-                <div className="summary-box p-4">
-                  <h4>Selected Services</h4>
-                  {selectedServices.length === 0 ? (
-                    <p>No services selected</p>
-                  ) : (
-                    <ul>
-                      {selectedServices.map((service, index) => (
-                        <li key={index}>{service}</li>
-                      ))}
-                    </ul>
-                  )}
+          {/* STEP 3: PACKAGE */}
+          {selectedEvent && (
+            <div className="mb-4">
+              <h4 className="mb-3">Select Package</h4>
+
+              {packagesLoading ? (
+                <p>Loading packages...</p>
+              ) : packages.length === 0 ? (
+                <p className="text-muted">
+                  No pre-built packages available for this event yet — build your own package below.
+                </p>
+              ) : (
+                <div className="row g-3">
+                  {packages.map((pkg) => (
+                    <div key={pkg._id} className="col-md-4">
+                      <div
+                        className={`service-card ${selectedPackage?._id === pkg._id ? "active" : ""}`}
+                        onClick={() => setSelectedPackage(pkg)}
+                      >
+                        <h5>{pkg.packageName}</h5>
+                        <p className="mb-2">₹{pkg.finalPrice.toLocaleString()}</p>
+                        <div className="package-included-services">
+                          {pkg.services?.map((s) => (
+                            <span key={s.service?._id || s.service} className="included-service-tag">
+                              {s.service?.serviceName || "Service"}
+                              {s.isOptional ? " (optional)" : ""}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="col-md-4">
+                    <div
+                      className={`service-card ${isCustom ? "active" : ""}`}
+                      onClick={() => setSelectedPackage("custom")}
+                    >
+                      <h5>Build Your Own</h5>
+                      <p className="mb-1 text-muted">No package fits?</p>
+                      <small>Pick individual services below</small>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* SERVICES — custom package flow only */}
+          {isCustom && (
+            <div className="mb-4">
+              <h4 className="mb-3">Select Services</h4>
+              <div className="row">
+                <div className="col-lg-9">
+                  <div className="row g-3">
+                    {services.map((service) => (
+                      <div className="col-md-4" key={service._id}>
+                        <div
+                          className={`service-card ${
+                            selectedExtraServices.some((s) => s.service === service._id) ? "active" : ""
+                          }`}
+                          onClick={() => toggleExtraService(service)}
+                        >
+                          <h5>{service.serviceName}</h5>
+                          <small>+ ₹{service.servicePrice.toLocaleString()}</small>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {errors.package && <small className="error-text d-block mt-2">{errors.package}</small>}
+                </div>
+
+                <div className="col-lg-3 mt-4 mt-lg-0">
+                  <div className="summary-box p-4">
+                    <h4>Your Selection</h4>
+                    {selectedExtraServices.length === 0 ? (
+                      <p>No services selected</p>
+                    ) : (
+                      <ul>
+                        {selectedExtraServices.map((s) => (
+                          <li key={s.service}>{s.serviceName}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
-
-          <div className="mb-4">
-            <h4 className="mb-3">Budget & Preferences</h4>
-
-            <div className="row">
-              <div className="col-md-4 mb-2">
-                <select className="form-select">
-                  <option>₹50,000 – ₹1,00,000</option>
-                  <option>₹1,00,000 – ₹3,00,000</option>
-                  <option>₹3,00,000+</option>
-                </select>
-              </div>
-
-              <div className="col-md-8 mb-2">
-                <textarea
-                  className="form-control"
-                  rows="2"
-                  placeholder="Special requirements..."
-                ></textarea>
-              </div>
-            </div>
-          </div>
-
-          {/* CONTACT */}
-          <div className="mb-3">
-            <h4 className="mb-3">Contact Details</h4>
-
-            <div className="row">
-              <div className="col-md-4 mb-2">
-                <input
-                  type="text"
-                  id='fullName'
-                  className="form-control"
-                  placeholder="Full Name"
-                  required
-                />
-              </div>
-
-              <div className="col-md-4 mb-2">
-                <input
-                  type="tel"
-                  className="form-control"
-                  id='phone'
-                  placeholder="Phone Number"
-                  required
-                />
-              </div>
-
-              <div className="col-md-4 mb-2">
-                <input
-                  type="email"
-                  className="form-control"
-                  id='email'
-                  placeholder="Email"
-                  required
-                />
-              </div>
-
-              <div className="col-md-6 d-flex align-items-center">
-                <div className="form-check mt-2">
-                  <input
-                    className="input-check"
-                    type="checkbox"
-                    id="whatsappConfirm"
-                  />
-                  <label className="form-check-label" htmlFor="whatsappConfirm">
-                    Send updates via WhatsApp
-                  </label>
+          {selectedPackage && (
+            <>
+              <div className="mb-4">
+                <h4 className="mb-3">Event Details</h4>
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label>Date</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={formData.eventDate}
+                      onChange={(e) => handleInputChange("eventDate", e.target.value)}
+                    />
+                    {errors.eventDate && <small className="error-text">{errors.eventDate}</small>}
+                  </div>
+                  <div className="col-md-3">
+                    <label>Start Time</label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={formData.startTime}
+                      onChange={(e) => handleInputChange("startTime", e.target.value)}
+                    />
+                    {errors.startTime && <small className="error-text">{errors.startTime}</small>}
+                  </div>
+                  <div className="col-md-3">
+                    <label>End Time</label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={formData.endTime}
+                      onChange={(e) => handleInputChange("endTime", e.target.value)}
+                    />
+                    {errors.endTime && <small className="error-text">{errors.endTime}</small>}
+                  </div>
+                  <div className="col-md-6">
+                    <label>City</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.city}
+                      onChange={(e) => handleInputChange("city", e.target.value)}
+                    />
+                    {errors.city && <small className="error-text">{errors.city}</small>}
+                  </div>
+                  <div className="col-md-6">
+                    <label>Venue Name (optional)</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={formData.venueName}
+                      onChange={(e) => handleInputChange("venueName", e.target.value)}
+                    />
+                    {errors.venueName && <small className="error-text">{errors.venueName}</small>}
+                  </div>
+                  <div className="col-md-6">
+                    <label>Guest Count</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Enter number of guests"
+                      min="100"
+                      max="5000"
+                      value={formData.guestCount}
+                      onChange={(e) => handleInputChange("guestCount", e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                    <small className="text-muted">Approximate guest count</small>
+                    {errors.guestCount && <small className="error-text d-block">{errors.guestCount}</small>}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="text-end mt-4">
-            <button
-              id="nextBtn"
-              type="button"
-              className="btn btn-gold px-4 py-2"
-              onClick={handleReview}
-            >
-              Review Booking
-            </button>
-          </div>
+              <div className="mb-4">
+                {isCustom ? (
+                  <>
+                    <h4 className="mb-3">Budget & Preferences</h4>
+                    <div className="row">
+                      <div className="col-md-4 mb-2">
+                        <label>Estimated Budget</label>
+                        <select
+                          className="form-select"
+                          value={formData.budgetRange}
+                          onChange={(e) => handleInputChange("budgetRange", e.target.value)}
+                        >
+                          <option>₹50,000 – ₹1,00,000</option>
+                          <option>₹1,00,000 – ₹3,00,000</option>
+                          <option>₹3,00,000+</option>
+                        </select>
+                        <small className="text-muted">
+                          Helps our team plan since no fixed package is selected.
+                        </small>
+                      </div>
+                      <div className="col-md-8 mb-2">
+                        <label>Special Requirements</label>
+                        <textarea
+                          className="form-control"
+                          rows="2"
+                          maxLength="500"
+                          placeholder="Tell us anything specific about your event..."
+                          value={formData.specialRequirements}
+                          onChange={(e) => handleInputChange("specialRequirements", e.target.value)}
+                        ></textarea>
+                        {errors.specialRequirements && (
+                          <small className="error-text">{errors.specialRequirements}</small>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h4 className="mb-3">Price Summary</h4>
+                    <div className="price-summary-box p-3 mb-3">
+                      <div className="d-flex justify-content-between">
+                        <span>{selectedPackage.packageName}</span>
+                        <strong>₹{packagePrice.toLocaleString()}</strong>
+                      </div>
+                      <hr />
+                      <div className="d-flex justify-content-between">
+                        <span>Estimated Total</span>
+                        <strong>₹{estimatedTotal.toLocaleString()}</strong>
+                      </div>
+                    </div>
+                    <label>Special Requirements</label>
+                    <textarea
+                      className="form-control"
+                      rows="2"
+                      maxLength="500"
+                      placeholder="Tell us anything specific about your event..."
+                      value={formData.specialRequirements}
+                      onChange={(e) => handleInputChange("specialRequirements", e.target.value)}
+                    ></textarea>
+                    {errors.specialRequirements && (
+                      <small className="error-text">{errors.specialRequirements}</small>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <h4 className="mb-3">Contact Details</h4>
+                {loggedInClient && (
+                  <p className="autofilled-note">
+                    Prefilled from your account — feel free to edit if needed.
+                  </p>
+                )}
+                <div className="row">
+                  <div className="col-md-4 mb-2">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Full Name"
+                      value={formData.fullName}
+                      onChange={(e) => handleInputChange("fullName", e.target.value)}
+                    />
+                    {errors.fullName && <small className="error-text">{errors.fullName}</small>}
+                  </div>
+                  <div className="col-md-4 mb-2">
+                    <input
+                      type="tel"
+                      className="form-control"
+                      placeholder="Phone Number"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                    />
+                    {errors.phone && <small className="error-text">{errors.phone}</small>}
+                  </div>
+                  <div className="col-md-4 mb-2">
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                    />
+                    {errors.email && <small className="error-text">{errors.email}</small>}
+                  </div>
+                  <div className="col-md-6 d-flex align-items-center">
+                    <div className="form-check mt-2">
+                      <input
+                        className="input-check"
+                        type="checkbox"
+                        id="whatsappConfirm"
+                        checked={formData.whatsappUpdates}
+                        onChange={(e) => handleInputChange("whatsappUpdates", e.target.checked)}
+                      />
+                      <label className="form-check-label" htmlFor="whatsappConfirm">
+                        Send updates via WhatsApp
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-end mt-4">
+                <button
+                  type="button"
+                  className="btn btn-gold px-4 py-2"
+                  onClick={handleReview}
+                  disabled={submitting}
+                >
+                  Review Booking
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Whatsapp floating icon */}
-      <a
-        href="https://wa.me/919847397414"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="whatsapp-float"
-      >
+      <a href="https://wa.me/9114155238886" target="_blank" rel="noopener noreferrer" className="whatsapp-float">
         <i className="bi bi-whatsapp"></i>
       </a>
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

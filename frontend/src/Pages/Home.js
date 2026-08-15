@@ -6,6 +6,7 @@ import ClientTestimonials from '../Components/Home/Client-testimonials/ClientTes
 import FounderSection from '../Components/Home/Founder-section/FounderSection'
 import MainBanner from '../Components/Home/Main-banner/MainBanner'
 import ServiceCard from '../Components/Home/Service-Card/ServiceCard'
+import { ToastContainer } from 'react-toastify'
 
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
         
         
         <Footer />
+        <ToastContainer position="top-right" autoClose={3000} />
     </>
   )
 }

@@ -1,99 +1,167 @@
 /* =========================================================
-   SERVICES.CSS
-
-   Sections:
-   1. ADD SERVICE PAGE
-   2. ALL SERVICES PAGE
-   3. EDIT SERVICE PAGE
-   4. VIEW SERVICE PAGE
-   5. SHARED UTILITIES
+   DESIGN TOKENS
+   Shared across Add/Edit, All, and View Service pages
 ========================================================= */
 
+:root {
+  --panel-bg: #0d2131;
+  --input-bg: #061521;
+  --text-primary: #fff7ee;
+  --text-muted: #8a9ba8;
+  --accent: #f1d49b;
+  --accent-dark: #062036;
+  --danger: #ef4444;
+  --danger-rgb: 239, 68, 68;
+  --success: #4ade80;
+
+  --accent-rgb: 241, 212, 155;
+  --success-rgb: 74, 222, 128;
+  --white-rgb: 255, 255, 255;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-pill: 20px;
+
+  --transition: 0.3s;
+}
 
 /* =========================================================
-   1. ADD SERVICE PAGE
+   1. ADD / EDIT SERVICE
+   Add uses addService-* for its field wrappers; Edit uses the
+   unprefixed .formGroup for its Name/Price/Status fields but
+   reuses .addService-formGroup for the Banner/Gallery groups —
+   both are covered by the combined selectors below.
 ========================================================= */
 
-.addService {
+.addService,
+.editServices {
   padding: 0;
 }
 
-/* Header */
-
-.addService-header {
+.addService-header,
+.editServices-header {
   margin-bottom: 25px;
 }
 
-.addService-header h2 {
+.addService-header h2,
+.editServices-header h2 {
+  color: var(--text-primary);
   margin-bottom: 5px;
-  color: #fff7ee;
 }
 
-.addService-header p {
-  color: #8a9ba8;
+.addService-header p,
+.editServices-header p {
+  color: var(--text-muted);
 }
 
 /* Card */
 
-.addService-card {
-  max-width: 1500px;
+.addService-card,
+.editServices-card {
+  background: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: var(--radius-xl);
   padding: 30px;
-  background: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 16px;
+  max-width: 1500px;
 }
 
-/* Form Layout */
+.editServices-card h3 {
+  color: var(--accent);
+  margin: 0 0 20px;
+}
 
-.addService-grid {
+.editServices-card h3:not(:first-child) {
+  margin-top: 10px;
+}
+
+/* Name / Price / Status row */
+
+.addService-grid,
+.editServices-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+  margin-bottom: 20px;
 }
 
-.addService-formGroup {
+/* Form fields */
+
+.addService-formGroup,
+.formGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
 
-.addService-formGroup label {
+.addService-formGroup label,
+.formGroup label {
+  color: var(--accent);
   margin-bottom: 8px;
-  color: #f1d49b;
   font-size: 0.9rem;
 }
 
-/* Inputs */
-
 .addService-formGroup input,
 .addService-formGroup textarea,
-.addService-formGroup select {
+.addService-formGroup select,
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  background: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-md);
   padding: 12px 15px;
-  background: #061521;
-  color: #fff7ee;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  border-radius: 10px;
+  color: var(--text-primary);
   outline: none;
   transition: border-color 0.2s;
 }
 
-.addService-formGroup input:focus,
-.addService-formGroup textarea:focus,
-.addService-formGroup select:focus {
-  border-color: rgba(241, 212, 155, 0.5);
+.addService-formGroup select, .formGroup select{
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f1d49b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
 }
 
-.addService-formGroup textarea {
-  resize: vertical;
+.addService-formGroup input:focus,
+.addService-formGroup textarea:focus,
+.addService-formGroup select:focus,
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  border-color: rgba(var(--accent-rgb), 0.5);
 }
 
 .addService-formGroup input::placeholder,
 .addService-formGroup textarea::placeholder {
-  color: #8a9ba8;
-  padding: 0;
+  color: var(--text-muted);
 }
 
-/* Upload Section */
+.addService-formGroup textarea,
+.formGroup textarea {
+  resize: vertical;
+}
+
+/* Textarea meta row (error + character count) */
+
+.textarea-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.char-count {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+/* Media upload row (Banner + Gallery) — shared, unprefixed
+   so both Add and Edit pages use it identically */
 
 .service-upload-row {
   display: grid;
@@ -110,18 +178,18 @@
   min-height: 260px;
   padding: 40px 20px;
   text-align: center;
-  background: #071a2f;
-  border: 2px dashed #3d4b5f;
-  border-radius: 16px;
+  background: var(--input-bg);
+  border: 2px dashed rgba(var(--accent-rgb), 0.2);
+  border-radius: var(--radius-xl);
   transition: border-color 0.2s;
 }
 
 .service-uploadPlaceholder:hover {
-  border-color: rgba(241, 212, 155, 0.3);
+  border-color: rgba(var(--accent-rgb), 0.3);
 }
 
 .service-uploadPlaceholder.upload-error {
-  border-color: #ef4444;
+  border-color: var(--danger);
 }
 
 .service-uploadPlaceholder input {
@@ -130,39 +198,43 @@
 
 .upload-cloud-icon {
   margin-bottom: 12px;
-  color: #7b8aa0;
+  color: var(--text-muted);
 }
 
 .service-uploadPlaceholder p {
   margin-bottom: 8px;
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .service-uploadPlaceholder span {
   margin-bottom: 20px;
-  color: #9ca8ba;
+  color: var(--text-muted);
 }
-
-/* Browse Button */
 
 .file-browse-btn {
   display: inline-block;
   padding: 12px 24px;
-  color: #f4c66a;
-  border: 1px solid #d4a84f;
-  border-radius: 10px;
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.5);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: 0.3s;
 }
 
 .file-browse-btn:hover {
-  background: #d4a84f;
-  color: #071a2f;
+  background: var(--accent);
+  color: var(--text-primary);
 }
 
-/* Banner Preview */
+.gallery-count-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* Banner preview */
 
 .service-imagePreviewContainer {
   position: relative;
@@ -174,7 +246,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
 }
 
 .remove-preview-btn {
@@ -185,8 +257,8 @@
   align-items: center;
   justify-content: center;
   padding: 8px;
-  background: crimson;
-  color: #fff;
+  background: var(--danger);
+  color: var(--text-primary);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -197,7 +269,7 @@
   transform: scale(1.1);
 }
 
-/* Gallery Preview */
+/* Gallery preview grid */
 
 .gallery-preview-grid {
   display: grid;
@@ -214,7 +286,7 @@
   width: 100%;
   height: 130px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 
 .gallery-preview-item button {
@@ -225,8 +297,8 @@
   align-items: center;
   justify-content: center;
   padding: 6px;
-  background: crimson;
-  color: #fff;
+  background: var(--danger);
+  color: var(--text-primary);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -237,31 +309,22 @@
   transform: scale(1.1);
 }
 
-/* "New" badge on gallery items in Edit page */
-
 .gallery-new-badge {
   position: absolute;
   bottom: 8px;
   left: 8px;
   padding: 3px 8px;
-  background: #f1d49b;
-  color: #062036;
-  border-radius: 20px;
+  background: var(--accent);
+  color: var(--accent-dark);
+  border-radius: var(--radius-pill);
   font-size: 11px;
   font-weight: 700;
 }
 
-/* Gallery count label in Edit */
+/* Action buttons */
 
-.gallery-count-label {
-  color: #8a9ba8;
-  font-size: 0.8rem;
-  font-weight: 400;
-}
-
-/* Buttons */
-
-.addService-btnGroup {
+.addService-btnGroup,
+.editServices-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -269,134 +332,156 @@
 }
 
 .addService-cancelBtn,
-.addService-submitBtn {
-  padding: 14px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.addService-cancelBtn {
-  background: transparent;
-  color: #8a9ba8;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-}
-
-.addService-cancelBtn:hover {
-  background: #061521;
-  color: #fff7ee;
-}
-
-.addService-submitBtn {
+.cancelBtn {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f1d49b;
-  color: #062036;
-  border: none;
-  font-weight: 600;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.addService-submitBtn:hover:not(:disabled) {
+.addService-cancelBtn:hover:not(:disabled),
+.cancelBtn:hover:not(:disabled) {
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.addService-submitBtn,
+.saveBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: var(--accent-dark);
+  border: none;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.addService-submitBtn:hover:not(:disabled),
+.saveBtn:hover:not(:disabled) {
   transform: translateY(-2px);
 }
 
 .addService-submitBtn:disabled,
-.addService-cancelBtn:disabled {
+.addService-cancelBtn:disabled,
+.saveBtn:disabled,
+.cancelBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Textarea meta row (error + char count) */
-
-.textarea-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 6px;
-}
-
-.char-count {
-  color: #8a9ba8;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-  margin-left: 10px;
-}
-
-/* Responsive */
+/* Responsive — Add/Edit Service
+   ≤992px: Name/Price/Status narrows to 2 columns
+   ≤768px: Banner/Gallery upload row stacks
+   ≤480px: everything stacks to a single column, buttons full-width */
 
 @media (max-width: 992px) {
-  .addService-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .service-upload-row {
-    grid-template-columns: 1fr;
+  .addService-grid,
+  .editServices-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 576px) {
-  .addService-grid {
+@media (max-width: 768px) {
+  .service-upload-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+
+  .service-upload-row{
     grid-template-columns: 1fr;
   }
 
-  .addService-card {
-    padding: 20px;
+  .allPackages-header{
+    justify-content: space-around;
   }
 
-  .addService-btnGroup {
-    flex-direction: column;
+  .addService-card,
+  .editServices-card {
+    padding: 18px;
+  }
+
+  .addService-grid,
+  .editServices-grid {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .addService-btnGroup,
+  .editServices-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
   }
 
   .addService-cancelBtn,
-  .addService-submitBtn {
+  .addService-submitBtn,
+  .cancelBtn,
+  .saveBtn {
     width: 100%;
     justify-content: center;
   }
 }
 
 
+
 /* =========================================================
-   2. ALL SERVICES PAGE
+   2. ALL SERVICES (list) PAGE
 ========================================================= */
 
 .allServices {
   padding: 0;
 }
 
-/* Header */
-
 .allServices-header {
   display: flex;
+  flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 25px;
 }
 
 .allServices-header h2 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .allServices-header p {
-  color: #8a9ba8;
+  color: var(--text-muted);
   margin-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-/* Add Button */
 
 .allServices-addBtn {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #062036, #f1d49b);
-  color: #fff7ee;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: var(--text-primary);
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 12px 18px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: var(--transition);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .allServices-addBtn:hover {
@@ -411,16 +496,16 @@
   gap: 10px;
   height: 50px;
   padding: 0 15px;
-  background: #0d2131;
+  background: var(--panel-bg);
   border-radius: 12px;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   margin-bottom: 25px;
-  color: #8a9ba8;
+  color: var(--text-muted);
   transition: border-color 0.2s;
 }
 
 .allServices-searchBox:focus-within {
-  border-color: rgba(241, 212, 155, 0.3);
+  border-color: rgba(var(--accent-rgb), 0.3);
 }
 
 .allServices-searchBox input {
@@ -428,20 +513,18 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #fff7ee;
+  color: var(--text-primary);
 }
 
 .allServices-searchBox input::placeholder {
-  color: #8a9ba8;
+  color: var(--text-muted);
   padding: 0;
 }
-
-/* Clear search button */
 
 .search-clear-btn {
   background: transparent;
   border: none;
-  color: #8a9ba8;
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 14px;
   padding: 4px 8px;
@@ -450,25 +533,16 @@
 }
 
 .search-clear-btn:hover {
-  color: #fff7ee;
-}
-
-/* Results count */
-
-.results-count {
-  color: #8a9ba8;
-  font-size: 0.85rem;
-  margin-top: 12px;
-  text-align: right;
+  color: var(--text-primary);
 }
 
 /* Table */
 
 .allServices-tableWrapper {
-  background: #0d2131;
-  border-radius: 16px;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  overflow-x: auto;
+  background: var(--panel-bg);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  overflow: visible; /* keep visible so action-button tooltips aren't clipped */
 }
 
 .allServices-table {
@@ -477,38 +551,34 @@
 }
 
 .allServices-table thead {
-  background: rgba(241, 212, 155, 0.05);
+  background: rgba(var(--accent-rgb), 0.05);
 }
 
 .allServices-table th {
   padding: 18px;
   text-align: left;
-  color: #f1d49b;
+  color: var(--accent);
   font-size: 14px;
   font-weight: 600;
 }
 
 .allServices-table td {
   padding: 18px;
-  color: #fff7ee;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   vertical-align: middle;
 }
 
-/* Empty State */
+/* Empty state */
 
 .table-empty-state {
   padding: 60px 20px;
   text-align: center;
-  color: #8a9ba8;
-}
-
-.table-empty-state strong {
-  color: #fff7ee;
+  color: var(--text-muted);
 }
 
 .empty-add-link {
-  color: #f1d49b;
+  color: var(--accent);
   cursor: pointer;
   text-decoration: underline;
 }
@@ -517,16 +587,14 @@
   color: #f4c66a;
 }
 
-/* Service Image */
+/* Service image */
 
 .allServices-image {
   width: 65px;
   height: 65px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
 }
-
-/* Service Info */
 
 .allServices-serviceInfo h4 {
   margin: 0;
@@ -542,36 +610,32 @@
   line-height: 1.6;
 }
 
-/* Gallery Badge */
-
 .allServices-galleryBadge {
-  background: rgba(241, 212, 155, 0.1);
-  color: #f1d49b;
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
   padding: 6px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
 }
 
-/* Status */
-
 .allServices-status {
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 600;
 }
 
 .allServices-status.active {
-  background: rgba(74, 222, 128, 0.15);
-  color: #4ade80;
+  background: rgba(var(--success-rgb), 0.15);
+  color: var(--success);
 }
 
 .allServices-status.inactive {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger);
 }
 
-/* Actions */
+/* Action buttons */
 
 .allServices-actions {
   display: flex;
@@ -579,176 +643,274 @@
 }
 
 .allServices-actions button {
+  position: relative; /* anchor for the tooltip */
   width: 36px;
   height: 36px;
   border: none;
-  border-radius: 10px;
-  background: #061521;
-  color: #fff7ee;
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: 0.3s;
+  transition: var(--transition);
 }
 
 .allServices-actions button:hover {
-  background: rgba(241, 212, 155, 0.1);
-  color: #f1d49b;
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
 }
 
+/* Custom hover tooltip, driven by data-tooltip attribute
+   (same pattern as the Events page) */
 
-/* =========================================================
-   3. EDIT SERVICE PAGE
-========================================================= */
-
-.editServices {
-  color: #fff7ee;
+.allServices-actions button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: var(--panel-bg);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  z-index: 20;
 }
 
-/* Header */
-
-.editServices-header {
-  margin-bottom: 25px;
+.allServices-actions button:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
-.editServices-header h2 {
-  margin-bottom: 5px;
-  color: #fff7ee;
+/* Clamp the first/last tooltip to the row's own edges so they
+   can't spill outside the card or table */
+
+.allServices-actions button:first-child::after {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allServices-actions button:first-child:hover::after {
+  transform: translateX(0) translateY(0);
 }
 
-.editServices-header p {
-  color: #8a9ba8;
+.allServices-actions button:last-child::after {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allServices-actions button:last-child:hover::after {
+  transform: translateX(0) translateY(0);
 }
 
-/* Edit Form Card */
+/* Card view — small-screen replacement for the table */
 
-.editServices-card {
-  background: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 16px;
-  padding: 30px;
+.allServices-cardList {
+  display: none; /* hidden by default; enabled ≤768px */
 }
 
-.editServices-card h3 {
-  color: #f1d49b;
-  margin-bottom: 20px;
-  margin-top: 0;
+.allServices-card {
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  border-radius: var(--radius-lg);
+  padding: 16px;
 }
 
-.editServices-card h3:not(:first-child) {
-  margin-top: 10px;
+.allServices-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.editServices-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
+.allServices-card-image {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
 }
 
-/* Form Elements */
-
-.formGroup {
+.allServices-card-titleBlock {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  gap: 6px;
+  min-width: 0;
 }
 
-.formGroup label {
-  color: #f1d49b;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
+.allServices-card-titleBlock h4 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.formGroup input,
-.formGroup textarea,
-.formGroup select {
-  background: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  border-radius: 10px;
-  padding: 12px 15px;
-  color: #fff7ee;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.formGroup input:focus,
-.formGroup textarea:focus,
-.formGroup select:focus {
-  border-color: rgba(241, 212, 155, 0.5);
-}
-
-.formGroup textarea {
-  resize: vertical;
-}
-
-/* Action Buttons */
-
-.editServices-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 25px;
-}
-
-.cancelBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff7ee;
-  padding: 12px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.cancelBtn:hover:not(:disabled) {
-  background: #061521;
-}
-
-.saveBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #f1d49b;
-  color: #062036;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 10px;
+.allServices-card-price {
+  color: var(--accent);
+  font-size: 0.85rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
 }
 
-.saveBtn:hover:not(:disabled) {
-  transform: translateY(-2px);
+.allServices-card-titleBlock .allServices-status {
+  width: fit-content;
 }
 
-.saveBtn:disabled,
-.cancelBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.allServices-card-description {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0 0 14px 0;
 }
 
-@media (max-width: 900px) {
-  .editServices-grid {
-    grid-template-columns: 1fr;
+.allServices-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px; /* separates this row from the divider below */
+}
+
+.allServices-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* only the actions live here now */
+  padding-top: 12px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.06);
+}
+
+.allServices-card-date {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+/* Pagination */
+
+.allServices-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
+}
+
+/* Responsive — All Services page
+   ≤992px: table drops less-important columns
+   ≤768px: table swaps for the card list; pagination stacks
+   ≤480px: Add button collapses to icon-only with a hover tooltip */
+
+@media (max-width: 992px) {
+  .allServices-table .col-description,
+  .allServices-table .col-gallery,
+  .allServices-table .col-created {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .allServices-table {
+    display: none;
+  }
+
+  .allServices-cardList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .allServices-pagination {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .allServices-header {
+    justify-content: space-around;
+  }
+  .allServices-header h2 {
+    font-size: 1.85rem;
+  }
+
+  .allServices-header p {
+    font-size: 1.02rem;
+  }
+
+  .allServices-addBtn {
+    position: relative;
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+
+  /* Icon-only by default — text becomes a hover tooltip instead of hiding completely */
+  .allServices-addBtn .btn-text {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto;
+    transform: translateY(-6px);
+    background-color: var(--panel-bg);
+    color: var(--accent);
+    border: 1px solid rgba(var(--accent-rgb), 0.25);
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    z-index: 20;
+  }
+
+  .allServices-addBtn .btn-text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    right: 14px;
+    left: auto;
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent var(--panel-bg) transparent;
+  }
+
+  .allServices-addBtn:hover .btn-text,
+  .allServices-addBtn:focus-visible .btn-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 }
 
 
+
 /* =========================================================
-   4. VIEW SERVICE PAGE
+   3. VIEW SERVICE PAGE
 ========================================================= */
 
 .viewService {
   padding: 0;
 }
-
-/* Header */
 
 .viewService-header {
   display: flex;
@@ -758,20 +920,18 @@
 }
 
 .viewService-header h2 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin-bottom: 5px;
 }
 
 .viewService-header p {
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .viewService-actions {
   display: flex;
   gap: 12px;
 }
-
-/* Buttons */
 
 .backBtn,
 .editBtn {
@@ -781,284 +941,40 @@
   border: none;
   cursor: pointer;
   padding: 12px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-weight: 600;
-  transition: 0.3s;
+  transition: var(--transition);
 }
 
 .backBtn {
-  background: #061521;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid rgba(var(--white-rgb), 0.1);
 }
 
 .backBtn:hover {
-  background: #0d2131;
+  background: var(--panel-bg);
 }
 
 .editBtn {
-  background: #f1d49b;
-  color: #062036;
+  background: var(--accent);
+  color: var(--accent-dark);
 }
 
 .editBtn:hover {
   transform: translateY(-2px);
 }
 
-/* Main Card */
+/* Main card */
 
 .viewService-card {
-  background: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 18px;
   overflow: hidden;
 }
 
-/* Banner Image */
-
-.viewService-banner {
-  width: 100%;
-  height: 380px;
-  object-fit: cover;
-}
-
-/* Information Grid */
-
-.viewService-infoGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding: 25px;
-}
-
-.infoBox {
-  background: #061521;
-  border-radius: 12px;
-  padding: 18px;
-}
-
-.infoBox span {
-  color: #8a9ba8;
-  font-size: 14px;
-}
-
-.infoBox h4 {
-  margin-top: 8px;
-  margin-bottom: 0;
-  color: #fff7ee;
-}
-
-/* Status Badge */
-
-.statusBadge {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.statusBadge.active {
-  background: rgba(74, 222, 128, 0.15);
-  color: #4ade80;
-}
-
-.statusBadge.inactive {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-}
-
-/* Description */
-
-.viewService-description {
-  padding: 0 25px 25px;
-}
-
-.viewService-description h3 {
-  color: #f1d49b;
-  margin-bottom: 15px;
-}
-
-.viewService-description p {
-  color: #d9e1e7;
-  line-height: 1.8;
-}
-
-/* Gallery */
-
-.viewService-gallery {
-  padding: 0 25px 25px;
-}
-
-.viewService-gallery h3 {
-  color: #f1d49b;
-  margin-bottom: 20px;
-}
-
-.no-gallery-text {
-  color: #8a9ba8;
-}
-
-.galleryGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-}
-
-.galleryGrid img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 12px;
-  transition: transform 0.3s;
-}
-
-.galleryGrid img:hover {
-  transform: scale(1.03);
-}
-
-@media (max-width: 992px) {
-  .viewService-infoGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .galleryGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 576px) {
-  .viewService-infoGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .galleryGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* =========================================================
-   5. SHARED UTILITIES
-========================================================= */
-
-/* Field-level validation error */
-
-.field-error {
-  color: #f87171;
-  font-size: 0.8rem;
-  margin-top: 5px;
-  min-height: 1rem;
-  display: block;
-}
-
-/* Page loading / not found state */
-
-.page-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  min-height: 40vh;
-  color: #8a9ba8;
-  font-size: 1rem;
-}
-
-/* =========================================================
-   6. LIGHTBOX
-========================================================= */
-
-.lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.88);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-.lightbox-img {
-  max-width: 90vw;
-  max-height: 88vh;
-  object-fit: contain;
-  border-radius: 14px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-  animation: scaleIn 0.2s ease;
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.92); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
-}
-
-.lightbox-close {
-  position: fixed;
-  top: 20px;
-  right: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s;
-  z-index: 10000;
-}
-
-.lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.22);
-}
-
-/* ── Zoom button on banner preview (Add / Edit pages) ── */
-
-.zoom-preview-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-}
-
-.zoom-preview-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-  transform: scale(1.1);
-}
-
-/* ── Clickable gallery images (all pages) ── */
-
-.gallery-zoomable {
-  cursor: zoom-in !important;
-  transition: transform 0.25s, box-shadow 0.25s !important;
-}
-
-.gallery-zoomable:hover {
-  transform: scale(1.04) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-
-/* ── Banner wrapper + hint (View page) ── */
+/* Banner — clickable, with a hover zoom hint */
 
 .viewService-banner-wrap {
   position: relative;
@@ -1066,7 +982,7 @@
   cursor: zoom-in;
 }
 
-.viewService-banner-wrap .viewService-banner {
+.viewService-banner {
   display: block;
   width: 100%;
   height: 380px;
@@ -1083,10 +999,10 @@
   bottom: 14px;
   right: 16px;
   background: rgba(0, 0, 0, 0.55);
-  color: #fff;
+  color: var(--text-primary);
   font-size: 12px;
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s;
@@ -1094,4 +1010,257 @@
 
 .viewService-banner-wrap:hover .banner-zoom-hint {
   opacity: 1;
+}
+
+/* Info grid */
+
+.viewService-infoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 25px;
+}
+
+.infoBox {
+  background: var(--input-bg);
+  border-radius: var(--radius-md);
+  padding: 18px;
+}
+
+.infoBox span {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.infoBox h4 {
+  margin-top: 8px;
+  margin-bottom: 0;
+  color: var(--text-primary);
+}
+
+.statusBadge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.statusBadge.active {
+  background: rgba(var(--success-rgb), 0.15);
+  color: var(--success);
+}
+
+.statusBadge.inactive {
+  background: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger);
+}
+
+/* Description */
+
+.viewService-description {
+  padding: 0 25px 25px;
+}
+
+.viewService-description h3 {
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+
+.viewService-description p {
+  color: #d9e1e7;
+  line-height: 1.8;
+}
+
+/* Gallery */
+
+.viewService-gallery {
+  padding: 0 25px 25px;
+}
+
+.viewService-gallery h3 {
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.no-gallery-text {
+  color: var(--text-muted);
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.galleryGrid img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+/* Responsive — View Service page
+   ≤992px: info grid and gallery drop to 2 columns
+   ≤480px: info grid, gallery, and header actions stack to 1 column */
+
+@media (max-width: 992px) {
+  .viewService-infoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .viewService-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .viewService-actions {
+    width: 100%;
+  }
+
+  .viewService-infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .galleryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewService-banner {
+    height: 220px;
+  }
+}
+
+
+
+/* =========================================================
+   4. SHARED ACROSS ALL PAGES
+   Validation, page loading, lightbox, zoomable images
+========================================================= */
+
+.field-error {
+  color: #f87171;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  min-height: 1rem;
+  display: block;
+}
+
+.page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  min-height: 40vh;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* Clickable/zoomable images (gallery thumbnails on all pages) */
+
+.gallery-zoomable {
+  cursor: zoom-in !important;
+  transition: transform 0.25s, box-shadow 0.25s !important;
+}
+
+.gallery-zoomable:hover {
+  transform: scale(1.04) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Zoom button on the banner preview (Add / Edit pages) */
+
+.zoom-preview-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.zoom-preview-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+/* Lightbox */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  animation: scaleIn 0.2s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  background: rgba(var(--white-rgb), 0.1);
+  border: 1px solid rgba(var(--white-rgb), 0.2);
+  color: var(--text-primary);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 10000;
+}
+
+.lightbox-close:hover {
+  background: rgba(var(--white-rgb), 0.22);
 }

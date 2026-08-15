@@ -14,7 +14,7 @@ import {
 import "./Vendors.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
 const AddVendors = () => {
@@ -348,7 +348,7 @@ const AddVendors = () => {
             {/* Row 3: Bio + Image Upload */}
             <div className="addVendor-descriptionRow">
 
-              <div className="addVendor-formGroup bio-group">
+              <div className="addVendor-formGroup">
                 <label>Partner Bio / Description</label>
                 <textarea
                   name="about"
@@ -359,7 +359,7 @@ const AddVendors = () => {
                 />
               </div>
 
-              <div className="addVendor-formGroup file-upload-group">
+              <div className="addVendor-formGroup">
                 <label>Company Logo / Business Banner</label>
                 {imagePreview ? (
                   <div className="addVendor-imagePreviewContainer">
@@ -447,6 +447,7 @@ const AddVendors = () => {
           </div>
         </div>
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };

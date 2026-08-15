@@ -4,6 +4,7 @@ import Footer from '../Components/Footer/Footer'
 import QuestionMap from '../Components/Contact/Question_map/QuestionMap'
 import Newsletter from '../Components/Contact/News_letter/Newsletter'
 import ContactBanner from '../Components/Contact/Contact-Banner/ContactBanner'
+import { ToastContainer } from 'react-toastify'
 
 function Contact() {
   return (
@@ -13,6 +14,7 @@ function Contact() {
         <QuestionMap />
         <Newsletter />
         <Footer />
+        <ToastContainer position="top-right" autoClose={3000} />
       
     </>
   )

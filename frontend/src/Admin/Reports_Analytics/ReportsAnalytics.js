@@ -1,86 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  TrendingUp, 
-  DollarSign, 
-  Calendar, 
-  Users, 
-  Layers, 
-  Filter, 
-  ArrowUpRight, 
+import {
+  TrendingUp,
+  DollarSign,
+  Calendar,
+  Users,
+  Layers,
+  Filter,
+  ArrowUpRight,
   ArrowDownRight,
   FileSpreadsheet
 } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
 import AdminLayout from '../../Pages/Admin/Layout/AdminLayout';
 import './Reports.css'
 
-// Mock transactional metrics categorized by Timeframes
-const TIMEFRAME_DATA = {
-  "This Month": {
-    revenue: 252500,
-    revenueChange: "+12.4%",
-    revenueUp: true,
-    bookings: 8,
-    bookingsChange: "+4%",
-    bookingsUp: true,
-    clients: 12,
-    clientsChange: "+8.2%",
-    clientsUp: true,
-    vendors: 7,
-    chartRevenue: [32000, 45000, 28000, 65000, 52000, 30500],
-    categoryShare: [
-      { name: "Marriage Events", percentage: 55, count: 4, revenue: 145000 },
-      { name: "Birthday Parties", percentage: 30, count: 3, revenue: 82500 },
-      { name: "Corporate Galas", percentage: 15, count: 1, revenue: 25000 }
-    ]
-  },
-  "This Year": {
-    revenue: 1850000,
-    revenueChange: "+24.8%",
-    revenueUp: true,
-    bookings: 62,
-    bookingsChange: "+18.5%",
-    bookingsUp: true,
-    clients: 142,
-    clientsChange: "+14.1%",
-    clientsUp: true,
-    vendors: 22,
-    chartRevenue: [120000, 145000, 180000, 210000, 195000, 240000],
-    categoryShare: [
-      { name: "Marriage Events", percentage: 60, count: 38, revenue: 1110000 },
-      { name: "Corporate Galas", percentage: 25, count: 15, revenue: 462500 },
-      { name: "Birthday Parties", percentage: 15, count: 9, revenue: 277500 }
-    ]
+const API_BASE_URL = 'http://localhost:5000/api';
+
+// Turns a preset name into an actual { start, end } date range.
+// This is the piece that makes "Last Month" / "Last Year" possible —
+// the backend doesn't know about presets at all, it just gets two dates.
+function getRangeForPreset(preset, customStart, customEnd) {
+  const now = new Date();
+
+  switch (preset) {
+    case "Last Month":
+      return {
+        start: new Date(now.getFullYear(), now.getMonth() - 1, 1),
+        end: new Date(now.getFullYear(), now.getMonth(), 0),
+      };
+    case "This Year":
+      return {
+        start: new Date(now.getFullYear(), 0, 1),
+        end: new Date(now.getFullYear(), 11, 31),
+      };
+    case "Last Year":
+      return {
+        start: new Date(now.getFullYear() - 1, 0, 1),
+        end: new Date(now.getFullYear() - 1, 11, 31),
+      };
+    case "Custom Range":
+      return {
+        start: customStart ? new Date(customStart) : new Date(now.getFullYear(), now.getMonth(), 1),
+        end: customEnd ? new Date(customEnd) : now,
+      };
+    case "This Month":
+    default:
+      return {
+        start: new Date(now.getFullYear(), now.getMonth(), 1),
+        end: new Date(now.getFullYear(), now.getMonth() + 1, 0),
+      };
   }
+}
+
+// Formats a Date as YYYY-MM-DD using its LOCAL date parts.
+// (date.toISOString() converts to UTC first, which shifts the day
+// backwards for anyone in a timezone ahead of UTC — e.g. IST — so
+// "Aug 1st" was turning into "07-31". This avoids that.)
+const toDateInputValue = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 const ReportsAnalytics = () => {
-  const [timeframe, setTimeframe] = useState("This Month");
-  const [data, setData] = useState(TIMEFRAME_DATA["This Month"]);
+  const [preset, setPreset] = useState("This Month");
+  const [customStart, setCustomStart] = useState("");
+  const [customEnd, setCustomEnd] = useState("");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isExporting, setIsExporting] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  // Handle mock dynamic recalculations on timeframe switch
+  const { start, end } = getRangeForPreset(preset, customStart, customEnd);
+  const startParam = toDateInputValue(start);
+  const endParam = toDateInputValue(end);
+
+  // For "Custom Range", wait until both dates are picked before fetching
+  const isCustomIncomplete = preset === "Custom Range" && (!customStart || !customEnd);
+
   useEffect(() => {
-    setLoading(true);
-    const delay = setTimeout(() => {
-      setData(TIMEFRAME_DATA[timeframe]);
-      setLoading(false);
-    }, 450);
-    return () => clearTimeout(delay);
-  }, [timeframe]);
+    if (isCustomIncomplete) return;
 
-  // Handle mock report sheet compile trigger
-  const handleExportCSV = () => {
+    const fetchReports = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(
+          `${API_BASE_URL}/reports?startDate=${startParam}&endDate=${endParam}`
+        );
+        const result = await res.json();
+
+        if (!res.ok || !result.success) {
+          throw new Error(result.message || "Failed to load reports");
+        }
+
+        setData(result.data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+        toast.error(err.message || "Couldn't load analytics data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startParam, endParam, isCustomIncomplete]);
+
+  const handleExportExcel = async () => {
     setIsExporting(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/reports/export?startDate=${startParam}&endDate=${endParam}`
+      );
+
+      const contentType = res.headers.get('content-type') || '';
+
+      // If the backend hit an error, it responds with JSON, not a
+      // spreadsheet. Catch that here instead of saving the error
+      // message as a fake ".xlsx" file.
+      if (!res.ok || contentType.includes('application/json')) {
+        const errorBody = await res.json().catch(() => null);
+        throw new Error(errorBody?.message || "Failed to generate the report file");
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `eventura-report-${startParam}-to-${endParam}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Report exported successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Export failed. Please try again.");
+    } finally {
       setIsExporting(false);
-      alert("Eventura Ledger Report generated successfully! Your download will begin shortly.");
-    }, 1500);
+    }
   };
 
   return (
     <AdminLayout>
-      {}
       <div className="analyticsPage">
         {/* Module Header Container */}
         <div className="analyticsPage-header">
@@ -88,21 +154,40 @@ const ReportsAnalytics = () => {
             <h2>Reports & Performance Analytics</h2>
             <p>Trace organizational profitability, operational performance indexes, and service category splits.</p>
           </div>
-          
+
           {/* Timeframe Filters Row */}
           <div className="analyticsPage-actions">
             <div className="timeframe-selector">
               <Filter size={14} className="filter-icon" />
-              <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)}>
-                <option value="This Month">This Month (June 2026)</option>
-                <option value="This Year">This Year (2026)</option>
+              <select value={preset} onChange={(e) => setPreset(e.target.value)}>
+                <option value="This Month">This Month</option>
+                <option value="Last Month">Last Month</option>
+                <option value="This Year">This Year</option>
+                <option value="Last Year">Last Year</option>
+                <option value="Custom Range">Custom Range</option>
               </select>
             </div>
 
-            <button 
-              className={`btn-export ${isExporting ? 'exporting' : ''}`} 
-              onClick={handleExportCSV}
-              disabled={isExporting}
+            {preset === "Custom Range" && (
+              <div className="custom-range-picker">
+                <input
+                  type="date"
+                  value={customStart}
+                  onChange={(e) => setCustomStart(e.target.value)}
+                />
+                <span>to</span>
+                <input
+                  type="date"
+                  value={customEnd}
+                  onChange={(e) => setCustomEnd(e.target.value)}
+                />
+              </div>
+            )}
+
+            <button
+              className={`btn-export ${isExporting ? 'exporting' : ''}`}
+              onClick={handleExportExcel}
+              disabled={isExporting || loading || !data || isCustomIncomplete}
             >
               {isExporting ? (
                 <>
@@ -112,24 +197,39 @@ const ReportsAnalytics = () => {
               ) : (
                 <>
                   <FileSpreadsheet size={16} />
-                  <span>Export Sheet Ledger</span>
+                  <span>Export Excel Sheet</span>
                 </>
               )}
             </button>
           </div>
         </div>
 
-        {/* Loading Indicator Overlay for data swapping */}
-        {loading ? (
+        {/* Custom range not yet picked */}
+        {isCustomIncomplete && (
+          <div className="analytics-loading-screen">
+            <p>Pick a start and end date to load the report.</p>
+          </div>
+        )}
+
+        {/* Loading state */}
+        {!isCustomIncomplete && loading && (
           <div className="analytics-loading-screen">
             <div className="pulse-loader"></div>
             <p>Syncing event balance sheets and analytics nodes...</p>
           </div>
-        ) : (
+        )}
+
+        {/* Error state */}
+        {!isCustomIncomplete && !loading && error && (
+          <div className="analytics-loading-screen">
+            <p>Couldn't load report data. {error}</p>
+          </div>
+        )}
+
+        {/* Loaded state */}
+        {!isCustomIncomplete && !loading && !error && data && (
           <>
-            {/* KPI Metrics Cards Row */}
             <div className="analytics-kpiGrid">
-              {/* Card 1: Revenue Balance */}
               <div className="kpi-card">
                 <div className="kpi-icon-wrapper">
                   <DollarSign size={20} className="kpi-icon" />
@@ -139,12 +239,11 @@ const ReportsAnalytics = () => {
                   <h3 className="kpi-value">₹{data.revenue.toLocaleString()}</h3>
                   <div className={`kpi-change ${data.revenueUp ? 'up' : 'down'}`}>
                     {data.revenueUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                    <span>{data.revenueChange} relative trend</span>
+                    <span>{data.revenueChange} vs previous period</span>
                   </div>
                 </div>
               </div>
 
-              {/* Card 2: Event Count */}
               <div className="kpi-card">
                 <div className="kpi-icon-wrapper">
                   <Calendar size={20} className="kpi-icon" />
@@ -154,27 +253,25 @@ const ReportsAnalytics = () => {
                   <h3 className="kpi-value">{data.bookings} Events</h3>
                   <div className={`kpi-change ${data.bookingsUp ? 'up' : 'down'}`}>
                     {data.bookingsUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                    <span>{data.bookingsChange} active volume</span>
+                    <span>{data.bookingsChange} vs previous period</span>
                   </div>
                 </div>
               </div>
 
-              {/* Card 3: Active Client Database */}
               <div className="kpi-card">
                 <div className="kpi-icon-wrapper">
                   <Users size={20} className="kpi-icon" />
                 </div>
                 <div className="kpi-details">
-                  <span className="kpi-title">Active Consumers</span>
+                  <span className="kpi-title">New Clients</span>
                   <h3 className="kpi-value">{data.clients} Members</h3>
                   <div className={`kpi-change ${data.clientsUp ? 'up' : 'down'}`}>
                     {data.clientsUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                    <span>{data.clientsChange} subscriber growth</span>
+                    <span>{data.clientsChange} vs previous period</span>
                   </div>
                 </div>
               </div>
 
-              {/* Card 4: Vendor Pool Network */}
               <div className="kpi-card">
                 <div className="kpi-icon-wrapper">
                   <Layers size={20} className="kpi-icon" />
@@ -190,105 +287,97 @@ const ReportsAnalytics = () => {
               </div>
             </div>
 
-            {}
-            {/* Main Visualizations Grid */}
             <div className="analytics-visualsGrid">
-              {/* Chart Panel 1: Pure CSS bar graphs */}
               <div className="chart-panel card-bg">
                 <div className="panel-header">
                   <h4>Revenue Inflow Curve</h4>
-                  <span>Trend History (Recent Cycles)</span>
+                  <span>{data.rangeLabel}</span>
                 </div>
                 <div className="panel-body">
-                  <div className="bar-chart-container">
-                    {data.chartRevenue.map((val, idx) => {
-                      const maxVal = Math.max(...data.chartRevenue);
-                      const barPercentage = (val / maxVal) * 85; // capped below max scale top
-                      return (
-                        <div className="chart-bar-group" key={idx}>
-                          <div className="bar-value-tooltip">₹{(val/1000).toFixed(0)}k</div>
-                          <div className="chart-bar-wrapper">
-                            <div className="chart-bar-fill" style={{ height: `${barPercentage}%` }}></div>
+                  {data.chartRevenue.every((point) => point.value === 0) ? (
+                    <p className="empty-state-text">No revenue recorded for this period yet.</p>
+                  ) : (
+                    <div className="bar-chart-container">
+                      {data.chartRevenue.map((point, idx) => {
+                        const maxVal = Math.max(...data.chartRevenue.map((p) => p.value), 1);
+                        const barPercentage = (point.value / maxVal) * 85;
+                        return (
+                          <div className="chart-bar-group" key={idx}>
+                            <div className="bar-value-tooltip">₹{(point.value / 1000).toFixed(0)}k</div>
+                            <div className="chart-bar-wrapper">
+                              <div className="chart-bar-fill" style={{ height: `${barPercentage}%` }}></div>
+                            </div>
+                            <span className="chart-bar-label">{point.label}</span>
                           </div>
-                          <span className="chart-bar-label">Cycle {idx + 1}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* Chart Panel 2: Popular Service Category Progress Meters */}
               <div className="chart-panel card-bg">
                 <div className="panel-header">
                   <h4>Category Conversion Split</h4>
                   <span>Revenue generation by market niche</span>
                 </div>
                 <div className="panel-body">
-                  <div className="progress-metrics-list">
-                    {data.categoryShare.map((category, idx) => (
-                      <div className="progress-metric-item" key={idx}>
-                        <div className="metric-label-row">
-                          <strong>{category.name}</strong>
-                          <span>₹{category.revenue.toLocaleString()} ({category.percentage}%)</span>
+                  {data.categoryShare.length === 0 ? (
+                    <p className="empty-state-text">No bookings in this period yet.</p>
+                  ) : (
+                    <div className="progress-metrics-list">
+                      {data.categoryShare.map((category, idx) => (
+                        <div className="progress-metric-item" key={idx}>
+                          <div className="metric-label-row">
+                            <strong>{category.name}</strong>
+                            <span>₹{category.revenue.toLocaleString()} ({category.percentage}%)</span>
+                          </div>
+                          <div className="gauge-track">
+                            <div className="gauge-fill" style={{ width: `${category.percentage}%` }}></div>
+                          </div>
+                          <small className="metric-detail-lbl">Total associated: {category.count} active reservations</small>
                         </div>
-                        <div className="gauge-track">
-                          <div className="gauge-fill" style={{ width: `${category.percentage}%` }}></div>
-                        </div>
-                        <small className="metric-detail-lbl">Total associated: {category.count} active reservations</small>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
-            {}
-            {/* Top performing audit table summary */}
             <div className="performance-summary-panel card-bg">
               <div className="panel-header">
-                <h4>Top Event Allocations</h4>
-                <p>Leading events based on client reviews, vendor integration limits, and cash turnover.</p>
+                <h4>Top Event Categories</h4>
+                <p>All-time performance ranked by total revenue generated.</p>
               </div>
-              <table className="performance-table">
-                <thead>
-                  <tr>
-                    <th>Event Category ID</th>
-                    <th>Niche Sub-type</th>
-                    <th>Average Event Volume</th>
-                    <th>Operational Margin</th>
-                    <th>Quality Index Rating</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>CAT-MAR-01</td>
-                    <td>Royal & Heritage Weddings</td>
-                    <td>24 Events / Year</td>
-                    <td className="gold-text">68% Profitability Margin</td>
-                    <td>⭐️ 4.9 / 5.0 (Excellent)</td>
-                  </tr>
-                  <tr>
-                    <td>CAT-BTH-02</td>
-                    <td>Kids & Teen Birthday Celebrations</td>
-                    <td>14 Events / Year</td>
-                    <td className="gold-text">42% Profitability Margin</td>
-                    <td>⭐️ 4.7 / 5.0 (Very Good)</td>
-                  </tr>
-                  <tr>
-                    <td>CAT-COR-03</td>
-                    <td>Corporate Conclaves & Galas</td>
-                    <td>8 Events / Year</td>
-                    <td className="gold-text">54% Profitability Margin</td>
-                    <td>⭐️ 4.5 / 5.0 (Standard)</td>
-                  </tr>
-                </tbody>
-              </table>
+              {data.topCategories.length === 0 ? (
+                <p className="empty-state-text">No booking history yet.</p>
+              ) : (
+                <table className="performance-table">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Total Bookings</th>
+                      <th>Total Revenue</th>
+                      <th>Avg Booking Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.topCategories.map((cat, idx) => (
+                      <tr key={idx}>
+                        <td data-label="Category">{cat.categoryName}</td>
+                        <td data-label="Total Bookings">{cat.totalBookings}</td>
+                        <td data-label="Total Revenue" className="gold-text">₹{cat.totalRevenue.toLocaleString()}</td>
+                        <td data-label="Avg Booking Value">₹{cat.avgBookingValue.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </>
         )}
-       
       </div>
+      <ToastContainer position="top-right" autoClose={3000}  />
     </AdminLayout>
   );
 };

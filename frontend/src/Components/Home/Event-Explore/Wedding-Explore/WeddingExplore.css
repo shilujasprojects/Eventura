@@ -542,3 +542,19 @@ right:25px;
 }
 
 }
+
+
+.wedding-gallery-skeleton {
+  width: 280px;
+  height: 200px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #e8dcc5 25%, #f1e9d6 50%, #e8dcc5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

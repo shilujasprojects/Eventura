@@ -1,10 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import './Faq.css'
 
-function Faq() {
-  return (
-    //   FAQ Section
+const BASE_URL = "http://localhost:5000";
 
+function Faq() {
+  const [faqs, setFaqs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [openId, setOpenId] = useState(null); // tracks which FAQ is currently open
+
+  useEffect(() => {
+    const fetchFaqs = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/faqs`);
+        setFaqs(res.data.data);
+        if (res.data.data.length > 0) {
+          setOpenId(res.data.data[0]._id); // first FAQ open by default
+        }
+      } catch (error) {
+        console.error("Failed to load FAQs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFaqs();
+  }, []);
+
+  const handleToggle = (id) => {
+    // clicking the currently open FAQ closes it; clicking a different one opens that one instead
+    setOpenId(prev => (prev === id ? null : id));
+  };
+
+  return (
     <section className="faq-glass-section py-5">
       <div className="container">
         <div className="text-center mb-5">
@@ -14,85 +42,37 @@ function Faq() {
           </p>
         </div>
 
-        <div className="accordion glass-accordion" id="glassFaq">
-          {/* FAQ 1 */}
-          <div className="accordion-item glass-card-faq">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button"
-                data-bs-toggle="collapse"
-                data-bs-target="#gfaq1"
-              >
-                What types of events does Eventura manage?
-              </button>
-            </h2>
-            <div id="gfaq1" className="accordion-collapse collapse show">
-              <div className="accordion-body">
-                Eventura manages weddings, birthdays, baby showers, corporate
-                events, housewarming ceremonies, and funeral services with
-                complete planning support.
-              </div>
-            </div>
-          </div>
+        {loading && <p className="text-center text-white">Loading FAQs...</p>}
 
-          {/* FAQ 2 */}
-          <div className="accordion-item glass-card-faq">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                data-bs-toggle="collapse"
-                data-bs-target="#gfaq2"
-              >
-                Can I customize my event services?
-              </button>
-            </h2>
-            <div id="gfaq2" className="accordion-collapse collapse">
-              <div className="accordion-body">
-                Yes! All services are fully customizable including décor,
-                catering, entertainment, and rituals based on your preferences.
-              </div>
-            </div>
-          </div>
+        {!loading && faqs.length === 0 && (
+          <p className="text-center text-white">No FAQs available right now.</p>
+        )}
 
-          {/* FAQ 3 */}
-          <div className="accordion-item glass-card-faq">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                data-bs-toggle="collapse"
-                data-bs-target="#gfaq3"
-              >
-                How early should I book my event?
-              </button>
-            </h2>
-            <div id="gfaq3" className="accordion-collapse collapse">
-              <div className="accordion-body">
-                We recommend booking at least 2–4 weeks in advance. For
-                weddings, booking 2–3 months earlier ensures better vendor
-                availability.
-              </div>
-            </div>
+        {!loading && faqs.length > 0 && (
+          <div className="accordion glass-accordion">
+            {faqs.map((faq) => {
+              const isOpen = openId === faq._id;
+              return (
+                <div className="accordion-item glass-card-faq" key={faq._id}>
+                  <h2 className="accordion-header">
+                    <button
+                      type="button"
+                      className={`accordion-button ${isOpen ? "" : "collapsed"}`}
+                      onClick={() => handleToggle(faq._id)}
+                    >
+                      {faq.question}
+                    </button>
+                  </h2>
+                  {isOpen && (
+                    <div className="accordion-collapse collapse show">
+                      <div className="accordion-body">{faq.answer}</div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-
-          {/* FAQ 4 */}
-          <div className="accordion-item glass-card-faq">
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                data-bs-toggle="collapse"
-                data-bs-target="#gfaq4"
-              >
-                Does Eventura provide on-site support?
-              </button>
-            </h2>
-            <div id="gfaq4" className="accordion-collapse collapse">
-              <div className="accordion-body">
-                Yes. Our professional team ensures smooth coordination and
-                support throughout the event day.
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );

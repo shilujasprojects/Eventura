@@ -1,14 +1,66 @@
-import React from "react";
-import './ClientTestimonials.css'
-import profile1 from "../Images/profile1.jpg";
-import profile2 from "../Images/profile2.jpg";
-import profile3 from "../Images/profile3.jpg";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import axios from "axios";
+import "./ClientTestimonials.css";
+
+const BASE_URL = "http://localhost:5000";
+const AUTO_ADVANCE_MS = 4000;
+
+// Clients don't upload a profile photo, so we show a navy circle with their
+// initials instead — keeps the card layout identical to the old static version.
+function getInitials(name) {
+  if (!name) return "?";
+  const parts = name.trim().split(" ").filter(Boolean);
+  return parts.length > 1
+    ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
+    : parts[0][0].toUpperCase();
+}
 
 function ClientTestimonials() {
-  return (
-   
-    // Client testimonials
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState(0);
+  const timerRef = useRef(null);
 
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/testimonials/featured`);
+        setTestimonials(res.data.data);
+      } catch (error) {
+        setTestimonials([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
+
+  const goTo = useCallback(
+    (index) => {
+      if (testimonials.length === 0) return;
+      const next = (index + testimonials.length) % testimonials.length;
+      setActive(next);
+    },
+    [testimonials.length]
+  );
+
+  const goNext = useCallback(() => goTo(active + 1), [active, goTo]);
+  const goPrev = useCallback(() => goTo(active - 1), [active, goTo]);
+
+  // Auto-advance, restarts whenever `active` changes (manual click resets the clock)
+  useEffect(() => {
+    if (testimonials.length <= 1) return;
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(goNext, AUTO_ADVANCE_MS);
+    return () => clearTimeout(timerRef.current);
+  }, [active, testimonials.length, goNext]);
+
+  // Nothing to show yet (still loading, backend down, or admin hasn't
+  // featured any reviews) — skip rendering rather than showing an empty shell.
+  if (loading || testimonials.length === 0) return null;
+
+  return (
     <section className="client py-5">
       <div className="container text-center">
         <h2>what our clients say</h2>
@@ -17,149 +69,75 @@ function ClientTestimonials() {
           moments.
         </p>
 
-        <div
-          id="clientCarousel"
-          className="carousel slide"
-          data-bs-ride="carousel"
-          data-bs-interval="4000"
-        >
-          {/* Indicators */}
-          <div className="carousel-indicators mb-0">
-            <button
-              type="button"
-              data-bs-target="#clientCarousel"
-              data-bs-slide-to="0"
-              className="active"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#clientCarousel"
-              data-bs-slide-to="1"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#clientCarousel"
-              data-bs-slide-to="2"
-            ></button>
-          </div>
+        <div className="client-carousel">
+          <button
+            type="button"
+            className="client-carousel-control prev"
+            onClick={goPrev}
+            aria-label="Previous testimonial"
+          >
+            <i className="bi bi-chevron-left"></i>
+          </button>
 
-          {/* Carousel Inner */}
-          <div className="carousel-inner">
-            {/* Slide 1 */}
-            <div className="carousel-item active ">
-              <div className="d-flex justify-content-center mt-0 mt-lg-5">
-                <div className="col-lg-4 col-md-6">
-                  <div className="card text-center p-3 client-card pb-4">
-                    <div className="stars">
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
+          <div className="client-carousel-track-wrapper">
+            <div
+              className="client-carousel-track"
+              style={{ transform: `translateX(-${active * 100}%)` }}
+            >
+              {testimonials.map((testi) => (
+                <div className="client-carousel-slide" key={testi._id}>
+                  <div className="d-flex justify-content-center mt-0 mt-lg-5">
+                    <div className="col-lg-4 col-md-6 col-sm-10 col-11 mx-auto">
+                      <div className="card text-center p-3 client-card pb-4">
+                        <div className="stars">
+                          {Array.from({ length: testi.rating }).map((_, s) => (
+                            <i key={s} className="bi bi-star-fill"></i>
+                          ))}
+                        </div>
+
+                        <p className="card-para">
+                          <b>“</b>
+                          {testi.review}
+                          <b>”</b>
+                        </p>
+
+                        <div className="profile-initials">
+                          {getInitials(testi.clientName)}
+                        </div>
+                        <h4 className="card-title">{testi.clientName}</h4>
+                        <p className="card-text">{testi.eventType}</p>
+                      </div>
                     </div>
-
-                    <p className="card-para">
-                      <b>“</b>Eventura made our wedding planning completely
-                      stress-free. Every service was perfectly coordinated!
-                      <b>”</b>
-                    </p>
-
-                    <img
-                      src={ profile2 }
-                      className="profile-image"
-                      alt="profile 2"
-                    />
-                    <h4 className="card-title">Anjali & Rahul</h4>
-                    <p className="card-text">Wedding Event</p>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Slide 2 */}
-            <div className="carousel-item">
-              <div className="d-flex justify-content-center mt-0 mt-lg-5">
-                <div className="col-lg-4 col-md-6">
-                  <div className="card text-center p-3 client-card  pb-4">
-                    <div className="stars">
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                    </div>
-
-                    <p className="card-para">
-                      <b>“</b>From booking to execution, everything was smooth.
-                      Highly recommended for any celebration.<b>”</b>
-                    </p>
-
-                    <img
-                      src={ profile3 }
-                      className="profile-image"
-                      alt="profile 3"
-                    />
-                    <h4 className="card-title">Nithya Sumran</h4>
-                    <p className="card-text">Birthday Party</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Slide 3 */}
-            <div className="carousel-item">
-              <div className="d-flex justify-content-center  mt-0 mt-lg-5">
-                <div className="col-lg-4 col-md-6">
-                  <div className="card text-center p-3 client-card  pb-4">
-                    <div className="stars">
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                      <i className="bi bi-star-fill"></i>
-                    </div>
-
-                    <p className="card-para">
-                      <b>“</b>Professional vendors, easy booking, and great
-                      support. Eventura truly understands events.<b>”</b>
-                    </p>
-
-                    <img
-                      src={ profile1 }
-                      className="profile-image"
-                      alt="profile 1"
-                    />
-                    <h4 className="card-title">Thomas George</h4>
-                    <p className="card-text">Corporate Event</p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* Controls */}
           <button
-            className="carousel-control-prev"
             type="button"
-            data-bs-target="#clientCarousel"
-            data-bs-slide="prev"
+            className="client-carousel-control next"
+            onClick={goNext}
+            aria-label="Next testimonial"
           >
-            <span className="carousel-control-prev-icon"></span>
+            <i className="bi bi-chevron-right"></i>
           </button>
+        </div>
 
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#clientCarousel"
-            data-bs-slide="next"
-          >
-            <span className="carousel-control-next-icon"></span>
-          </button>
+        <div className="client-carousel-indicators">
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              className={i === active ? "active" : ""}
+              onClick={() => goTo(i)}
+              aria-label={`Go to testimonial ${i + 1}`}
+            ></button>
+          ))}
         </div>
       </div>
     </section>
-  
-  )
+  );
 }
 
-export default ClientTestimonials
+export default ClientTestimonials;

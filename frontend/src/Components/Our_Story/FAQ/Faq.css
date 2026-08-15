@@ -24,11 +24,11 @@
 
 /* Glass Cards */
 .glass-card-faq {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
   margin-bottom: 20px;
   overflow: hidden;
 }
@@ -38,12 +38,18 @@
   background: transparent !important;
   color: #fff !important;
   font-weight: 600;
-  box-shadow: none;
+  box-shadow: none !important;
+}
+
+.accordion-button:focus {
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 .accordion-button:not(.collapsed) {
   color: #d3b679 !important;
   background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
 }
 
 /* Remove default arrow background */
@@ -53,13 +59,14 @@
 
 /* Body */
 .accordion-body {
+  background: transparent !important;
   color: #e9edf1 !important;
   line-height: 1.7;
 }
 
-/* Remove default borders */
+/* Remove default border only — background is handled by .glass-card-faq above */
 .accordion-item {
-  border: none;
+  border: none !important;
 }
 
 /* Mobile adjustments */

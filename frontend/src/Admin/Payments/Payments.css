@@ -1,4 +1,3 @@
-
 .allPayments {
 padding: 0;
 }
@@ -25,6 +24,46 @@ gap: 10px;
 margin-bottom: 25px;
 border-bottom: 1px solid rgba(241, 212, 155, 0.08);
 padding-bottom: 8px;
+}
+
+/* Tab buttons */
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid rgba(241, 212, 155, 0.12);
+  border-radius: 20px;
+  background-color: #061521;
+  color: #8a9ba8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tab-btn:hover {
+  color: #fff7ee;
+  border-color: rgba(241, 212, 155, 0.3);
+}
+
+.tab-btn.active {
+  background-color: #f1d49b;
+  color: #062036;
+  border-color: #f1d49b;
+}
+
+.tab-count {
+  background-color: rgba(255, 255, 255, 0.12);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+}
+
+.tab-btn.active .tab-count {
+  background-color: rgba(6, 32, 54, 0.15);
 }
 
 /* Global Search Component */
@@ -54,8 +93,7 @@ font-size: 0.95rem;
 color: #8a9ba8;
 }
 
-/* STREAMING_CHUNK: Styling the ledger data table... /
-/ Core Data Table Layout */
+/* Core Data Table Layout */
 .allPayments-tableWrapper {
 background-color: #0d2131;
 border: 1px solid rgba(241, 212, 155, 0.1);
@@ -78,6 +116,7 @@ padding: 18px;
 color: #f1d49b;
 font-size: 0.9rem;
 font-weight: 600;
+white-space: nowrap;
 }
 
 .allPayments-table td {
@@ -89,11 +128,14 @@ vertical-align: middle;
 
 /* Row-specific elements */
 .payment-id-cell {
-font-family: monospace;
-font-weight: 600;
-color: #f1d49b;
+  display: block;
+  font-family: monospace;
+  font-weight: 600;
+  color: #f1d49b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .booking-link-cell {
 font-family: monospace;
 color: #8a9ba8;
@@ -160,6 +202,8 @@ font-weight: 600;
 display: inline-block;
 text-transform: uppercase;
 letter-spacing: 0.5px;
+white-space: nowrap;
+flex-shrink: 0;
 }
 
 .status-pill.pending { background: rgba(241, 212, 155, 0.15); color: #f1d49b; }
@@ -167,8 +211,150 @@ letter-spacing: 0.5px;
 .status-pill.failed { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
 .status-pill.refunded { background: rgba(138, 155, 168, 0.15); color: #8a9ba8; }
 
-/* STREAMING_CHUNK: Fixing the modal overlap and scroll containment... /
-/ =====================================================
+
+/* Wrapper that becomes horizontally scrollable on tablet.
+   On desktop this has no visual effect since the table
+   never exceeds the container width. */
+.allPayments-tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.allPayments-tableScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.allPayments-tableScroll::-webkit-scrollbar-thumb {
+  background-color: rgba(241, 212, 155, 0.2);
+  border-radius: 10px;
+}
+
+/* Card list is hidden by default (desktop + tablet show the table) */
+.payments-card-list {
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+/* ---------- TABLET: 768px – 1023px ---------- */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .allPayments-table th,
+  .allPayments-table td {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+
+  /* Hide less-critical columns; ID, Client Name, Amount,
+     Status and Actions always stay visible */
+  .allPayments-table .col-optional {
+    display: none;
+  }
+}
+
+/* ---------- MOBILE: below 768px ---------- */
+/* ---------- TABLET + MOBILE: up to 1023px — show card list instead of table ---------- */
+@media (max-width: 1023px) {
+  .allPayments-tableScroll {
+    display: none;
+  }
+  .payments-card-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .allPayments-tableWrapper {
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 12px;
+  }
+
+  .payments-card-list {
+    padding: 16px 10px;
+  }
+}
+
+/* Individual payment card (mobile) */
+.payment-card {
+  background-color: #061521 !important;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.payment-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.payment-card-top > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.payment-card-booking {
+  display: block;
+  margin-top: 4px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #8a9ba8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.payment-card-client {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.payment-card-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.payment-card-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-label {
+  color: #8a9ba8;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* span{
+    color: #fff7ee ;
+} */
+
+.payment-card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 12px;
+}
+
+@media (max-width: 400px) {
+  .payment-card-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================
 FIXED MODAL VIEW SYSTEM WITH SCROLLABLE INTERNAL BODY
 ===================================================== */
 
@@ -184,7 +370,7 @@ padding: 20px;
 }
 
 
-bookingModal-card {
+.bookingModal-card {
 background-color: #0d2131;
 border: 1px solid rgba(241, 212, 155, 0.15);
 border-radius: 18px;
@@ -239,8 +425,8 @@ flex-grow: 1;
 overflow-y: auto; 
 padding: 25px;
 background-color: #0d2131;
+width: 100%;
 
-/* Standard modern dark-mode scrollbars styling */
 scrollbar-width: thin;
 scrollbar-color: rgba(241, 212, 155, 0.2) rgba(6, 21, 33, 0.5);
 }
@@ -281,7 +467,6 @@ color: #fff7ee;
 font-size: 0.95rem;
 }
 
-/* Uploaded Receipt Preview Block Style */
 .payment-receipt-preview-section {
 margin-top: 15px;
 margin-bottom: 20px;
@@ -321,14 +506,23 @@ border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .download-btn {
-color: #fff7ee;
-text-decoration: none;
-font-size: 0.8rem;
-font-weight: 600;
-display: inline-flex;
-align-items: center;
-gap: 6px;
-transition: color 0.2s;
+  background: none;
+  border: none;
+  color: #fff7ee;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .download-btn:hover {
@@ -362,7 +556,6 @@ font-size: 0.9rem;
 border-left: 3px solid #8a9ba8;
 }
 
-/* Pricing Highlight Strip */
 .bookingModal-totalPrice {
 display: flex;
 justify-content: space-between;
@@ -438,8 +631,6 @@ background-color: #061521 !important;
 color: #fff7ee;
 }
 
-/* STREAMING_CHUNK: Styles for warning elements & confirmations... /
-/ Warning confirmation popups adjustments */
 .confirmation-mini {
 max-width: 420px !important;
 border: 1px solid rgba(239, 68, 68, 0.3) !important;
@@ -475,7 +666,6 @@ cursor: pointer;
 background-color: #dc2626;
 }
 
-/* System Exception Views Styling */
 .table-loading-state,
 .table-empty-state {
 padding: 60px 20px;
@@ -505,23 +695,269 @@ animation: rotate 0.8s linear infinite;
 
 @keyframes rotate { to { transform: rotate(360deg); } }
 
-/* Responsive Overrides */
-@media (max-width: 992px) {
-.allPayments-table th:nth-child(5), .allPayments-table td:nth-child(5),
-.allPayments-table th:nth-child(6), .allPayments-table td:nth-child(6) {
-display: none;
-}
+.refund-reason-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(241, 212, 155, 0.2);
+  background: #061521;
+  color: #fff7ee;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  height: 200px;
 }
 
-@media (max-width: 576px) {
-.bookingModal-grid {
-grid-template-columns: 1fr;
-gap: 12px;
+.refund-reason-input:focus {
+  outline: none;
+  border-color: #f1d49b;
 }
-.bookingModal-card {
-max-height: 95vh;
+
+.payment-stage-badge {
+  background-color: rgba(96, 165, 250, 0.12);
+  color: #60a5fa;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  white-space: nowrap;
 }
-.bookingModal-body {
-padding: 15px;
+
+.partial-refund-note {
+  font-size: 0.7rem;
+  color: #8a9ba8;
+  font-weight: 500;
+  margin-top: 2px;
 }
+
+.refund-amount-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(241, 212, 155, 0.2);
+  background: #061521;
+  color: #fff7ee;
+  font-size: 0.85rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.refund-amount-input:focus {
+  outline: none;
+  border-color: #f1d49b;
+}
+
+.field-hint-dark {
+  display: block;
+  color: #8a9ba8;
+  font-size: 0.75rem;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.action-locked {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background-color: #061521;
+  color: #4a5a68;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: not-allowed;
+  margin-left: 4px;
+}
+
+.pending-note {
+  color: #8a9ba8;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Pagination bar */
+.allPayments-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pagination-info {
+  color: #8a9ba8;
+  font-size: 0.82rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 8px;
+  background-color: #061521;
+  color: #fff7ee;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: rgba(241, 212, 155, 0.1);
+  border-color: #f1d49b;
+}
+
+.pagination-btn.active {
+  background-color: #f1d49b;
+  color: #062036;
+  border-color: #f1d49b;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   GENERAL RESPONSIVE TWEAKS — header, search, tabs
+========================================== */
+
+@media (max-width: 768px) {
+  .allPayments-header h2 {
+    font-size: 1.35rem;
+  }
+
+  .allPayments-searchBox {
+    height: 46px;
+    padding: 0 12px;
+  }
+
+  .allPayments-tabs {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 8px;
+  }
+
+  .bookingModal-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .bookingModal-card {
+    max-height: 95vh;
+  }
+
+  .bookingModal-body {
+    padding: 15px;
+  }
+
+  .allPayments-pagination {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .client-primary-name{
+    display: none;
+  }
+
+    .payment-card-meta {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+   .status-pill{
+    margin: 0;
+  }
+
+}
+
+@media (max-width: 320px) {
+  .allPayments-searchBox input {
+    font-size: 0.85rem;
+  }
+
+  .allPayments-tableWrapper{
+    margin: 0;
+  }
+  
+
+  /* On very small phones, scroll tabs instead of wrapping —
+     wrapping "Awaiting Verification" + count looks cramped */
+  .allPayments-tabs {
+    flex-wrap: nowrap;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+    .allPayments-tabs {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .allPayments-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .tab-btn {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+
+  .status-pill{
+    margin: 0;
+  }
+
+  .payment-card {
+    padding: 20px !important;
+    margin: 0;
+  }
+
+   .payment-id-cell,
+.payment-card-booking {
+  white-space: nowrap;
+  font-size: 0.72rem;
+  word-break: normal;
+}
+
+  .payment-card-meta {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .meta-label-date{
+    color: #fff7ee;
+  }
+
+  .payment-card-client{
+    margin: 0;   
+  }
+
+  .client-primary-name{
+    display: none;
+  }
+
+  .bookingModal-footer {
+    flex-wrap: wrap;
+  }
+
+  .bookingModal-footer button {
+    flex: 1;
+    min-width: 120px;
+  }
+
 }

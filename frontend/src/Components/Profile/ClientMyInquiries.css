@@ -1,0 +1,108 @@
+.clientProfile-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.clientProfile-card {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.clientProfile-card h2 {
+  color: #fff7ee;
+  margin: 0 0 10px 0;
+}
+
+.clientProfile-metaRow {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.clientProfile-metaRow span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8a9ba8;
+  font-size: 0.9rem;
+}
+
+.clientTickets-section h3 {
+  color: #f1d49b;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 15px;
+}
+
+.clientTickets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clientTicket-item {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 12px;
+  padding: 15px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.clientTicket-item:hover {
+  border-color: #f1d49b;
+  transform: translateY(-1px);
+}
+
+.clientTicket-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clientTicket-id {
+  font-family: monospace;
+  color: #8a9ba8;
+  font-size: 0.8rem;
+}
+
+.clientTicket-main strong {
+  color: #fff7ee;
+}
+
+.clientTicket-date {
+  color: #8a9ba8;
+  font-size: 0.8rem;
+}
+
+.clientTickets-empty, .clientTickets-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #8a9ba8;
+}
+
+.reply-sender {
+  display: block;
+  color: #f1d49b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.reply-fromClient {
+  border-left-color: #3b82f6 !important;
+}
+
+.reply-fromClient .reply-sender {
+  color: #3b82f6;
+}

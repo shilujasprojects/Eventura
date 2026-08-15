@@ -175,7 +175,7 @@ function AboutEvent() {
                     <p id="planner">Certified Wedding Planner</p>
                     <p>
                       <i className="bi bi-telephone-inbound"></i>
-                      <span className="px-1">+1 123-456-7890</span>
+                      <span className="px-1" style={{color: '#6'}}>+1 123-456-7890</span>
                     </p>
                     <p>
                       <i className="bi bi-globe-americas"></i>

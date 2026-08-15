@@ -159,3 +159,60 @@ textarea.form-control {
   }
   
 }
+
+.error-text {
+  color: #d9534f;
+  font-size: 12px;
+  margin-top: 2px;
+  display: inline-block;
+}
+
+.package-included-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.included-service-tag {
+  background: rgba(6, 32, 54, 0.08);
+  color: #062036;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.price-summary-box {
+  background: #fffaf2;
+  border: 1px solid #e5d3b3;
+  border-radius: 12px;
+  color: #062036;
+}
+
+.suspended-blocker {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  background: #fffaf2;
+  border: 1px solid #f3b7b3;
+  border-radius: 16px;
+  padding: 40px 32px;
+  box-shadow: 0 8px 24px rgba(6, 32, 54, 0.1);
+}
+
+.suspended-blocker h4 {
+  color: #a12f2a;
+  font-family: Cinzel;
+  margin-bottom: 12px;
+}
+
+.suspended-blocker p {
+  color: #062036;
+  margin-bottom: 0;
+}
+
+.autofilled-note {
+  font-size: 13px;
+  color: #8a7a52;
+  margin-bottom: 12px;
+}

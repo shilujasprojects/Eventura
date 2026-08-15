@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./WeddingExplore.css";
 import Footer from "../../../Footer/Footer";
 import Navbar from "../../../Navbar/Navbar";
+import useCategoryGallery from '../../../../hooks/useCategoryGallery'
 
 export default function WeddingExplore() {
 
@@ -10,6 +11,9 @@ const autoSlideRef = useRef(null);
 
 const [lightbox, setLightbox] = useState(false);
 const [selectedImg, setSelectedImg] = useState("");
+
+ const { images: weddingImages, loading: galleryLoading } =
+    useCategoryGallery("Wedding", 6);
 
 /* Scroll buttons */
 
@@ -108,31 +112,29 @@ and unforgettable event moments.
 
 <button className="scroll-btn left" onClick={() => scrollGallery(-300)}>❮</button>
 
-<div className="wedding-gallery-row" ref={galleryRef} onMouseEnter={() => clearInterval(autoSlideRef.current)}
-onMouseLeave={startAutoSlide}>
-
-{[
-"https://images.unsplash.com/photo-1520854221256-17451cc331bf",
-"https://images.unsplash.com/photo-1529636798458-92182e662485",
-"https://images.unsplash.com/photo-1537633552985-df8429e8048b",
-"https://images.unsplash.com/photo-1507504031003-b417219a0fde",
-"https://images.unsplash.com/photo-1519741497674-611481863552",
-"https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
-"https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
-"https://images.unsplash.com/photo-1523438885200-e635ba2c371e",
-"https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d"
-
-// "https://images.unsplash.com/photo-1521334884684-d80222895322"
-].map((img)=>(
-<img
-key={img}
-src={img}
-alt="wedding"
-loading="lazy"
-onClick={()=>openLightbox(img)}
-/>
-))}
-
+<div
+  className="wedding-gallery-row"
+  ref={galleryRef}
+  onMouseEnter={() => clearInterval(autoSlideRef.current)}
+  onMouseLeave={startAutoSlide}
+>
+  {galleryLoading ? (
+    Array.from({ length: 6 }).map((_, i) => (
+      <div className="wedding-gallery-skeleton" key={i} />
+    ))
+  ) : weddingImages.length === 0 ? (
+    <p>No gallery images available yet.</p>
+  ) : (
+    weddingImages.map((img) => (
+      <img
+        key={img}
+        src={img}
+        alt="wedding"
+        loading="lazy"
+        onClick={() => openLightbox(img)}
+      />
+    ))
+  )}
 </div>
 
 <button className="scroll-btn right" onClick={() => scrollGallery(300)}>❯</button>

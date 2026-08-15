@@ -15,6 +15,10 @@ font-family: Cinzel;
   font-weight: 00;
 }
 
+#email-id{
+  color: #062036;
+}
+
 .img-gallery {
   border-radius: 10px;
 }
@@ -111,4 +115,24 @@ hr {
 #gallery-text-box {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.img-gallery-skeleton {
+  width: 100%;
+  padding-top: 66%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #e8dcc5 25%, #f1e9d6 50%, #e8dcc5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.img-gallery {
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+  width: 100%;
 }

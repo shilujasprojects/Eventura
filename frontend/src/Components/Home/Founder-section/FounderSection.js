@@ -12,8 +12,8 @@ function FounderSection() {
       <div class="container">
         <div class="hero-grid">
           {/* LEFT CONTENT */}
-          <div class="hero-founder-content" data-aos="fade-up" data-aos-duration="2000">
-            <div class="founder">
+          <div className="hero-founder-content" data-aos="fade-up" data-aos-duration="2000">
+            <div className="founder">
               <img src={founder} alt="Founder" />
               <span>
                 Hey, we’re <strong>Eventura</strong>
@@ -28,40 +28,40 @@ function FounderSection() {
               Creating Memories.
             </h1>
 
-            <p class="hero-founder-desc">
+            <p className="hero-founder-desc">
               We design and deliver seamless events with creativity, precision,
               and elegance — so you can enjoy every moment stress-free.
             </p>
 
-            <Link to="/bookNow" class="hero-btn">
+            <Link to="/bookNow" className="hero-btn">
               Plan Your Event
             </Link>
           </div>
 
           {/* RIGHT IMAGE */}
-          <div class="hero-image" data-aos="fade-left" data-aos-duration="2000">
+          <div className="hero-image" data-aos="fade-left" data-aos-duration="2000">
             <img src={flower} alt="Event Setup" />
           </div>
         </div>
 
         {/* STATS Card */}
-        <div class="hero-stats" data-aos="zoom-out-down" data-aos-duration="1500">
-          <div class="stat-card" >
+        <div className="hero-stats" data-aos="zoom-out-down" data-aos-duration="1500">
+          <div className="stat-card" >
             <h3>8+</h3>
             <p>Years Experience</p>
           </div>
 
-          <div class="stat-card">
+          <div className="stat-card">
             <h3>1200+</h3>
             <p>Events Managed</p>
           </div>
 
-          <div class="stat-card">
+          <div className="stat-card">
             <h3>300+</h3>
             <p>Trusted Vendors</p>
           </div>
 
-          <div class="stat-card">
+          <div className="stat-card">
             <h3>2500+</h3>
             <p>Happy Clients</p>
           </div>

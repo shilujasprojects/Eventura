@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./Services.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const ViewServices = () => {
   const navigate = useNavigate();
@@ -203,6 +203,7 @@ const ViewServices = () => {
 
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };

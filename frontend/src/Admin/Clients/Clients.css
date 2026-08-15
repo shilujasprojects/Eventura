@@ -1,38 +1,70 @@
-/* =====================================================
-   CLIENTS MANAGEMENT TAB SYSTEM COMPONENT STYLES
-===================================================== */
+/* =========================================================
+   DESIGN TOKENS
+   Same palette/spacing scale as Packages.css so all admin
+   modules stay visually consistent.
+========================================================= */
+
+:root {
+  --panel-bg: #0d2131;
+  --input-bg: #061521;
+  --text-primary: #fff7ee;
+  --text-muted: #8a9ba8;
+  --accent: #f1d49b;
+  --accent-dark: #062036;
+  --danger: #ef4444;
+  --danger-rgb: 239, 68, 68;
+  --success: #4ade80;
+
+  --accent-rgb: 241, 212, 155;
+  --success-rgb: 74, 222, 128;
+  --white-rgb: 255, 255, 255;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-pill: 20px;
+
+  --transition: 0.2s ease;
+}
+
+/* =========================================================
+   1. PAGE HEADER
+========================================================= */
 
 .allClients {
   padding: 0;
 }
 
-/* Header Structuring */
 .allClients-header {
   margin-bottom: 25px;
 }
 
 .allClients-header h2 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0 0 5px 0;
 }
 
 .allClients-header p {
-  color: #8a9ba8;
+  color: var(--text-muted);
   margin: 0;
 }
 
-/* Global Search Component */
+/* =========================================================
+   2. SEARCH
+========================================================= */
+
 .allClients-searchBox {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   height: 50px;
   padding: 0 15px;
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 12px;
   margin-bottom: 25px;
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .allClients-searchBox input {
@@ -40,29 +72,89 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
-.allClients-searchBox input::placeholder{
-    padding: 0;
+.allClients-searchBox input::placeholder {
+  color: var(--text-muted);
 }
 
-/* Dynamic Filter Sub-tab Switches */
+/* =========================================================
+   3. STATUS TABS
+========================================================= */
+
 .allClients-tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 25px;
-  border-bottom: 1px solid rgba(241, 212, 155, 0.08);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.08);
   padding-bottom: 8px;
 }
 
-/* Core Data Table Layout */
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(var(--accent-rgb), 0.06);
+}
+
+.tab-btn.active {
+  color: var(--accent-dark);
+  background-color: var(--accent);
+}
+
+.tab-count {
+  background-color: rgba(var(--white-rgb), 0.15);
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.tab-btn.active .tab-count {
+  background-color: rgba(var(--accent-dark), 0.15);
+}
+
+/* =========================================================
+   4. TABLE WRAPPER
+========================================================= */
+
 .allClients-tableWrapper {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 15px;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Horizontally scrollable on narrower desktop widths; no
+   visual effect once the table is short enough to fit */
+.allClients-tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.allClients-tableScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.allClients-tableScroll::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--accent-rgb), 0.2);
+  border-radius: 10px;
 }
 
 .allClients-table {
@@ -71,215 +163,515 @@
 }
 
 .allClients-table thead {
-  background-color: rgba(241, 212, 155, 0.05);
+  background-color: rgba(var(--accent-rgb), 0.05);
 }
 
 .allClients-table th {
   text-align: left;
   padding: 18px;
-  color: #f1d49b;
+  color: var(--accent);
   font-size: 0.9rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .allClients-table td {
   padding: 18px;
-  color: #fff7ee;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   vertical-align: middle;
 }
 
-/* Custom Profile Layout Blocks inside Row */
+/* Profile cell */
+
 .client-profile-cell {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
-.client-table-avatar {
+.client-avatar-fallback {
   width: 44px;
   height: 44px;
-  object-fit: cover;
   border-radius: 50%;
-  border: 1px solid rgba(241, 212, 155, 0.2);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  background: var(--input-bg);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
-.client-title-meta, .client-contact-meta {
+.client-title-meta,
+.client-contact-meta {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  
 }
 
 .client-primary-name {
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .client-uid-tag {
   font-family: monospace;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.8rem;
+  margin-left: 0;
+  margin-top: 5px;
 }
 
 .client-contact-meta small {
-  color: #8a9ba8;
+  color: var(--text-muted);
   margin-top: 2px;
+  margin-left: 0;
+  margin-top: 5px;
 }
 
 .client-count-badge {
-  background-color: rgba(241, 212, 155, 0.1);
-  color: #f1d49b;
+  background-color: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
   padding: 5px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 0.8rem;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .gold-text-value {
-  color: #f1d49b;
+  color: var(--accent);
   font-weight: 600;
 }
 
-/* Operational Actions Control Interface */
+/* =========================================================
+   5. ACTIONS — icon buttons with hover tooltip
+   (same pattern as .allPackages-actions on the Packages page)
+========================================================= */
+
 .allClients-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: flex-end;
 }
 
 .client-action-btn {
-  padding: 8px 14px;
+  position: relative;
+  width: 35px;
+  height: 35px;
   border: none;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
   cursor: pointer;
-  transition: 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
 }
 
-.client-action-btn.view-btn {
-  background-color: #061521;
-  color: #fff7ee;
-  border: 1px solid rgba(241, 212, 155, 0.15);
+.client-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.client-action-btn.view-btn:hover {
-  color: #f1d49b;
-  transform: translateY(-1px);
+.client-action-btn.view-btn:hover:not(:disabled) {
+  color: var(--accent);
+  background-color: #102739;
 }
 
 .client-action-btn.toggle-btn.suspend {
-  background-color: rgba(239, 68, 68, 0.12);
-  color: #ef4444;
+  color: var(--danger);
 }
 
-.client-action-btn.toggle-btn.suspend:hover {
-  background-color: #ef4444;
-  color: #fff7ee;
+.client-action-btn.toggle-btn.suspend:hover:not(:disabled) {
+  background-color: var(--danger);
+  color: var(--text-primary);
 }
 
 .client-action-btn.toggle-btn.activate {
-  background-color: rgba(74, 222, 128, 0.12);
-  color: #4ade80;
+  color: var(--success);
 }
 
-.client-action-btn.toggle-btn.activate:hover {
-  background-color: #4ade80;
-  color: #062036;
+.client-action-btn.toggle-btn.activate:hover:not(:disabled) {
+  background-color: var(--success);
+  color: var(--accent-dark);
 }
 
-/* System Exception View Defaults */
+/* Hover tooltip driven by data-tooltip attribute */
+
+.client-action-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: var(--panel-bg);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  z-index: 20;
+}
+
+.client-action-btn:hover:not(:disabled)::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Clamp first/last tooltip to the row's own edges so nothing
+   spills outside the table or card */
+
+.allClients-actions .client-action-btn:first-child::after {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allClients-actions .client-action-btn:first-child:hover:not(:disabled)::after {
+  transform: translateX(0) translateY(0);
+}
+
+.allClients-actions .client-action-btn:last-child::after {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allClients-actions .client-action-btn:last-child:hover:not(:disabled)::after {
+  transform: translateX(0) translateY(0);
+}
+
+/* Small inline spinner shown on a button while a status
+   toggle request is in flight */
+
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(var(--white-rgb), 0.25);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   6. CARD VIEW — small-screen replacement for the table
+========================================================= */
+
+.allClients-cardList {
+  display: none; /* enabled ≤768px */
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.allClients-card {
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.allClients-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.allClients-card-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.allClients-card-contact span {
+  color: var(--text-primary);
+}
+
+.allClients-card-contact small {
+  color: var(--text-muted);
+  margin-left: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.allClients-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.allClients-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.06);
+}
+
+.allClients-card-date {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+/* =========================================================
+   7. EMPTY STATE
+========================================================= */
+
 .table-empty-state {
   padding: 50px 20px;
   text-align: center;
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .empty-icon {
-  font-size: 40px;
-  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  color: rgba(var(--accent-rgb), 0.4);
+  margin-bottom: 12px;
 }
 
 .table-empty-state h3 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin-bottom: 5px;
 }
 
-/* =====================================================
-   CLIENT DETAILED SUMMARY MANIFEST MODAL CARDS
-===================================================== */
+/* =========================================================
+   8. PAGINATION
+========================================================= */
+
+.allClients-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
+}
+
+.pagination-info {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: rgba(var(--accent-rgb), 0.1);
+  border-color: var(--accent);
+}
+
+.pagination-btn.active {
+  background-color: var(--accent);
+  color: var(--accent-dark);
+  border-color: var(--accent);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   9. CLIENT PROFILE MODAL
+========================================================= */
+
 .clientModal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(6, 21, 33, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1200;
-  padding: 20px;
+  padding: 30px 20px;
+  overflow-y: auto; /* fallback so the overlay itself can scroll
+                        if the viewport is shorter than the card */
 }
 
 .clientModal-card {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 18px;
   width: 100%;
   max-width: 600px;
+  max-height: 90vh; /* caps card height so it never exceeds the
+                        viewport on short/medium screens */
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
   animation: modalFadeIn 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .clientModal-header {
-  background-color: rgba(241, 212, 155, 0.02);
+  background-color: rgba(var(--accent-rgb), 0.02);
   padding: 20px 25px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(var(--white-rgb), 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
-.clientModal-header h3 { color: #fff7ee; margin: 0; }
+.clientModal-header h3 {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.closeModal-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.closeModal-btn:hover {
+  color: var(--text-primary);
+}
 
 .clientModal-body {
   padding: 25px;
+  overflow-y: auto; /* only the body scrolls; header/footer stay pinned */
+  flex: 1;
+  min-height: 0; /* required for a flex child to actually shrink & scroll */
 }
 
-/* Profile Master Info Card Hero element */
 .clientModal-hero {
   display: flex;
   gap: 20px;
   align-items: center;
-  background: #061521;
+  background: var(--input-bg);
   padding: 20px;
   border-radius: 12px;
-  border: 1px solid rgba(241, 212, 155, 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.08);
   margin-bottom: 20px;
   position: relative;
 }
 
-.clientModal-hero img {
+.clientModal-avatarFallback {
   width: 75px;
   height: 75px;
-  object-fit: cover;
   border-radius: 50%;
-  border: 2px solid #f1d49b;
+  border: 2px solid var(--accent);
+  background: var(--input-bg);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  font-size: 1.6rem;
+  flex-shrink: 0;
 }
 
-.clientModal-hero h4 { color: #fff7ee; margin: 0 0 4px 0; font-size: 1.2rem; }
-.clientModal-hero p { color: #8a9ba8; margin: 0 0 5px 0; font-size: 0.9rem; }
+.clientModal-hero h4 {
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  font-size: 1.2rem;
+}
+
+.clientModal-hero p {
+  color: var(--text-muted);
+  margin: 0 0 5px 0;
+  font-size: 0.9rem;
+}
 
 .status-pill-badge {
-  position: absolute;
-  top: 20px; right: 20px;
   font-size: 0.75rem;
   padding: 3px 10px;
   border-radius: 12px;
   font-weight: bold;
+  white-space: nowrap;
+  margin-top: 10px;
 }
-.status-pill-badge.active { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
-.status-pill-badge.suspended { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
 
-/* Business Multi-Metric Counters Block layout */
+.clientModal-hero .status-pill-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.status-pill-badge.active {
+  background: rgba(var(--success-rgb), 0.15);
+  color: var(--success);
+}
+
+.status-pill-badge.suspended {
+  background: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger);
+}
+
 .clientModal-metricsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -288,8 +680,8 @@
 }
 
 .metric-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(var(--white-rgb), 0.02);
+  border: 1px solid rgba(var(--white-rgb), 0.05);
   padding: 15px;
   border-radius: 10px;
   text-align: center;
@@ -297,28 +689,31 @@
 
 .metric-title {
   display: block;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.75rem;
   margin-bottom: 5px;
   text-transform: uppercase;
 }
 
 .metric-value {
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 1.3rem;
   font-weight: 700;
 }
 
-/* History Core Log Section Listing */
 .clientModal-historySection h5 {
-  color: #f1d49b;
+  color: var(--accent);
   margin: 0 0 12px 0;
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.no-history-txt { color: #8a9ba8; font-style: italic; font-size: 0.9rem; }
+.no-history-txt {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
 
 .history-list {
   max-height: 160px;
@@ -332,49 +727,239 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #061521;
+  background-color: var(--input-bg);
   padding: 12px 15px;
   border-radius: 8px;
-  border-left: 3px solid rgba(241, 212, 155, 0.3);
+  border-left: 3px solid rgba(var(--accent-rgb), 0.3);
 }
 
-.history-main-info, .history-price-status {
+.history-main-info,
+.history-price-status {
   display: flex;
   flex-direction: column;
 }
 
-.history-main-info strong { color: #fff7ee; font-size: 0.9rem; }
-.history-main-info small { color: #8a9ba8; font-size: 0.75rem; margin-top: 2px; }
-.history-price-status { text-align: right; }
-.history-price-status strong { color: #f1d49b; font-size: 0.9rem; }
-.history-status-lbl { color: #8a9ba8; font-size: 0.7rem; text-transform: uppercase; }
+.history-main-info strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
 
-/* Control Footers */
+.history-main-info small {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-top: 6px;
+}
+
+.history-price-status {
+  text-align: right;
+}
+
+.history-price-status strong {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.history-status-lbl {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
 .clientModal-footer {
   padding: 20px 25px;
   background-color: rgba(6, 21, 33, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  flex-shrink: 0;
+}
+
+.clientModal-footer .client-action-btn.toggle-btn {
+  width: auto;
+  height: auto;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.clientModal-footer .client-action-btn.toggle-btn.suspend {
+  background-color: rgba(var(--danger-rgb), 0.12);
+}
+
+.clientModal-footer .client-action-btn.toggle-btn.activate {
+  background-color: rgba(var(--success-rgb), 0.12);
 }
 
 .clientModal-closeBtn {
   background-color: transparent;
-  color: #8a9ba8;
-  border: 1px solid rgba(241, 212, 155, 0.15);
+  color: var(--text-muted);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   padding: 10px 18px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
+  transition: var(--transition);
 }
-.clientModal-closeBtn:hover { background-color: #061521; color: #fff7ee; }
 
-/* Responsive Media Breakdown Scaling */
+.clientModal-closeBtn:hover {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+}
+
+/* =========================================================
+   10. LOADING STATE
+========================================================= */
+
+.clients-loading {
+  text-align: center;
+  margin-top: 60px;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* =========================================================
+   11. RESPONSIVE
+   ≤992px: table drops less-critical columns
+   ≤900px: modal narrows for tablets
+   ≤768px: table swaps for the card list
+   ≤600px: modal padding/typography shrink for phones
+   ≤480px: header, tabs and modal shrink for small screens
+========================================================= */
+
+@media (max-width: 992px) {
+  .allClients-table .col-contact,
+  .allClients-table .col-joined {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .clientModal-card {
+    max-width: 90%;
+  }
+
+  .clientModal-metricsGrid {
+    gap: 10px;
+  }
+}
+
 @media (max-width: 768px) {
-  .clientModal-metricsGrid { grid-template-columns: 1fr; }
-  .allClients-table th:nth-child(4), .allClients-table td:nth-child(4),
-  .allClients-table th:nth-child(5), .allClients-table td:nth-child(5) { display: none; }
-  .clientModal-hero { flex-direction: column; text-align: center; }
-  .status-pill-badge { position: relative; top: 5px; right: 0; display: inline-block; }
+  .allClients-table {
+    display: none;
+  }
+
+  .allClients-cardList {
+    display: flex;
+  }
+
+  .clientModal-metricsGrid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .clientModal-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .clientModal-hero .status-pill-badge {
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 10px;
+    display: inline-block;
+    
+  }
+
+  .allClients-pagination {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .clientModal-overlay {
+    padding: 12px;
+  }
+
+  .clientModal-card {
+    max-height: 92vh;
+    border-radius: 14px;
+  }
+
+  .clientModal-header {
+    padding: 16px 18px;
+  }
+
+  .clientModal-header h3 {
+    font-size: 1.05rem;
+  }
+
+  .clientModal-body {
+    padding: 18px;
+  }
+
+  .clientModal-hero {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .clientModal-avatarFallback {
+    width: 60px;
+    height: 60px;
+    font-size: 1.3rem;
+  }
+
+  .clientModal-hero h4 {
+    font-size: 1.05rem;
+  }
+
+  .history-item-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .history-price-status {
+    text-align: left;
+    width: 100%;
+  }
+
+  .clientModal-footer {
+    padding: 16px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .allClients-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .allClients-tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  .clientModal-metricsGrid{
+    grid-template-columns:1fr;
+  }
+
+  .clientModal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .clientModal-footer .client-action-btn.toggle-btn,
+  .clientModal-closeBtn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
 }

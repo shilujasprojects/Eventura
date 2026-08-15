@@ -1,36 +1,73 @@
+/* =========================================================
+   DESIGN TOKENS
+   Same palette/spacing scale as Bookings.css / Clients.css /
+   Packages.css so all admin modules stay visually consistent.
+========================================================= */
+
+:root {
+  --panel-bg: #0d2131;
+  --input-bg: #061521;
+  --text-primary: #fff7ee;
+  --text-muted: #8a9ba8;
+  --accent: #f1d49b;
+  --accent-dark: #062036;
+  --danger: #ef4444;
+  --danger-rgb: 239, 68, 68;
+  --success: #4ade80;
+  --info: #3b82f6;
+  --info-rgb: 59, 130, 246;
+
+  --accent-rgb: 241, 212, 155;
+  --success-rgb: 74, 222, 128;
+  --white-rgb: 255, 255, 255;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-pill: 20px;
+
+  --transition: 0.2s ease;
+}
 
 .supportPage {
   padding: 0;
 }
 
-/* Header Structuring */
+/* =========================================================
+   1. PAGE HEADER
+========================================================= */
+
 .supportPage-header {
   margin-bottom: 25px;
 }
 
 .supportPage-header h2 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0 0 5px 0;
 }
 
 .supportPage-header p {
-  color: #8a9ba8;
+  color: var(--text-muted);
   margin: 0;
   font-size: 0.95rem;
 }
 
-/* Global Search Component */
+/* =========================================================
+   2. SEARCH
+========================================================= */
+
 .supportPage-searchBox {
   display: flex;
   align-items: center;
   gap: 12px;
   height: 50px;
   padding: 0 15px;
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 12px;
   margin-bottom: 25px;
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .supportPage-searchBox input {
@@ -38,38 +75,46 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
+.supportPage-searchBox ::placeholder {
+  color: var(--text-muted);
+  padding: 0;
+}
+
 .search-icon-svg {
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .clear-search {
   background: none;
   border: none;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 20px;
   cursor: pointer;
 }
 
-/* Dynamic Filter Sub-tab Switches */
+/* =========================================================
+   3. STATUS TABS
+========================================================= */
+
 .supportPage-tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 25px;
-  border-bottom: 1px solid rgba(241, 212, 155, 0.08);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.08);
   padding-bottom: 8px;
   flex-wrap: wrap;
 }
 
 .supportPage-tabs .tab-btn {
   background-color: transparent;
-  color: #8a9ba8;
+  color: var(--text-muted);
   border: 1px solid transparent;
-  padding: 12px 18px;
-  border-radius: 10px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
@@ -80,35 +125,56 @@
 }
 
 .supportPage-tabs .tab-btn:hover {
-  color: #fff7ee;
-  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--text-primary);
+  background-color: rgba(var(--white-rgb), 0.02);
 }
 
 .supportPage-tabs .tab-btn.active {
-  background-color: #f1d49b;
-  color: #062036;
+  color: var(--accent);
+  background-color: rgba(var(--accent-rgb), 0.05);
+  border-color: var(--accent);
 }
 
 .tab-count {
   font-size: 0.75rem;
   background-color: rgba(6, 21, 33, 0.4);
   padding: 2px 8px;
-  border-radius: 12px;
-  color: #f1d49b;
+  border-radius: var(--radius-pill);
+  color: var(--accent);
   font-weight: bold;
 }
 
 .tab-btn.active .tab-count {
-  background-color: #061521;
-  color: #fff7ee;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
 }
 
-/* Core Data Table Layout */
+/* =========================================================
+   4. TABLE
+========================================================= */
+
 .supportPage-tableWrapper {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 15px;
   overflow: hidden;
+}
+
+/* Wrapper that becomes horizontally scrollable on tablet.
+   On desktop this has no visual effect since the table
+   never exceeds the container width. */
+.supportPage-tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.supportPage-tableScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.supportPage-tableScroll::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--accent-rgb), 0.2);
+  border-radius: 10px;
 }
 
 .supportPage-table {
@@ -117,29 +183,31 @@
 }
 
 .supportPage-table thead {
-  background-color: rgba(241, 212, 155, 0.05);
+  background-color: rgba(var(--accent-rgb), 0.05);
 }
 
 .supportPage-table th {
   text-align: left;
   padding: 18px;
-  color: #f1d49b;
+  color: var(--accent);
   font-size: 0.9rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .supportPage-table td {
   padding: 18px;
-  color: #fff7ee;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   vertical-align: middle;
 }
 
 /* Row-specific elements */
+
 .support-id-cell {
   font-family: monospace;
   font-weight: 600;
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .client-meta {
@@ -148,12 +216,12 @@
 }
 
 .client-primary-name {
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
 .client-email {
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.8rem;
   margin-top: 2px;
 }
@@ -164,12 +232,12 @@
 }
 
 .subject-meta strong {
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
 .message-snippet {
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.8rem;
   margin-top: 3px;
   max-width: 350px;
@@ -178,61 +246,217 @@
   text-overflow: ellipsis;
 }
 
-/* Action Control Icons */
+/* =========================================================
+   5. ACTIONS & TOOLTIPS
+========================================================= */
+
 .supportPage-actions {
   display: flex;
-  gap: 6px;
+  gap: 10px;
   justify-content: flex-end;
 }
 
-.allEvents-actions-btn {
-  width: 36px;
-  height: 36px;
+.support-action-btn {
+  position: relative;
+  width: 35px;
+  height: 35px;
   border: none;
-  border-radius: 8px;
-  background-color: #061521;
-  color: #fff7ee;
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s ease;
-  margin-left: 4px;
+  transition: var(--transition);
 }
 
-.allEvents-actions-btn:hover {
+.support-action-btn:hover {
   transform: translateY(-2px);
 }
 
-/* Action Hover Variations */
-.action-view:hover { color: #f1d49b; background-color: rgba(241, 212, 155, 0.05); }
-.action-approve:hover { background-color: rgba(74, 222, 128, 0.2); color: #4ade80; }
-.action-reject:hover { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.support-action-btn.action-view:hover { color: var(--accent); background-color: rgba(var(--accent-rgb), 0.05); }
+.support-action-btn.action-approve:hover { background-color: rgba(var(--success-rgb), 0.2); color: var(--success); }
+.support-action-btn.action-reject:hover { background-color: rgba(var(--danger-rgb), 0.2); color: var(--danger); }
 
-/* Status Indicators */
+/* Hover tooltip driven by data-tooltip attribute */
+
+.support-action-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: var(--panel-bg);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  z-index: 20;
+}
+
+.support-action-btn:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Clamp first/last tooltip to the row's own edges so it can't
+   spill outside the table or card */
+
+.supportPage-actions .support-action-btn:first-child::after {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+.supportPage-actions .support-action-btn:first-child:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+.supportPage-actions .support-action-btn:last-child::after {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+.supportPage-actions .support-action-btn:last-child:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+/* Status pills */
+
 .status-pill {
   font-size: 0.75rem;
   padding: 4px 10px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-weight: 600;
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
-.status-pill.new { background: rgba(241, 212, 155, 0.15); color: #f1d49b; }
-.status-pill.in-progress { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-.status-pill.resolved { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.status-pill.new { background: rgba(var(--accent-rgb), 0.15); color: var(--accent); }
+.status-pill.in-progress { background: rgba(var(--info-rgb), 0.15); color: var(--info); }
+.status-pill.resolved { background: rgba(var(--success-rgb), 0.15); color: var(--success); }
 
-/* =====================================================
-   FIXED MODAL VIEW SYSTEM WITH SCROLLABLE INTERNAL BODY
-===================================================== */
+/* =========================================================
+   6. CARD VIEW — small/medium-screen replacement for the table
+========================================================= */
 
-/* High priority overlay layers to clear any Admin dashboard overlays */
+.inquiries-card-list {
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.inquiry-card {
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.inquiry-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.inquiry-card-subject {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(var(--white-rgb), 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inquiry-card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
+  padding-top: 12px;
+}
+
+/* =========================================================
+   7. PAGINATION
+========================================================= */
+
+.supportPage-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
+}
+
+.pagination-info {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: rgba(var(--accent-rgb), 0.1);
+  border-color: var(--accent);
+}
+
+.pagination-btn.active {
+  background-color: var(--accent);
+  color: var(--accent-dark);
+  border-color: var(--accent);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   8. MODAL — Inquiry detail / reply thread
+========================================================= */
+
 .bookingModal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(4, 11, 17, 0.85); /* Dark background premium backdrop */
+  background: rgba(4, 11, 17, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -240,14 +464,13 @@
   padding: 20px;
 }
 
-/* Flexbox layout ensures structure fits view constraints cleanly */
 .bookingModal-card {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.15);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   border-radius: 18px;
   width: 100%;
   max-width: 650px;
-  max-height: 90vh; /* Keeps container safely inside viewport margins */
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -260,19 +483,18 @@
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Pinned Header constraints */
 .bookingModal-header {
   flex-shrink: 0;
-  background-color: rgba(241, 212, 155, 0.02);
+  background-color: rgba(var(--accent-rgb), 0.02);
   padding: 18px 25px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(var(--white-rgb), 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .bookingModal-header h3 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0;
   font-size: 1.15rem;
 }
@@ -280,27 +502,26 @@
 .closeModal-btn {
   background: none;
   border: none;
-  color: #8a9ba8;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: 0.2s;
+  transition: var(--transition);
   padding: 4px;
 }
 
 .closeModal-btn:hover {
-  color: #f1d49b;
+  color: var(--accent);
 }
 
-/* Scroll wrapper on center body prevents overlap leaks */
 .bookingModal-body {
   flex-grow: 1;
-  overflow-y: auto; /* Independent scroll flow limits heights */
+  overflow-y: auto;
   padding: 25px;
-  background-color: #0d2131;
+  background-color: var(--panel-bg);
   scrollbar-width: thin;
-  scrollbar-color: rgba(241, 212, 155, 0.2) rgba(6, 21, 33, 0.5);
+  scrollbar-color: rgba(var(--accent-rgb), 0.2) rgba(6, 21, 33, 0.5);
 }
 
 .bookingModal-body::-webkit-scrollbar {
@@ -312,7 +533,7 @@
 }
 
 .bookingModal-body::-webkit-scrollbar-thumb {
-  background-color: rgba(241, 212, 155, 0.2);
+  background-color: rgba(var(--accent-rgb), 0.2);
   border-radius: 10px;
 }
 
@@ -324,7 +545,7 @@
 }
 
 .bookingModal-infoBlock label {
-  color: #f1d49b;
+  color: var(--accent);
   display: block;
   font-size: 0.8rem;
   margin-bottom: 6px;
@@ -334,19 +555,20 @@
 
 .bookingModal-infoBlock p {
   margin: 6px 0;
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
 .muted-icon {
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 /* Message display block */
+
 .support-message-box {
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.08);
-  border-radius: 12px;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.08);
+  border-radius: var(--radius-md);
   padding: 18px;
   margin-bottom: 22px;
 }
@@ -355,7 +577,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #f1d49b;
+  color: var(--accent);
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 10px;
@@ -363,20 +585,21 @@
 }
 
 .support-message-content {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.6;
   font-style: italic;
 }
 
-/* Responses Threads list */
+/* Reply thread */
+
 .support-replies-thread {
   margin-bottom: 22px;
 }
 
 .support-replies-thread label {
-  color: #f1d49b;
+  color: var(--accent);
   display: block;
   font-size: 0.8rem;
   margin-bottom: 8px;
@@ -385,12 +608,12 @@
 }
 
 .no-replies-message {
-  background-color: rgba(255, 255, 255, 0.02);
-  border: 1px dashed rgba(138, 155, 168, 0.15);
-  border-radius: 10px;
+  background-color: rgba(var(--white-rgb), 0.02);
+  border: 1px dashed rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-md);
   padding: 15px;
   text-align: center;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.85rem;
 }
 
@@ -404,30 +627,31 @@
 }
 
 .reply-bubble {
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-left: 3px solid #f1d49b;
-  border-radius: 10px;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
   padding: 12px;
 }
 
 .reply-bubble p {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0 0 6px 0;
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
 .reply-bubble small {
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.75rem;
   display: block;
   text-align: right;
 }
 
-/* Quick Response Drafting Form */
+/* Reply drafting form */
+
 .support-reply-form {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   padding-top: 18px;
   display: flex;
   flex-direction: column;
@@ -435,7 +659,7 @@
 }
 
 .support-reply-form label {
-  color: #f1d49b;
+  color: var(--accent);
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -443,25 +667,25 @@
 }
 
 .support-reply-form textarea {
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  border-radius: 10px;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-md);
   padding: 12px 15px;
-  color: #fff7ee;
+  color: var(--text-primary);
   outline: none;
   font-size: 0.9rem;
   resize: vertical;
 }
 
 .support-reply-form textarea:focus {
-  border-color: #f1d49b;
+  border-color: var(--accent);
 }
 
 .btn-send-reply {
-  background-color: #f1d49b;
-  color: #062036;
+  background-color: var(--accent);
+  color: var(--accent-dark);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 10px 15px;
   font-weight: 600;
   font-size: 0.85rem;
@@ -475,39 +699,16 @@
 
 .btn-send-reply:hover {
   transform: translateY(-1px);
-  background-color: #fff7ee;
+  background-color: var(--text-primary);
 }
 
-/* Pricing Highlight summary strip */
-.bookingModal-totalPrice {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgba(241, 212, 155, 0.05);
-  padding: 14px 18px;
-  border-radius: 10px;
-  border: 1px dashed rgba(241, 212, 155, 0.2);
-  margin-top: 15px;
-}
+/* Modal footer */
 
-.bookingModal-totalPrice span {
-  color: #8a9ba8;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.bookingModal-totalPrice .price-tag {
-  color: #f1d49b;
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-/* Pinned Footer constraints */
 .bookingModal-footer {
   flex-shrink: 0;
   padding: 18px 25px;
   background-color: rgba(6, 21, 33, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -515,7 +716,7 @@
 
 .bookingModal-footer button {
   padding: 10px 18px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   cursor: pointer;
   font-size: 0.85rem;
@@ -524,40 +725,38 @@
 }
 
 .btn-approve-submit {
-  background-color: #f1d49b;
-  color: #062036;
+  background-color: var(--accent);
+  color: var(--accent-dark);
 }
 
 .btn-approve-submit:hover {
-  background-color: #fff7ee;
+  background-color: var(--text-primary);
   transform: translateY(-1px);
-}
-
-.btn-reject-trigger {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-}
-
-.btn-reject-trigger:hover {
-  background-color: #ef4444;
-  color: #fff7ee;
 }
 
 .bookingModal-cancelBtn {
   background-color: transparent !important;
-  color: #8a9ba8;
-  border: 1px solid rgba(241, 212, 155, 0.15) !important;
+  color: var(--text-muted);
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(var(--accent-rgb), 0.15) !important;
 }
 
 .bookingModal-cancelBtn:hover {
-  background-color: #061521 !important;
-  color: #fff7ee;
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary);
 }
 
-/* Confirmation overlay settings */
+/* Delete-confirmation modal variant */
+
 .confirmation-mini {
   max-width: 420px !important;
-  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  border: 1px solid rgba(var(--danger-rgb), 0.3) !important;
+}
+
+.warning-icon-svg {
+  color: var(--danger);
+  margin-bottom: 10px;
 }
 
 .text-center {
@@ -572,11 +771,11 @@
 }
 
 .btn-danger-execute {
-  background-color: #ef4444;
-  color: #fff7ee;
+  background-color: var(--danger);
+  color: var(--text-primary);
   border: none;
   padding: 10px 18px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   cursor: pointer;
 }
@@ -585,29 +784,32 @@
   background-color: #dc2626;
 }
 
-/* System Exception Views Styling */
-.table-loading-state, 
+/* =========================================================
+   9. LOADING / EMPTY STATES
+========================================================= */
+
+.table-loading-state,
 .table-empty-state {
   padding: 60px 20px;
   text-align: center;
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .empty-state-icon {
-  color: rgba(138, 155, 168, 0.4);
+  color: rgba(var(--accent-rgb), 0.4);
   margin-bottom: 12px;
 }
 
 .table-empty-state h3 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin-bottom: 5px;
 }
 
 .spinner {
   width: 35px;
   height: 35px;
-  border: 3px solid rgba(241, 212, 155, 0.1);
-  border-top-color: #f1d49b;
+  border: 3px solid rgba(var(--accent-rgb), 0.1);
+  border-top-color: var(--accent);
   border-radius: 50%;
   margin: 0 auto 15px auto;
   animation: rotate 0.8s linear infinite;
@@ -615,54 +817,114 @@
 
 @keyframes rotate { to { transform: rotate(360deg); } }
 
-/* Dynamic non-blocking duration toast alert */
-.support-toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 16px 22px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  z-index: 99999;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  animation: toastEntrance 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+/* =========================================================
+   10. RESPONSIVE
+   ≤992px: table swaps for the card list; tabs become a 4-col grid
+   ≤768px: header stacks, modal shrinks, tabs drop to 2 columns
+   ≤480px: tabs stay 2 columns (locked width), cards/pagination/
+            modal footer stack for phones
+========================================================= */
 
-@keyframes toastEntrance {
-  from { transform: translateY(100px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.support-toast.success {
-  background-color: #f1d49b;
-  color: #062036;
-}
-
-.support-toast.error {
-  background-color: #ef4444;
-  color: #fff7ee;
-}
-
-/* Responsive Adaptive Constraints */
 @media (max-width: 992px) {
-  .supportPage-table th:nth-child(4), .supportPage-table td:nth-child(4) {
-    display: none;
+  .supportPage-tableScroll { display: none; }
+  .inquiries-card-list { display: flex; }
+
+  .supportPage-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .supportPage-tabs .tab-btn {
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 12px;
+  }
+
+  .inquiry-card-infoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    background-color: rgba(var(--white-rgb), 0.02);
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    margin-bottom: 14px;
+  }
+
+  .inquiry-card-clientCol,
+  .inquiry-card-metaCol {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .inquiry-card-metaCol {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .grid-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
   }
 }
 
-@media (max-width: 576px) {
-  .bookingModal-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
+@media (max-width: 768px) {
+  .supportPage-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  .bookingModal-card {
-    max-height: 95vh;
+
+  .bookingModal-card { max-height: 95vh; }
+  .bookingModal-body { padding: 15px; }
+  .bookingModal-grid { grid-template-columns: 1fr; gap: 12px; }
+
+  .supportPage-tabs {
+    grid-template-columns: repeat(4, 1fr);
   }
-  .bookingModal-body {
-    padding: 15px;
+}
+
+@media (max-width: 480px) {
+  .supportPage-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .supportPage-tabs .tab-btn {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: space-between;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  .inquiry-card-infoGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .inquiry-card-metaCol {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .supportPage-pagination {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .bookingModal-footer {
+    flex-direction: column;
+  }
+
+  .bookingModal-footer button,
+  .confirmation-actions button {
+    width: 100%;
   }
 }

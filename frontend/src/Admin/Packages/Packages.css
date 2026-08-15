@@ -1,100 +1,289 @@
-
-
 /* =========================================================
-   1. ADD PACKAGE PAGE
+   DESIGN TOKENS
+   Shared across Add/Edit, All, and View Package pages
+   (same palette as Events.css so both modules stay in sync)
 ========================================================= */
 
-.addPackage {
-  padding: 0;
+:root {
+  --panel-bg: #0d2131;
+  --input-bg: #061521;
+  --text-primary: #fff7ee;
+  --text-muted: #8a9ba8;
+  --accent: #f1d49b;
+  --accent-dark: #062036;
+  --danger: #ef4444;
+  --danger-rgb: 239, 68, 68; 
+  --success: #4ade80;
+
+  --accent-rgb: 241, 212, 155;
+  --success-rgb: 74, 222, 128;
+  --white-rgb: 255, 255, 255;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-pill: 20px;
+
+  --transition: 0.3s;
 }
 
-/* Header */
+/* =========================================================
+   1. ADD / EDIT PACKAGE
+   Add and Edit share near-identical markup with different
+   class prefixes (addPackage-* / editPackage-*), so shared
+   rules are written as combined selectors below.
+========================================================= */
+
+.addPackage,
+.editPackage {
+  padding: 0;
+}
 
 .addPackage-header {
   margin-bottom: 25px;
 }
 
-.addPackage-header h2 {
-  color: #fff7ee;
+.editPackage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.addPackage-header h2,
+.editPackage-header h2 {
+  color: var(--text-primary);
+  text-transform: capitalize;
   margin-bottom: 5px;
 }
 
-.addPackage-header p {
-  color: #8a9ba8;
+.addPackage-header p,
+.editPackage-header p {
+  color: var(--text-muted);
+}
+
+.editPackage-backBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.editPackage-backBtn:hover {
+  transform: translateY(-2px);
 }
 
 /* Card */
 
-.addPackage-card {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 16px;
-  padding: 24px;
+.addPackage-card,
+.editPackage-card {
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: var(--radius-xl);
+  padding: 30px;
+  max-width: 1200px;
 }
 
-/* Top Form Grid */
+/* Top form grid — fluid, so it reflows on its own without
+   needing a breakpoint for every screen size */
 
-.addPackage-grid {
+.addPackage-grid,
+.editPackage-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   margin-bottom: 20px;
 }
 
-/* Description */
-
-.addPackage-description {
-  grid-column: span 3;
+.addPackage-discountRow,
+.editPackage-discountRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-/* Form Fields */
+/* Form fields */
 
-.addPackage-formGroup {
+.addPackage-formGroup,
+.editPackage-formGroup {
   display: flex;
   flex-direction: column;
 }
 
-.addPackage-formGroup label {
-  color: #f1d49b;
+.addPackage-formGroup label,
+.editPackage-formGroup label {
+  color: var(--accent);
   margin-bottom: 8px;
   font-size: 0.9rem;
 }
 
 .addPackage-formGroup input,
 .addPackage-formGroup textarea,
-.addPackage-formGroup select {
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  border-radius: 10px;
+.addPackage-formGroup select,
+.editPackage-formGroup input,
+.editPackage-formGroup textarea,
+.editPackage-formGroup select {
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-md);
   padding: 12px 15px;
-  color: #fff7ee;
+  color: var(--text-primary);
   outline: none;
+  font-size: 0.95rem;
+  width: 100%;
 }
 
 .addPackage-formGroup input::placeholder,
-.addPackage-formGroup textarea::placeholder {
-  color: #8a9ba8;
-  padding: 0;
+.addPackage-formGroup textarea::placeholder,
+.editPackage-formGroup input::placeholder,
+.editPackage-formGroup textarea::placeholder {
+  color: var(--text-muted);
 }
 
-.addPackage-formGroup textarea {
+.addPackage-formGroup textarea,
+.editPackage-formGroup textarea {
   resize: vertical;
   max-height: max-content;
 }
 
-/* Services Section */
+.addPackage-formGroup input:disabled,
+.editPackage-formGroup input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-.addPackage-services {
+/* Dropdowns (Category / Status / Discount type) */
+
+.addPackage-formGroup select,
+.editPackage-formGroup select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f1d49b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  transition: 0.2s;
+}
+
+.addPackage-formGroup select:hover,
+.editPackage-formGroup select:hover {
+  border-color: rgba(var(--accent-rgb), 0.35);
+}
+
+.addPackage-formGroup select option,
+.editPackage-formGroup select option {
+  background-color: var(--panel-bg);
+  color: var(--text-primary);
+}
+
+.field-error {
+  color: var(--danger);
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Pricing summary */
+
+.addPackage-priceSummary,
+.editPackage-priceSummary {
+  margin: 24px 0;
+  background: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+}
+
+.addPackage-priceSummary h4,
+.editPackage-priceSummary h4 {
+  color: var(--accent);
+  margin-bottom: 18px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.priceSummaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.08);
+  gap: 12px;
+}
+
+.priceSummaryRow:last-child {
+  border-bottom: none;
+}
+
+.priceSummaryRow span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.priceSummaryRow strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.priceSummaryRow.saved strong {
+  color: var(--success);
+}
+
+.priceSummaryRow.finalPrice {
+  margin-top: 12px;
+  padding: 18px;
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.18);
+  border-radius: var(--radius-md);
+}
+
+.priceSummaryRow.finalPrice span {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.priceSummaryRow.finalPrice strong {
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* Description field (rendered as its own row beneath the
+   pricing summary — full width by default via formGroup) */
+
+.addPackage-description {
+  margin-top: 4px;
+}
+
+/* Included services */
+
+.addPackage-services,
+.editPackage-services {
   margin-top: 25px;
 }
 
-.addPackage-services h4 {
-  color: #f1d49b;
+.addPackage-services h4,
+.editPackage-services h4 {
+  color: var(--accent);
   margin-bottom: 15px;
   font-size: 1rem;
 }
 
-/* ===== Service Included Cards ===== */
 .addPackage-servicesGrid,
 .editPackage-servicesGrid {
   display: grid;
@@ -104,21 +293,21 @@
 
 .pkg-serviceCard {
   position: relative;
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.12);
-  border-radius: 12px;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  border-radius: var(--radius-lg);
   padding: 16px;
   transition: 0.25s;
   cursor: pointer;
 }
 
 .pkg-serviceCard:hover {
-  border-color: rgba(241, 212, 155, 0.35);
+  border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 .pkg-serviceCard.selected {
-  border-color: #f1d49b;
-  background-color: rgba(241, 212, 155, 0.06);
+  border-color: var(--accent);
+  background-color: rgba(var(--accent-rgb), 0.06);
 }
 
 .pkg-serviceCard-top {
@@ -129,20 +318,21 @@
 }
 
 .pkg-serviceCard-name {
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.3;
 }
 
 .pkg-serviceCard-price {
-  color: #f1d49b;
+  color: var(--accent);
   font-size: 0.85rem;
   font-weight: 600;
   margin-top: 8px;
 }
 
-/* Custom checkbox (replaces raw native checkbox) */
+/* Custom checkbox */
+
 .pkg-checkbox {
   position: relative;
   flex-shrink: 0;
@@ -163,9 +353,9 @@
 .pkg-checkbox .box {
   position: absolute;
   inset: 0;
-  border: 1.5px solid rgba(241, 212, 155, 0.35);
+  border: 1.5px solid rgba(var(--accent-rgb), 0.35);
   border-radius: 6px;
-  background-color: #0d2131;
+  background-color: var(--panel-bg);
   transition: 0.2s;
   display: flex;
   align-items: center;
@@ -175,14 +365,14 @@
 .pkg-checkbox .box svg {
   width: 13px;
   height: 13px;
-  color: #062036;
+  color: var(--accent-dark);
   opacity: 0;
   transition: 0.15s;
 }
 
 .pkg-checkbox input:checked + .box {
-  background-color: #f1d49b;
-  border-color: #f1d49b;
+  background-color: var(--accent);
+  border-color: var(--accent);
 }
 
 .pkg-checkbox input:checked + .box svg {
@@ -190,18 +380,17 @@
 }
 
 .pkg-checkbox input:focus-visible + .box {
-  box-shadow: 0 0 0 3px rgba(241, 212, 155, 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
 }
 
-/* Optional row, only shown once a card is selected */
 .pkg-serviceCard-optional {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid rgba(241, 212, 155, 0.08);
-  color: #8a9ba8;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.08);
+  color: var(--text-muted);
   font-size: 0.8rem;
 }
 
@@ -221,835 +410,10 @@
   height: 10px;
 }
 
-/* ===== Better styled dropdowns (Category / Status / Discount type) ===== */
-.addPackage-formGroup select,
-.editPackage-formGroup select {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f1d49b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 38px;
-  cursor: pointer;
-  transition: 0.2s;
-}
+/* Tags */
 
-.addPackage-formGroup select:hover,
-.editPackage-formGroup select:hover {
-  border-color: rgba(241, 212, 155, 0.35);
-}
-
-/* .addPackage-formGroup select:focus,
-.editPackage-formGroup select:focus {
-  border-color: #f1d49b;
-  box-shadow: 0 0 0 3px rgba(241, 212, 155, 0.12);
-} */
-
-.addPackage-formGroup select:disabled,
-.editPackage-formGroup select:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-
-/* Buttons */
-
-.addPackage-btnGroup {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 25px;
-}
-
-.addPackage-cancelBtn {
-  background: transparent;
-  color: #8a9ba8;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  padding: 14px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.addPackage-cancelBtn:hover {
-  background-color: #061521;
-  color: #fff7ee;
-}
-
-.addPackage-submitBtn {
-  background-color: #f1d49b;
-  color: #062036;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.addPackage-submitBtn:hover {
-  transform: translateY(-2px);
-}
-
-/* Responsive */
-
-@media (max-width: 992px) {
-  .addPackage-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .addPackage-description {
-    grid-column: span 1;
-  }
-
-  .addPackage-servicesGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 576px) {
-  .addPackage-grid,
-  .addPackage-servicesGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-
-/* =========================================================
-   2. ALL PACKAGES PAGE
-========================================================= */
-
-.allPackages {
-  padding: 0;
-}
-
-/* Header */
-
-.allPackages-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.allPackages-header h2 {
-  color: #fff7ee;
-  margin: 0;
-}
-
-.allPackages-header p {
-  color: #8a9ba8;
-  margin-top: 5px;
-}
-
-/* Add Button */
-
-.allPackages-addBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 18px;
-  background: linear-gradient(135deg, #062036, #f1d49b);
-  color: #fff7ee;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-.allPackages-addBtn:hover {
-  transform: translateY(-2px);
-}
-
-/* Search & Filters */
-
-.allPackages-filters {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
-.allPackages-searchBox,
-.allPackages-filterSelect {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 12px;
-}
-
-.allPackages-searchBox {
-  flex: 1;
-  padding: 0 15px;
-  gap: 10px;
-  color: #8a9ba8;
-}
-
-.allPackages-searchBox input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #fff7ee;
-}
-
-.allPackages-searchBox input::placeholder {
-  color: #8a9ba8;
-  padding: 0;
-}
-
-.allPackages-filterSelect {
-  width: 220px;
-}
-
-.allPackages-filterSelect select {
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff7ee;
-  padding: 0 15px;
-}
-
-/* Table */
-
-.allPackages-tableWrapper {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 15px;
-  overflow: hidden;
-}
-
-.allPackages-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.allPackages-table thead {
-  background-color: rgba(241, 212, 155, 0.05);
-}
-
-.allPackages-table th {
-  text-align: left;
-  padding: 18px;
-  color: #f1d49b;
-  font-size: 0.9rem;
-}
-
-.allPackages-table td {
-  padding: 18px;
-  color: #fff7ee;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.allPackages-image {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-/* Status */
-
-.allPackages-status {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-}
-
-.allPackages-status.active {
-  background-color: rgba(74, 222, 128, 0.15);
-  color: #4ade80;
-}
-
-.allPackages-status.inactive {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-}
-
-/* Service Count Badge */
-
-.allPackages-serviceBadge {
-  background-color: rgba(241, 212, 155, 0.15);
-  color: #f1d49b;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-}
-
-/* Actions */
-
-.allPackages-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.allPackages-actions button {
-  width: 35px;
-  height: 35px;
-  border: none;
-  border-radius: 8px;
-  background-color: #061521;
-  color: #fff7ee;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.allPackages-actions button:hover {
-  color: #f1d49b;
-}
-
-
-.allPackages-filterSelect {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 12px;
-  transition: 0.2s;
-}
-
-.allPackages-filterSelect {
-  width: 220px;
-}
-
-.allPackages-filterSelect:hover {
-  border-color: rgba(241, 212, 155, 0.35);
-}
-
-
-.allPackages-filterSelect select {
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff7ee;
-  padding: 0 38px 0 15px;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f1d49b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-}
-
-.allPackages-filterSelect select option {
-  background-color: #0d2131;
-  color: #fff7ee;
-}
-
-/* =========================================================
-   3. EDIT PACKAGE PAGE
-========================================================= */
-
-.editPackage {
-  padding: 0;
-}
-
-.editPackage-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.editPackage-header h2 {
-  color: #fff7ee;
-  margin-bottom: 5px;
-}
-
-.editPackage-header p {
-  color: #8a9ba8;
-}
-
-.editPackage-backBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  color: #f1d49b;
-  border: 1px solid rgba(241, 212, 155, 0.25);
-  padding: 10px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.editPackage-card {
-  background: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 16px;
-  padding: 30px;
-}
-
-.editPackage-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.editPackage-formGroup {
-  display: flex;
-  flex-direction: column;
-}
-
-.editPackage-formGroup label {
-  color: #f1d49b;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.editPackage-formGroup input,
-.editPackage-formGroup select,
-.editPackage-formGroup textarea {
-  background-color: #061521;
-  border: 1px solid rgba(241,212,155,0.15);
-  color: #fff7ee;
-  border-radius: 10px;
-  padding: 12px 15px;
-  outline: none;
-}
-
-.editPackage-formGroup textarea {
-  resize: vertical;
-}
-
-.editPackage-services {
-  margin-top: 25px;
-}
-
-.editPackage-services h4 {
-  color: #f1d49b;
-  margin-bottom: 15px;
-}
-
-.editPackage-servicesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
-  gap: 12px;
-}
-
-.editPackage-serviceItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #061521;
-  padding: 12px;
-  border-radius: 10px;
-  color: #fff7ee;
-}
-
-.editPackage-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.editPackage-cancelBtn {
-  padding: 12px 20px;
-  background: transparent;
-  color: #8a9ba8;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.editPackage-submitBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #f1d49b;
-  color: #062036;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.editPackage-submitBtn:hover {
-  transform: translateY(-2px);
-}
-
-
-/* ===========================
-   Edit Package Price Summary
-=========================== */
-
-.editPackage-priceSummary {
-  margin: 24px 0;
-  background: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.12);
-  border-radius: 16px;
-  padding: 22px;
-}
-
-.editPackage-priceSummary h4 {
-  color: #f1d49b;
-  margin-bottom: 18px;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-
-/* =========================================================
-   4. VIEW PACKAGE PAGE
-   File: ViewPackage.css
-========================================================= */
-
-.viewPackage {
-  padding: 0;
-}
-
-/* Header */
-
-.viewPackage-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  margin-bottom: 25px;
-}
-
-.viewPackage-header h2 {
-  color: #fff7ee;
-  margin-bottom: 5px;
-}
-
-.viewPackage-header p {
-  color: #8a9ba8;
-}
-
-/* Header Actions */
-
-.viewPackage-headerActions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* Back Button */
-
-.viewPackage-backBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  background: transparent;
-  color: #fff7ee;
-
-  border: 1px solid rgba(241, 212, 155, 0.2);
-
-  padding: 10px 16px;
-
-  border-radius: 10px;
-
-  cursor: pointer;
-
-  transition: 0.3s;
-}
-
-.viewPackage-backBtn:hover {
-  background: rgba(241, 212, 155, 0.08);
-}
-
-/* Edit Button */
-
-.viewPackage-editBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  background: #f1d49b;
-  color: #062036;
-
-  border: none;
-
-  padding: 10px 18px;
-
-  border-radius: 10px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.3s;
-}
-
-.viewPackage-editBtn:hover {
-  transform: translateY(-2px);
-}
-.viewPackage-cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  margin-bottom: 20px;
-}
-
-.viewPackage-cardHeader h2 {
-  margin: 0;
-  color: #fff7ee;
-}
-
-
-
-/* Mobile */
-
-@media (max-width: 768px) {
-
-  .viewPackage-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .viewPackage-headerActions {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-}
-
-/* Status */
-
-.viewPackage-status {
-  padding: 8px 18px;
-
-  border-radius: 25px;
- 
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.viewPackage-status.active {
-  background: rgba(74, 222, 128, 0.15);
-  color: #4ade80;
-}
-
-.viewPackage-status.inactive {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-}
-
-/* Top Grid */
-
-.viewPackage-topGrid {
-  display: grid;
-  grid-template-columns: 380px 1fr;
-
-  gap: 25px;
-
-  margin-bottom: 25px;
-}
-
-/* Image Card */
-
-.viewPackage-imageCard {
-  background: #0d2131;
-
-  border-radius: 18px;
-
-  overflow: hidden;
-
-  border: 1px solid rgba(241, 212, 155, 0.1);
-}
-
-.viewPackage-imageCard img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-}
-
-/* Details Card */
-
-.viewPackage-detailsCard {
-  background: #0d2131;
-
-  border-radius: 18px;
-
-  padding: 25px;
-
-  border: 1px solid rgba(241, 212, 155, 0.1);
-}
-
-.viewPackage-detailsCard h3 {
-  color: #f1d49b;
-
-  margin-bottom: 25px;
-}
-
-.viewPackage-info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-
-  gap: 20px;
-}
-
-.viewPackage-infoItem {
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  background: #061521;
-
-  padding: 16px;
-
-  border-radius: 12px;
-
-  color: #fff7ee;
-}
-
-/* Cards */
-
-.viewPackage-card {
-  background: #0d2131;
-
-  border-radius: 18px;
-
-  padding: 25px;
-
-  margin-bottom: 25px;
-
-  border: 1px solid rgba(241, 212, 155, 0.1);
-}
-
-.viewPackage-card h3 {
-  color: #f1d49b;
-
-  margin-bottom: 15px;
-}
-
-.viewPackage-card p {
-  color: #c7d0d8;
-
-  line-height: 1.8;
-}
-
-/* Services */
-
-.viewPackage-services {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 12px;
-}
-
-.viewPackage-service {
-  background: rgba(241, 212, 155, 0.12);
-
-  color: #f1d49b;
-
-  padding: 10px 16px;
-
-  border-radius: 30px;
-
-  font-size: 14px;
-}
-
-/* Responsive */
-
-@media (max-width: 992px) {
-  .viewPackage-topGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .viewPackage-info {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ===== NEW: Discount row ===== */
-.addPackage-discountRow, .editPackage-discountRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-/* ===========================
-   Pricing Summary
-=========================== */
-
-.addPackage-priceSummary {
-  margin: 24px 0;
-  background: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.12);
-  border-radius: 16px;
-  padding: 22px;
-}
-
-.addPackage-priceSummary h4 {
-  color: #f1d49b;
-  margin-bottom: 18px;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.priceSummaryRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 0;
-  color: #fff7ee;
-  border-bottom: 1px solid rgba(241, 212, 155, 0.08);
-}
-
-.priceSummaryRow:last-child {
-  border-bottom: none;
-}
-
-.priceSummaryRow span {
-  color: #8a9ba8;
-  font-size: 15px;
-}
-
-.priceSummaryRow strong {
-  color: #fff7ee;
-  font-weight: 600;
-}
-
-/* Amount Saved */
-
-.priceSummaryRow.saved strong {
-  color: #22c55e;
-}
-
-/* Final Price */
-
-.priceSummaryRow.finalPrice {
-  margin-top: 12px;
-  padding: 18px;
-  background: rgba(241, 212, 155, 0.08);
-  border: 1px solid rgba(241, 212, 155, 0.18);
-  border-radius: 12px;
-}
-
-.priceSummaryRow.finalPrice span {
-  color: #f1d49b;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.priceSummaryRow.finalPrice strong {
-  color: #f1d49b;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-/* ===== NEW: Tags multi-select ===== */
-.addPackage-tagsGrid, .editPackage-tagsGrid {
+.addPackage-tagsGrid,
+.editPackage-tagsGrid {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -1058,32 +422,879 @@
 
 .pkg-tagBtn {
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 0.85rem;
   cursor: pointer;
-  border: 1px solid rgba(241, 212, 155, 0.2);
-  background-color: #061521;
-  color: #8a9ba8;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  background-color: var(--input-bg);
+  color: var(--text-muted);
   transition: 0.2s;
 }
 
 .pkg-tagBtn.active {
-  background-color: rgba(241, 212, 155, 0.15);
-  color: #f1d49b;
-  border-color: #f1d49b;
+  background-color: rgba(var(--accent-rgb), 0.15);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
-/* ===== NEW: viewPackage tags reuse ===== */
-.viewPackage-tag {
-  background: rgba(241, 212, 155, 0.12);
-  color: #f1d49b;
-  padding: 8px 14px;
-  border-radius: 30px;
+/* Action buttons */
+
+.addPackage-btnGroup,
+.editPackage-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.addPackage-cancelBtn,
+.editPackage-cancelBtn {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  padding: 14px 22px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.addPackage-cancelBtn:hover,
+.editPackage-cancelBtn:hover {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.addPackage-submitBtn,
+.editPackage-submitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--accent);
+  color: var(--accent-dark);
+  border: none;
+  padding: 14px 22px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.addPackage-submitBtn:hover,
+.editPackage-submitBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsive — Add/Edit Package
+   ≤768px: discount row stacks, service/tag grids stay fluid
+           via auto-fit so no extra rule is needed there
+   ≤480px: card padding shrinks, buttons go full-width,
+           heading scales down */
+
+@media (max-width: 768px) {
+  .addPackage-discountRow,
+  .editPackage-discountRow {
+    grid-template-columns: 1fr;
+  }
+
+  .priceSummaryRow.finalPrice strong {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .addPackage-header h2,
+  .editPackage-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .editPackage-header {
+    flex-wrap: wrap;
+  }
+
+  .addPackage-card,
+  .editPackage-card {
+    padding: 18px;
+  }
+
+  .addPackage-formGroup label,
+  .editPackage-formGroup label {
+    font-size: 0.85rem;
+  }
+
+  .addPackage-servicesGrid,
+  .editPackage-servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .addPackage-btnGroup,
+  .editPackage-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .addPackage-cancelBtn,
+  .addPackage-submitBtn,
+  .editPackage-cancelBtn,
+  .editPackage-submitBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 320px) {
+  .addPackage-grid,
+  .editPackage-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   2. ALL PACKAGES (list) PAGE
+========================================================= */
+
+.allPackages {
+  padding: 0;
+}
+
+.allPackages-header {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.allPackages-header h2 {
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.allPackages-header p {
+  color: var(--text-muted);
+  margin-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.allPackages-addBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.allPackages-addBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Search & filters */
+
+.allPackages-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  
+}
+
+.allPackages-searchBox {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 15px;
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: 12px;
+  color: var(--text-muted);
+}
+
+.allPackages-searchBox input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.allPackages-searchBox input::placeholder {
+  color: var(--text-muted);
+  padding: 0;
+}
+
+.allPackages-filterSelect {
+  height: 50px;
+  width: 220px;
+  display: flex;
+  align-items: center;
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.allPackages-filterSelect:hover {
+  border-color: rgba(var(--accent-rgb), 0.35);
+}
+
+.allPackages-filterSelect select {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  padding: 0 38px 0 15px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f1d49b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
+/* The dropdown popup is browser-rendered, not styled by the
+   rules above — options need explicit colors or they inherit
+   a white system background with light text, unreadable */
+.allPackages-filterSelect select option {
+  background-color: var(--panel-bg);
+  color: var(--text-primary);
+}
+
+/* Table */
+
+.allPackages-tableWrapper {
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: 15px;
+  overflow: visible;
+}
+
+.allPackages-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.allPackages-table thead {
+  background-color: rgba(var(--accent-rgb), 0.05);
+}
+
+.allPackages-table th {
+  text-align: left;
+  padding: 18px;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.allPackages-table td {
+  padding: 18px;
+  color: var(--text-primary);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
+}
+
+.allPackages-table td,
+.allPackages-table th {
+  vertical-align: middle;
+}
+
+.allPackages-status {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+}
+
+.allPackages-status.active {
+  background-color: rgba(var(--success-rgb), 0.15);
+  color: var(--success);
+}
+
+.allPackages-status.inactive {
+  background-color: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger);
+}
+
+.allPackages-serviceBadge {
+  background-color: rgba(var(--accent-rgb), 0.15);
+  color: var(--accent);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.allPackages-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.allPackages-actions button {
+  position: relative;
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.allPackages-actions button:hover {
+  color: var(--accent);
+  background-color: #102739;
+}
+
+/* Custom hover tooltip, driven by data-tooltip attribute
+   (matches the pattern used on the Category page) */
+
+.allPackages-actions button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: var(--panel-bg);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  z-index: 20;
+}
+
+.allPackages-actions button:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Clamp the first/last tooltip to the row's own edges so they can't
+   spill outside the card or table */
+
+.allPackages-actions button:first-child::after {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allPackages-actions button:first-child:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+.allPackages-actions button:last-child::after {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allPackages-actions button:last-child:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+/* Card view — small-screen replacement for the table */
+
+.allPackages-cardList {
+  display: none; /* hidden by default; enabled ≤768px */
+}
+
+.allPackages-card {
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.allPackages-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.allPackages-card-titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.allPackages-card-titleBlock h4 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.allPackages-card-category {
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+.allPackages-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.allPackages-card-price {
+  font-size: 0.9rem;
+}
+
+.allPackages-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.06);
+}
+
+.allPackages-card-footer .allPackages-actions {
+  margin-left: auto;
+}
+
+.allPackages-card-date {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.allPackages-empty-card {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 40px 16px;
+  font-size: 0.95rem;
+}
+
+/* Pagination */
+
+.allPackages-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
+}
+
+.allPackages-pagination .pagination-info {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.allPackages-pagination .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.allPackages-pagination .pagination-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.allPackages-pagination .pagination-btn:hover:not(:disabled) {
+  background-color: rgba(var(--accent-rgb), 0.1);
+  border-color: var(--accent);
+}
+
+.allPackages-pagination .pagination-btn.active {
+  background-color: var(--accent);
+  color: var(--accent-dark);
+  border-color: var(--accent);
+}
+
+.allPackages-pagination .pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Responsive — All Packages page
+   ≤992px: table drops less-important columns
+   ≤768px: table swaps for the card list; filters stack full-width
+   ≤480px: Add button collapses to icon-only with a hover tooltip */
+
+@media (max-width: 992px) {
+  .allPackages-table .col-category,
+  .allPackages-table .col-services,
+  .allPackages-table .col-created {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .allPackages-table {
+    display: none;
+  }
+
+  .allPackages-cardList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+  }
+
+
+  .allPackages-filterSelect {
+    width: 100%;
+  }
+
+  .allPackages-pagination {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .allPackages-header{
+    justify-content: space-around;
+  }
+  
+  .allPackages-header h2 {
+    font-size: 1.85rem;
+  }
+
+  .allPackages-header p {
+    font-size: 1.02rem;
+  }
+
+  .allPackages-filters{
+    flex-wrap: wrap;
+  }
+
+  .allPackages-addBtn {
+    position: relative;
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+
+  /* Icon-only by default — text becomes a hover tooltip instead
+     of hiding completely */
+  .allPackages-addBtn .btn-text {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto;
+    transform: translateY(-6px);
+    background-color: var(--panel-bg);
+    color: var(--accent);
+    border: 1px solid rgba(var(--accent-rgb), 0.25);
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    z-index: 20;
+  }
+
+  .allPackages-addBtn .btn-text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    right: 14px;
+    left: auto;
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent var(--panel-bg) transparent;
+  }
+
+  .allPackages-addBtn:hover .btn-text,
+  .allPackages-addBtn:focus-visible .btn-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   3. VIEW PACKAGE PAGE
+========================================================= */
+
+.viewPackage {
+  padding: 0;
+}
+
+.viewPackage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: capitalize;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.viewPackage-header h2 {
+  color: var(--text-primary);
+  margin-bottom: 5px;
+}
+
+.viewPackage-header p {
+  color: var(--text-muted);
+}
+
+.viewPackage-headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.viewPackage-backBtn,
+.viewPackage-editBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.viewPackage-backBtn {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+}
+
+.viewPackage-editBtn {
+  background: var(--accent);
+  color: var(--accent-dark);
+}
+
+.viewPackage-backBtn:hover {
+  background: rgba(var(--accent-rgb), 0.08);
+}
+
+.viewPackage-editBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Details card */
+
+.viewPackage-details{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 10px;
+}
+
+.viewPackage-detailsCard,
+.viewPackage-card {
+  background: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: var(--radius-xl);
+  padding: 25px;
+}
+
+.viewPackage-detailsCard {
+  margin-bottom: 20px;
+}
+
+.viewPackage-card {
+  margin-bottom: 20px;
+}
+
+.viewPackage-card:last-child {
+  margin-bottom: 20px;
+}
+
+.viewPackage-cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.viewPackage-cardHeader h2 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.15rem;
+}
+
+.viewPackage-status {
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
   font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.viewPackage-status.active {
+  background: rgba(var(--success-rgb), 0.15);
+  color: var(--success);
+}
+
+.viewPackage-status.inactive {
+  background: rgba(var(--danger-rgb), 0.15);
+  color: var(--danger);
+}
+
+.viewPackage-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.viewPackage-infoItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--input-bg);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.viewPackage-infoItem svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.viewPackage-card h3 {
+  color: var(--accent);
+  margin-bottom: 15px;
+  font-size: 1.05rem;
+}
+
+.viewPackage-card p {
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+
+.viewPackage-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.viewPackage-tag {
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+}
+
+.viewPackage-service {
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent);
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
 }
 
 .viewPackage-service.optional::after {
   content: " (optional)";
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 11px;
+}
+
+/* Responsive — View Package page
+   ≤992px: info grid narrows to two columns
+   ≤768px: header stacks, actions wrap to full width
+   ≤480px: info grid drops to one column, buttons shrink */
+
+@media (max-width: 992px) {
+  .viewPackage-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .viewPackage-header {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .viewPackage-headerActions {
+    margin-left: auto;
+    margin-top: 15px;
+  }
+  
+}
+
+@media (max-width: 480px) {
+  .viewPackage-info {
+    grid-template-columns: 1fr;
+  }
+
+  .viewPackage-cardHeader h2 {
+    font-size: 17px;
+    /* flex-wrap: wrap; */
+  }
+
+  .viewPackage-backBtn,
+  .viewPackage-editBtn {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .viewPackage-details{
+    grid-template-columns: 1fr;
+  }
+
+  .viewPackage-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+
 }

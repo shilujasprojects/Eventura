@@ -8,6 +8,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .analyticsPage-header h2 {
@@ -24,6 +26,8 @@
 .analyticsPage-actions {
   display: flex;
   gap: 12px;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 /* Interactive Timeframe Selection */
@@ -39,6 +43,7 @@
 
 .filter-icon {
   margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .timeframe-selector select {
@@ -49,12 +54,45 @@
   outline: none;
   padding: 12px 0;
   cursor: pointer;
+  min-width: 0;
+}
+
+.timeframe-selector select option {
+  background-color: #0d2131;
+  color: #fff7ee;
+}
+
+/* Custom date range inputs shown when "Custom Range" is selected */
+.custom-range-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 10px;
+  padding: 0 12px;
+  color: #8a9ba8;
+  font-size: 0.85rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.custom-range-picker input[type="date"] {
+  background: transparent;
+  border: none;
+  color: #fff7ee;
+  padding: 10px 0;
+  outline: none;
+  font-size: 0.85rem;
+  color-scheme: dark;
+  min-width: 0;
 }
 
 /* Export Action Control Button */
 .btn-export {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background-color: #f1d49b;
   color: #061521;
@@ -64,6 +102,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease-in-out;
+  white-space: nowrap;
 }
 
 .btn-export:hover:not(:disabled) {
@@ -76,7 +115,10 @@
   cursor: not-allowed;
 }
 
-/* KPI Mini Cards Grid Matrix Layout */
+/* ============================================
+   KPI CARDS
+   Large: 4 per row | Medium: 2 per row | Small: 1 per row
+   ============================================ */
 .analytics-kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -92,6 +134,7 @@
   display: flex;
   align-items: flex-start;
   gap: 15px;
+  min-width: 0;
 }
 
 .kpi-icon-wrapper {
@@ -114,6 +157,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 0;
 }
 
 .kpi-title {
@@ -129,6 +173,7 @@
   font-size: 1.4rem;
   font-weight: 700;
   margin: 0 0 6px 0;
+  word-break: break-word;
 }
 
 .kpi-change {
@@ -136,6 +181,7 @@
   align-items: center;
   gap: 4px;
   font-size: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .kpi-change.up {
@@ -146,7 +192,12 @@
   color: #ef4444;
 }
 
-/* Analytics Core Visual Panels Grid */
+/* ============================================
+   CHART PANELS (Revenue Inflow Curve + Category Split)
+   Large: side by side, wider left panel
+   Medium: side by side, equal width, still one row
+   Small: each takes its own full row (stacked)
+   ============================================ */
 .analytics-visualsGrid {
   display: grid;
   grid-template-columns: 1.3fr 0.9fr;
@@ -159,6 +210,7 @@
   border: 1px solid rgba(241, 212, 155, 0.08);
   border-radius: 16px;
   padding: 25px;
+  min-width: 0;
 }
 
 .panel-header {
@@ -180,6 +232,14 @@
   margin: 0;
 }
 
+/* Empty state text inside chart/table panels when there's no data yet */
+.empty-state-text {
+  color: #8a9ba8;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 40px 20px;
+}
+
 /* Pure CSS Bar Chart Element Structuring */
 .bar-chart-container {
   display: flex;
@@ -190,13 +250,16 @@
   background-color: #061521;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.02);
+  gap: 4px;
+  overflow-x: auto;
 }
 
 .chart-bar-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 14%;
+  min-width: 32px;
+  flex: 1 0 auto;
   height: 100%;
   justify-content: flex-end;
   position: relative;
@@ -249,6 +312,7 @@
   font-size: 0.75rem;
   color: #8a9ba8;
   margin-bottom: 5px;
+  white-space: nowrap;
 }
 
 /* Progress Meters Visualizers */
@@ -268,6 +332,8 @@
   justify-content: space-between;
   margin-bottom: 8px;
   font-size: 0.9rem;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .metric-label-row strong {
@@ -277,6 +343,7 @@
 .metric-label-row span {
   color: #f1d49b;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .gauge-track {
@@ -300,7 +367,11 @@
   font-size: 0.75rem;
 }
 
-/* Audit Performance Summary Table */
+/* ============================================
+   TOP EVENT CATEGORIES TABLE
+   Large/Medium: normal table.
+   Small: becomes a stack of cards (see media query below).
+   ============================================ */
 .performance-summary-panel {
   margin-top: 5px;
 }
@@ -322,6 +393,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .performance-table td {
@@ -382,29 +454,283 @@
   }
 }
 
-/* Responsive Adaptive Constraints */
-@media (max-width: 1200px) {
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   Large:  >= 1200px  (default styles above already cover this)
+   Medium: 768px – 1199px
+   Small:  <= 767px
+   ============================================ */
+
+/* ---------- MEDIUM DEVICES (tablets) ---------- */
+@media (max-width: 1199px) and (min-width: 768px) {
   .analytics-kpiGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
   }
+
   .analytics-visualsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr; /* both charts, one row, equal width */
+  }
+
+  .card-bg {
+    padding: 20px;
+  }
+
+  .analyticsPage-actions {
+    flex-direction: row;
+    margin-left: auto;
+  }
+
+  .timeframe-selector,
+  .custom-range-picker,
+  .btn-export {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .timeframe-selector select {
+    font-size: 0.82rem;
+  }
+
+  .custom-range-picker {
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 0 10px;
+    font-size: 0.78rem;
+  }
+
+  .custom-range-picker input[type="date"] {
+    padding: 7px 0;
+    font-size: 0.78rem;
+    min-width: 0;
+  }
+
+  .btn-export {
+    white-space: nowrap;
+    padding: 10px 12px;
+    font-size: 0.85rem;
   }
 }
 
-@media (max-width: 768px) {
-  .analyticsPage-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+/* ---------- SMALL DEVICES (phones) ---------- */
+@media (max-width: 320px) {
+  .analyticsPage-header h2 {
+    font-size: 1.25rem;
   }
+
+  .analyticsPage-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .timeframe-selector,
+  .custom-range-picker,
+  .btn-export {
+    flex: 1 1 45%;
+    min-width: 140px;
+  }
+
+  .custom-range-picker {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 12px;
+  }
+
+  .custom-range-picker input[type="date"] {
+    width: 100%;
+  }
+
+  /* KPI cards: 1 per row */
   .analytics-kpiGrid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
-  .performance-table th:nth-child(4),
-  .performance-table td:nth-child(4),
-  .performance-table th:nth-child(5),
-  .performance-table td:nth-child(5) {
-    display: none;
+
+  .kpi-card {
+    padding: 16px;
+  }
+
+  .kpi-value {
+    font-size: 1.2rem;
+  }
+
+  /* Chart panels: each takes its own full row, stacked */
+  .analytics-visualsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-bg {
+    padding: 18px;
+  }
+
+  .panel-header h4 {
+    font-size: 1rem;
+  }
+
+  .bar-chart-container {
+    height: 160px;
+  }
+
+  .analytics-loading-screen {
+    padding: 70px 15px;
+  }
+
+  /* ---- Top Event Categories: table becomes a stack of cards ---- */
+  .performance-table thead {
+    display: none; /* column headers are replaced by per-row labels below */
+  }
+
+  .performance-table,
+  .performance-table tbody,
+  .performance-table tr,
+  .performance-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .performance-table tr {
+    background-color: #061521;
+    border: 1px solid rgba(241, 212, 155, 0.1);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    padding: 6px 16px;
+  }
+
+  .performance-table tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .performance-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+  }
+
+  .performance-table td:last-child {
+    border-bottom: none;
+  }
+
+  /* The label ("Category", "Total Revenue"...) comes from the
+     data-label attribute set on each <td> in the JSX. */
+  .performance-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #8a9ba8;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 12px;
+  }
+
+  .analyticsPage-header p {
+    font-size: 0.85rem;
+  }
+
+  .kpi-title {
+    font-size: 0.72rem;
+  }
+
+  .kpi-icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .chart-bar-wrapper {
+    width: 24px;
+  }
+
+  .chart-bar-label {
+    font-size: 0.68rem;
+  }
+
+  .bar-value-tooltip {
+    font-size: 0.62rem;
+  }
+
+  .btn-export {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+
+}
+
+/* Dropdown options weren't inheriting the dark theme — browsers render
+   <option> with their own default (usually white bg / black text) unless
+   you style it explicitly, so it was unreadable against the dark page. */
+.timeframe-selector select option {
+  background-color: #0d2131;
+  color: #fff7ee;
+}
+
+
+/* ============================================
+   PAGINATION — Top Event Categories table
+   ============================================ */
+.analyticsPage-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px 0 20px;
+  margin-top: 4px;
+}
+
+.pagination-info {
+  color: #8a9ba8;
+  font-size: 0.82rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 8px;
+  background-color: #061521;
+  color: #fff7ee;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: rgba(241, 212, 155, 0.1);
+  border-color: #f1d49b;
+}
+
+.pagination-btn.active {
+  background-color: #f1d49b;
+  color: #062036;
+  border-color: #f1d49b;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  .analyticsPage-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 0 0 0;
   }
 }
+

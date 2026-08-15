@@ -1,17 +1,46 @@
-.adminDashboard {
+.admin-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh; /* Lock to viewport height */
+  overflow: hidden; /* Prevent the entire browser window from scrolling */
   background-color: #061521;
 }
 
-.adminDashboardContent {
+.admin-layout-content {
   flex: 1;
+  min-width: 0; /* lets this flex item actually shrink to the viewport —
+                   without this, wide navbar content (search box, icons,
+                   avatar name) pushes it wider and gets clipped instead
+                   of wrapping/shrinking */
   margin-left: 260px;
   background-color: #061521;
+  display: flex;
+  flex-direction: column; /* Stack navbar and body vertically */
 }
 
 .adminDashboardBody {
   padding: 25px;
   background-color: #061521;
-  min-height: calc(100vh - 80px);
+  flex: 1; /* Takes up all remaining space below the navbar */
+  overflow-y: auto; /* Makes ONLY the content area scrollable */
+  min-width: 0; /* same reasoning as above — this is also a flex child
+                   (of .admin-layout-content, in the column direction,
+                   but keeping it constrained avoids the same class of
+                   overflow if content inside ever forces it wide) */
+
+  /* You no longer need min-height: calc(100vh - 80px) */
+}
+
+@media (max-width: 1024px) {
+  .admin-layout-content {
+    margin-left: 0;
+  }
+}
+
+@media(max-width: 320px){
+  .adminDashboardBody {
+    padding: 15px;
+  }
+  /* .payments-page {
+    padding: 10px;
+  } */
 }

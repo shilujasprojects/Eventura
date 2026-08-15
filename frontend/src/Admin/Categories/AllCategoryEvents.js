@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Search, Plus, Eye, Pencil, Trash2 } from "lucide-react";
+import { Search, Plus, Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -9,11 +9,14 @@ import "react-toastify/dist/ReactToastify.css";
 import "./CategoryEvents.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
+const ROWS_PER_PAGE = 4;
+
 const AllCategoryEvents = () => {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);   // full list from API
   const [searchQuery, setSearchQuery] = useState("");  // search input
+  const [currentPage, setCurrentPage] = useState(1);
 
   // ---------- fetch ----------
   const fetchCategory = async () => {
@@ -36,6 +39,25 @@ const AllCategoryEvents = () => {
     cat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     cat.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Whenever the search query or underlying data changes, the result set
+  // is different — jump back to page 1 so we don't land on an
+  // empty/out-of-range page.
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, categories]);
+
+  // ---------- pagination ----------
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ROWS_PER_PAGE));
+  const paginated = filtered.slice(
+    (currentPage - 1) * ROWS_PER_PAGE,
+    currentPage * ROWS_PER_PAGE
+  );
+
+  const goToPage = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
 
   // ---------- delete (confirm FIRST, then delete) ----------
   const handleDelete = async (id) => {
@@ -83,22 +105,51 @@ const AllCategoryEvents = () => {
     });
   };
 
+
+  const ActionButtons = ({ cat }) => (
+  <div className="allCategory-actions">
+    <button
+      data-tooltip="View Category"
+      aria-label="View Category"
+      onClick={() => navigate(`/viewCategoryEvent/${cat._id}`)}
+    >
+      <Eye size={16} />
+    </button>
+    <button
+      data-tooltip="Edit Category"
+      aria-label="Edit"
+      onClick={() => navigate(`/editCategoryEvent/${cat._id}`)}
+    >
+      <Pencil size={16} />
+    </button>
+    <button
+      data-tooltip="Delete Category"
+      aria-label="Delete"
+      className="delete-btn"
+      onClick={() => handleDelete(cat._id)}
+    >
+      <Trash2 size={16} />
+    </button>
+  </div>
+);
+
   return (
     <>
       <AdminLayout>
         <div className="allCategory">
           {/* Header */}
           <div className="allCategory-header">
-            <div>
+            <div className="allCategory-headerText">
               <h2>Event Categories</h2>
               <p>Manage all event categories</p>
             </div>
             <button
               className="allCategory-addBtn"
               onClick={() => navigate("/addCategoryEvent")}
+              title="Add Category"
             >
               <Plus size={18} />
-              Add Category
+              <span className="btn-text">Add Category</span>
             </button>
           </div>
 
@@ -122,16 +173,16 @@ const AllCategoryEvents = () => {
             )}
           </div>
 
-          {/* Table */}
           <div className="allCategory-tableWrapper">
+            {/* ---------- TABLE VIEW (large & medium screens) ---------- */}
             <table className="allCategory-table">
               <thead>
                 <tr>
                   <th>Image</th>
                   <th>Category Name</th>
-                  <th>Description</th>
+                  <th className="col-description">Description</th>
                   <th>Status</th>
-                  <th>Created</th>
+                  <th className="col-created">Created</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -145,7 +196,7 @@ const AllCategoryEvents = () => {
                     </td>
                   </tr>
                 ) : (
-                  filtered.map((cat) => (
+                  paginated.map((cat) => (
                     <tr key={cat._id}>
                       <td>
                         {cat.image ? (
@@ -162,7 +213,7 @@ const AllCategoryEvents = () => {
                         )}
                       </td>
                       <td>{cat.categoryName}</td>
-                      <td className="allCategory-description">
+                      <td className="allCategory-description col-description">
                         {cat.description.length > 60
                           ? cat.description.slice(0, 60) + "..."
                           : cat.description}
@@ -176,39 +227,104 @@ const AllCategoryEvents = () => {
                           {cat.status}
                         </span>
                       </td>
-                      <td>{formatDate(cat.createdAt)}</td>
+                      <td className="col-created">{formatDate(cat.createdAt)}</td>
                       <td>
-                        <div className="allCategory-actions">
-                          <button
-                            title="View"
-                            onClick={() =>
-                              navigate(`/viewCategoryEvent/${cat._id}`)
-                            }
-                          >
-                            <Eye size={16} />
-                          </button>
-                          <button
-                            title="Edit"
-                            onClick={() =>
-                              navigate(`/editCategoryEvent/${cat._id}`)
-                            }
-                          >
-                            <Pencil size={16} />
-                          </button>
-                          <button
-                            title="Delete"
-                            className="delete-btn"
-                            onClick={() => handleDelete(cat._id)}
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
+                        <ActionButtons cat={cat} />
                       </td>
                     </tr>
                   ))
                 )}
               </tbody>
             </table>
+
+            {/* ---------- CARD VIEW (small screens only) ---------- */}
+            <div className="allCategory-cardList">
+              {filtered.length === 0 ? (
+                <div className="allCategory-empty-card">
+                  {searchQuery
+                    ? "No categories match your search."
+                    : "No categories found. Add one!"}
+                </div>
+              ) : (
+                paginated.map((cat) => (
+                  <div className="allCategory-card" key={cat._id}>
+                    <div className="allCategory-card-top">
+                      {cat.image ? (
+                        <img
+                          src={`http://localhost:5000/uploads/${cat.image}`}
+                          alt={cat.categoryName}
+                          className="allCategory-card-image"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        <div className="allCategory-card-noImage">No Image</div>
+                      )}
+                      <div className="allCategory-card-titleBlock">
+                        <h4>{cat.categoryName}</h4>
+                        <span
+                          className={`allCategory-status ${
+                            cat.status === "Active" ? "active" : "inactive"
+                          }`}
+                        >
+                          {cat.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="allCategory-card-description">
+                      {cat.description}
+                    </p>
+
+                    <div className="allCategory-card-footer">
+                      <span className="allCategory-card-date">
+                        Created: {formatDate(cat.createdAt)}
+                      </span>
+                      <ActionButtons cat={cat} />
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Pagination — shared by both views */}
+            {filtered.length > 0 && (
+              <div className="allCategory-pagination">
+                <span className="pagination-info">
+                  Showing {(currentPage - 1) * ROWS_PER_PAGE + 1}–
+                  {Math.min(currentPage * ROWS_PER_PAGE, filtered.length)} of {filtered.length}
+                </span>
+
+                <div className="pagination-controls">
+                  <button
+                    className="pagination-btn"
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      className={page === currentPage ? "pagination-btn active" : "pagination-btn"}
+                      onClick={() => goToPage(page)}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    className="pagination-btn"
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Result count */}

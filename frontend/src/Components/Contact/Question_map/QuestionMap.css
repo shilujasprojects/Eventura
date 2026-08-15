@@ -1,160 +1,197 @@
-/* --------------- Form Section ---------------- */
+/* ---------------- CONTACT SECTION ---------------- */
 
 .contact-section {
-    padding: 80px 60px;
-    background: linear-gradient(135deg,#edcb96, #ffe5bb);
-      /* background: linear-gradient(135deg, #f1d49b, #c89d72); */
-
+  padding: 80px 60px;
+  background: linear-gradient(135deg, #edcb96, #ffe5bb);
 }
 
 .contact-container {
-    display: flex;
-    gap: 60px;
-    align-items: flex-start;
+  display: flex;
+  gap: 60px;
+  align-items: stretch;
 }
 
-.contact-container h2{
-    font-family: "Lucida Handwriting", cursive;
-
+.contact-container h2 {
+  font-family: "Lucida Handwriting", cursive;
 }
 
-/* LEFT */
-.form-side {
-    flex: 1;
+/* ---------------- LEFT SIDE ---------------- */
+
+.question-side {
+  flex: 1;
 }
 
-.form-container {
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    margin-top: 20px;
+.question-side > p {
+  line-height: 1.7;
+  max-width: 650px;
 }
 
-.form-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
+/* ---------------- INQUIRY CARD ---------------- */
+
+.inquiry-card {
+  background: #ffffff;
+  padding: 45px 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.09);
+
+  margin-top: 25px;
+
+  text-align: center;
+
+  min-height: 320px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff7ee;
 }
 
+.inquiry-icon {
+  width: 65px;
+  height: 65px;
 
-.form-row .form-floating,
-.form-row .form-select {
-    flex: 1;
+  background: #062036;
+  color: #f1d49b;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+
+  margin-bottom: 20px;
 }
 
-textarea {
-    width: 100%;
-    height: 240px;
-    margin-bottom: 20px;
-    padding: 14px;
-    border: 1px solid #e3e3e3;
-    border-radius: 8px;
-    
+.inquiry-card h3 {
+  font-family: "Cinzel", serif;
+  margin-bottom: 12px;
 }
 
-input, select {
-    padding: 14px;
-    border: 1px solid #e3e3e3;
-    border-radius: 8px;
+.inquiry-card p {
+  max-width: 500px;
+  line-height: 1.7;
+  color: #8a9ba8;
+
+  margin-bottom: 25px;
 }
 
-.form-control:focus,
-.form-select:focus {
-  
-  border-color: #c89d72 !important;
-  box-shadow: none !important;
-  outline: none !important;
+/* ---------------- INQUIRY BUTTON ---------------- */
 
+.inquiry-btn {
+  background: #c89d72;
+  color: #ffffff;
+
+  border: none;
+
+  padding: 14px 32px;
+
+  border-radius: 30px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+
+  transition: all 0.3s ease;
 }
 
-.submit-btn {
-    background: #c89d72;
-    color: #fff;
-    border: none;
-    padding: 14px 40px;
-    border-radius: 30px;
-    cursor: pointer;
+.inquiry-btn:hover {
+  background: #062036;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* RIGHT  ------Map Section */
+/* ---------------- MAP SECTION ---------------- */
+
 .map-side {
-    flex: 1;
-}
-.map-para{
-    max-width: 100%;
-    margin-bottom: 0;
-    
+  flex: 1;
 }
 
-.map-side h2{
-    font-family: cinzel;
+.map-side h2 {
+  font-family: "Cinzel", serif;
+}
+
+.map-para {
+  max-width: 100%;
+  margin-bottom: 0;
+  line-height: 1.7;
 }
 
 .map-side iframe {
-    width: 100%;
-    height: 320px;
-    border: 0;
-    border-radius: 12px;
-    margin-top: 20px;
+  width: 100%;
+  height: 320px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  margin-top: 20px;
 }
 
-.map-side h4{
-    font-family: Cinzel;
-    margin-top: 6px;
+.map-side h4 {
+  font-family: "Cinzel", serif;
+
+  margin-top: 10px;
 }
 
-/* Social Media Section  */
+/* ---------------- SOCIAL MEDIA ---------------- */
 
-.social{
-    display:flex;
-    gap:15px;
+.social {
+  display: flex;
+  gap: 15px;
 }
 
-.social div{
-    width:25px;
-    height:25px;
-    background:#062036;
-    color:#f1d49b;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:6px;
-    cursor:pointer;
-    transition:0.3s;
+.social div {
+  width: 30px;
+  height: 30px;
+
+  background: #062036;
+  color: #f1d49b;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
 }
 
-.social div:hover{
-    background:#f1d49b;
-    color:#062036;
+.social div:hover {
+  background: #f1d49b;
+  color: #062036;
 }
 
+/* ---------------- RESPONSIVE ---------------- */
 
-/* RESPONSIVE */
 @media (max-width: 992px) {
-    .contact-container {
-        flex-direction: column;
-    }
+  .contact-container {
+    flex-direction: column;
+  }
+
+  .inquiry-card {
+    min-height: 280px;
+  }
 }
 
-@media (max-width: 576px){
-    .contact-section{
-        padding: 30px 20px;
-    }
+@media (max-width: 576px) {
+  .contact-section {
+    padding: 30px 20px;
+  }
 
-     .form-row{
-        flex-direction: column;
-        gap: 15px;
-    }
+  .inquiry-card {
+    padding: 30px 20px;
+  }
 
-    .form-container{
-        padding: 25px;
-    }
-
-    .submit-btn{
-        width: 100%;
-    }
-
-
-
+  .inquiry-btn {
+    width: 100%;
+  }
 }

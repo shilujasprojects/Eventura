@@ -23,9 +23,22 @@ exports.addService = async (req, res) => {
 };
 
 // ── Get All Services ──────────────────────────────────────
+// exports.getServices = async (req, res) => {
+//   try {
+//     const services = await Service.find().sort({ createdAt: -1 });
+//     res.status(200).json({ success: true, data: services });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// ── Get All Services ──────────────────────────────────────
 exports.getServices = async (req, res) => {
   try {
-    const services = await Service.find().sort({ createdAt: -1 });
+    const filter = {};
+    if (req.query.status) filter.status = req.query.status;
+
+    const services = await Service.find(filter).sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: services });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

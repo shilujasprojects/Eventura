@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import "./Packages.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
@@ -133,7 +133,8 @@ const ViewPackages = () => {
           </div>
         </div>
 
-        <div className="viewPackage-card">
+        <div className="viewPackage-details">
+                  <div className="viewPackage-card">
           <h3>Description</h3>
           <p>{pkg.description || "No description provided."}</p>
         </div>
@@ -164,7 +165,9 @@ const ViewPackages = () => {
             ))}
           </div>
         </div>
+        </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };

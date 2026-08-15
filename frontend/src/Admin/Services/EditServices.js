@@ -4,7 +4,7 @@ import "./Services.css";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 const MAX_FILE_SIZE_MB = 5;
@@ -459,6 +459,7 @@ const EditServices = () => {
 
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };

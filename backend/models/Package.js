@@ -1,82 +1,93 @@
-const mongoose = require("mongoose");
+  const mongoose = require("mongoose");
 
-const packageSchema = new mongoose.Schema(
-  {
-    packageName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
-    },
-
-    description: {
-      type: String,
-      trim: true,
-    },
-
-    services: [
-      {
-        service: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Service",
-          required: true,
-        },
-        isOptional: {
-          type: Boolean,
-          default: false,
-        },
-      },
-    ],
-
-    basePrice: {
-      type: Number,
-      required: true,
-    },
-
-    packageDiscount: {
-      type: {
+  const packageSchema = new mongoose.Schema(
+    {
+      packageName: {
         type: String,
-        enum: ["Percentage", "Flat"],
-        default: "Percentage",
+        required: true,
+        trim: true,
       },
-      value: {
+
+      category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        required: true,
+      },
+
+      description: {
+        type: String,
+        trim: true,
+      },
+
+      services: [
+        {
+          service: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Service",
+            required: true,
+          },
+          isOptional: {
+            type: Boolean,
+            default: false,
+          },
+        },
+      ],
+
+      // Auto calculated from selected services
+      basePrice: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+
+      packageDiscount: {
+        type: {
+          type: String,
+          enum: ["Percentage", "Flat"],
+          default: "Percentage",
+        },
+        value: {
+          type: Number,
+          default: 0,
+        },
+      },
+
+      // Auto calculated after discount
+      finalPrice: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+
+      tags: [
+        {
+          type: String,
+          enum: [
+            "Recommended",
+            "Featured",
+            "Popular",
+            "Best Seller",
+            "Trending",
+            "Luxury",
+            "New",
+          ],
+        },
+      ],
+
+      displayOrder: {
         type: Number,
         default: 0,
       },
-    },
 
-    tags: [
-      {
+      status: {
         type: String,
-        enum: [
-          "Recommended",
-          "Featured",
-          "Popular",
-          "Best Seller",
-          "Trending",
-          "Luxury",
-          "New",
-        ],
+        enum: ["Active", "Inactive"],
+        default: "Active",
       },
-    ],
-
-    displayOrder: {
-      type: Number,
-      default: 0,
     },
+    {
+      timestamps: true,
+    }
+  );
 
-    status: {
-      type: String,
-      enum: ["Active", "Inactive"],
-      default: "Active",
-    },
-  },
-  { timestamps: true }
-);
-
-module.exports = mongoose.model("Package", packageSchema);
+  module.exports = mongoose.model("Package", packageSchema);

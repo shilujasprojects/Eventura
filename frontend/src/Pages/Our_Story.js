@@ -7,6 +7,7 @@ import BannerReady from '../Components/Our_Story/Banner-ready/BannerReady'
 import MissionVision from '../Components/Our_Story/Mission-vision/MissionVision'
 import WhoWeAre from '../Components/Our_Story/Who-we-are/WhoWeAre'
 import WhyEventura from '../Components/Our_Story/Why-choose-eventura/WhyEventura'
+import { ToastContainer } from 'react-toastify'
 
 function Our_Story() {
   return (
@@ -19,6 +20,7 @@ function Our_Story() {
            <Faq />
            <BannerReady />
            <Footer />
+           <ToastContainer position="top-right" autoClose={3000} />
       
     </>
   )

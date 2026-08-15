@@ -15,7 +15,7 @@ import {
 import "./Vendors.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const EditVendors = () => {
   const { id } = useParams();
@@ -391,7 +391,7 @@ const EditVendors = () => {
             {/* Row 3: Bio + Image */}
             <div className="addVendor-descriptionRow">
 
-              <div className="addVendor-formGroup bio-group">
+              <div className="addVendor-formGroup">
                 <label>Partner Bio / Description</label>
                 <textarea
                   name="about"
@@ -402,7 +402,7 @@ const EditVendors = () => {
                 />
               </div>
 
-              <div className="addVendor-formGroup file-upload-group">
+              <div className="addVendor-formGroup">
                 <label>Company Logo / Business Banner</label>
                 {imagePreview ? (
                   <div className="addVendor-imagePreviewContainer">
@@ -489,6 +489,7 @@ const EditVendors = () => {
           </div>
         </div>
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };

@@ -1,4 +1,3 @@
-
 .settingsPage {
   padding: 0;
 }
@@ -33,7 +32,7 @@
   background-color: transparent;
   color: #8a9ba8;
   border: 1px solid transparent;
-  padding: 12px 18px;
+  padding: 8px 12px;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
@@ -47,11 +46,13 @@
 .settingsPage-tabs .tab-btn:hover {
   color: #fff7ee;
   background-color: rgba(255, 255, 255, 0.02);
+  border-color: #f1d49b;
 }
 
 .settingsPage-tabs .tab-btn.active {
-  background-color: #f1d49b;
-  color: #062036;
+  color: #f1d49b;
+  background-color: rgba(241, 212, 155, 0.05);
+  border-color: #f1d49b;
 }
 
 /* Transition Area settings */
@@ -85,6 +86,12 @@
   color: #fff7ee;
   margin: 0;
   font-size: 1.1rem;
+}
+
+/* Pushes the Edit button (when present) to the right side of the card header */
+.settings-cardHeader-action {
+  margin-left: auto;
+  padding: 8px 14px;
 }
 
 .gold-icon {
@@ -146,8 +153,25 @@
   line-height: 1.5;
 }
 
+/* New: read-only look for the Account/Business tab fields before "Edit" is pressed */
+.settings-formGroup input:disabled,
+.settings-formGroup textarea:disabled {
+  background-color: #08192a;
+  border-color: rgba(241, 212, 155, 0.06);
+  color: #8a9ba8;
+  cursor: default;
+}
+
 .settings-field-hint {
   color: #8a9ba8;
+  font-size: 0.75rem;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* New: inline validation error text, shown under a field when it fails validation */
+.settings-field-error {
+  color: #ef4444;
   font-size: 0.75rem;
   margin-top: 6px;
   line-height: 1.4;
@@ -212,6 +236,7 @@
 .settings-btnGroup {
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding-top: 20px;
   margin-top: 15px;
@@ -221,7 +246,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 22px;
+  padding: 8px 12px;
   border-radius: 10px;
   font-weight: 600;
   font-size: 0.9rem;
@@ -240,40 +265,66 @@
   background-color: #fff7ee;
 }
 
-/* Dynamic toast configurations */
-.settings-toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 16px 22px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  z-index: 9999;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  animation: toastEntrance 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.settings-btn.save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
-@keyframes toastEntrance {
-  from { transform: translateY(100px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* New: outlined style for the "Edit" button in the Account tab header */
+.settings-btn.edit {
+  background-color: transparent;
+  color: #f1d49b;
+  border: 1px solid #f1d49b;
 }
 
-.settings-toast.success {
-  background-color: #f1d49b;
-  color: #062036;
+.settings-btn.edit:hover {
+  background-color: rgba(241, 212, 155, 0.08);
 }
 
-.settings-toast.error {
-  background-color: #ef4444;
+/* New: muted style for "Cancel", next to the gold "Save" button */
+.settings-btn.cancel {
+  background-color: transparent;
+  color: #8a9ba8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-btn.cancel:hover {
   color: #fff7ee;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.settings-btn.cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* New: full-page loading state while settings are being fetched */
+.settingsPage-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 0;
+  color: #8a9ba8;
+}
+
+.settingsPage-loading .spin {
+  color: #f1d49b;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Responsive Adaptive constraints */
 @media (max-width: 768px) {
+  .settingsPage-tabs .tab-btn.active {
+    color: #f1d49b;
+  }
   .settings-formRow.split-2 {
     grid-template-columns: 1fr;
   }
@@ -281,4 +332,38 @@
     flex-direction: column;
     gap: 15px;
   }
+  .settings-btnGroup {
+    flex-direction: column-reverse;
+  }
+  .settings-btnGroup .settings-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.password-inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-inputWrapper input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.password-toggleBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #8a9ba8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.password-toggleBtn:hover {
+  color: #f1d49b;
 }

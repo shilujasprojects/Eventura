@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -7,23 +7,43 @@ import "react-toastify/dist/ReactToastify.css";
 import "./CategoryEvents.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
+// Same inline icons used on the Add Category page
+const UploadIcon = () => (
+  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M12 16V4M12 4L7 9M12 4l5 5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const TrashIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6h16z" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_SIZE_MB = 5;
+
 const EditCategoryEvents = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const fileInputRef = useRef(null);
 
-  const [category, setCategory] = useState({
-    categoryName: "",
-    description: "",
-    status: "Active",
-    image: "",
-  });
-  const [newImage, setNewImage] = useState(null);       // new file picked by user
-  const [imagePreview, setImagePreview] = useState(""); // what to show in <img>
+  const [categoryName, setCategoryName] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("Active");
+
+  const [existingImage, setExistingImage] = useState("");  // filename stored on server
+  const [newImage, setNewImage] = useState(null);           // new File object, if picked
+  const [imagePreview, setImagePreview] = useState(null);   // url shown in the box (existing or blob)
+
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
 
-  // ---------- fetch existing data ----------
+  // ---------- fetch existing category ----------
   useEffect(() => {
     const fetchCategory = async () => {
       try {
@@ -31,41 +51,62 @@ const EditCategoryEvents = () => {
           `http://localhost:5000/api/category/view-category/${id}`
         );
         const data = res.data.data;
-        setCategory(data);
+        setCategoryName(data.categoryName || "");
+        setDescription(data.description || "");
+        setStatus(data.status || "Active");
+        setExistingImage(data.image || "");
         setImagePreview(
-          data.image
-            ? `http://localhost:5000/uploads/${data.image}`
-            : ""
+          data.image ? `http://localhost:5000/uploads/${data.image}` : null
         );
       } catch (error) {
         console.error(error);
         toast.error("Failed to load category details.");
+      } finally {
+        setPageLoading(false);
       }
     };
     fetchCategory();
   }, [id]);
 
-  // ---------- field change ----------
-  const handleChange = (e) => {
-    setCategory({ ...category, [e.target.name]: e.target.value });
-    setErrors((prev) => ({ ...prev, [e.target.name]: null }));
+  // ---------- validation ----------
+  const validate = () => {
+    const newErrors = {};
+    const trimmedName = categoryName.trim();
+    const trimmedDesc = description.trim();
+
+    if (!trimmedName) newErrors.categoryName = "Category name is required.";
+    else if (trimmedName.length < 3)
+      newErrors.categoryName = "Category name must be at least 3 characters.";
+    else if (trimmedName.length > 50)
+      newErrors.categoryName = "Category name must be under 50 characters.";
+
+    if (!trimmedDesc) newErrors.description = "Description is required.";
+    else if (trimmedDesc.length < 10)
+      newErrors.description = "Description must be at least 10 characters.";
+    else if (trimmedDesc.length > 500)
+      newErrors.description = "Description must be under 500 characters.";
+
+    if (!imagePreview) newErrors.image = "Category cover image is required.";
+
+    return newErrors;
   };
 
-  // ---------- image pick ----------
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  // ---------- image handling (shared by browse + drag/drop) ----------
+  const processFile = (file) => {
     if (!file) return;
 
-    const allowed = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowed.includes(file.type)) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
       setErrors((prev) => ({
         ...prev,
         image: "Only JPG, PNG or WEBP images are allowed.",
       }));
       return;
     }
-    if (file.size > 2 * 1024 * 1024) {
-      setErrors((prev) => ({ ...prev, image: "Image must be under 2 MB." }));
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      setErrors((prev) => ({
+        ...prev,
+        image: `Image must be under ${MAX_SIZE_MB} MB.`,
+      }));
       return;
     }
 
@@ -74,24 +115,32 @@ const EditCategoryEvents = () => {
     setErrors((prev) => ({ ...prev, image: null }));
   };
 
-  // ---------- validation ----------
-  const validate = () => {
-    const newErrors = {};
-    if (!category.categoryName.trim())
-      newErrors.categoryName = "Category name is required.";
-    else if (category.categoryName.trim().length < 3)
-      newErrors.categoryName = "Category name must be at least 3 characters.";
+  const handleImageChange = (e) => {
+    processFile(e.target.files[0]);
+  };
 
-    if (!category.description.trim())
-      newErrors.description = "Description is required.";
-    else if (category.description.trim().length < 10)
-      newErrors.description = "Description must be at least 10 characters.";
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    processFile(e.dataTransfer.files[0]);
+  };
 
-    // image: existing image or new image must be present
-    if (!imagePreview && !newImage)
-      newErrors.image = "Category image is required.";
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
 
-    return newErrors;
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleRemoveImage = (e) => {
+    e.stopPropagation();
+    setNewImage(null);
+    setImagePreview(null);
+    setExistingImage("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   // ---------- submit ----------
@@ -106,20 +155,20 @@ const EditCategoryEvents = () => {
 
     try {
       setLoading(true);
-      const formdata = new FormData();
-      formdata.append("categoryName", category.categoryName.trim());
-      formdata.append("description", category.description.trim());
-      formdata.append("status", category.status);
+      const formData = new FormData();
+      formData.append("categoryName", categoryName.trim());
+      formData.append("description", description.trim());
+      formData.append("status", status);
 
       if (newImage) {
-        formdata.append("image", newImage);        // new file uploaded
+        formData.append("image", newImage);       // new file uploaded
       } else {
-        formdata.append("image", category.image);  // keep old filename
+        formData.append("image", existingImage);  // keep old filename
       }
 
       await axios.put(
         `http://localhost:5000/api/category/edit-category/${id}`,
-        formdata
+        formData
       );
 
       toast.success("Category updated successfully!");
@@ -134,29 +183,41 @@ const EditCategoryEvents = () => {
     }
   };
 
+  if (pageLoading) {
+    return (
+      <AdminLayout>
+        <div className="view-loading">Loading category details...</div>
+      </AdminLayout>
+    );
+  }
+
   return (
     <>
       <AdminLayout>
-        <div className="editCategory">
+        <div className="addCategory">
           {/* Header */}
-          <div className="editCategory-header">
+          <div className="addCategory-header">
             <h2>Edit Category</h2>
-            <p>Update category details</p>
+            <p>Update event category details</p>
           </div>
 
-          <div className="editCategory-card">
+          {/* Card */}
+          <div className="addCategory-card">
             <form onSubmit={handleSubmit} noValidate>
-              <div className="editCategory-formRow">
-                {/* Category Name */}
-                <div className="editCategory-formGroup">
+              {/* Row 1: Name + Status */}
+              <div className="addCategory-formRow name-status">
+                <div className="addCategory-formGroup">
                   <label>
                     Category Name <span className="required">*</span>
                   </label>
                   <input
                     type="text"
-                    name="categoryName"
-                    value={category.categoryName}
-                    onChange={handleChange}
+                    placeholder="Enter Category Name"
+                    value={categoryName}
+                    onChange={(e) => {
+                      setCategoryName(e.target.value);
+                      setErrors((prev) => ({ ...prev, categoryName: null }));
+                    }}
                     className={errors.categoryName ? "input-error" : ""}
                   />
                   {errors.categoryName && (
@@ -164,80 +225,116 @@ const EditCategoryEvents = () => {
                   )}
                 </div>
 
-                {/* Status */}
-                <div className="editCategory-formGroup">
+                <div className="addCategory-formGroup">
                   <label>Status</label>
                   <select
-                    name="status"
-                    value={category.status}
-                    onChange={handleChange}
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
                   >
                     <option>Active</option>
                     <option>Inactive</option>
                   </select>
                 </div>
+              </div>
 
-                {/* Image */}
-                <div className="editCategory-formGroup">
-                  <label>Category Image</label>
+              {/* Row 2: Cover Image + Description */}
+              <div className="addCategory-formRow media-description">
+                <div className="addCategory-formGroup">
+                  <label>
+                    Category Cover Image <span className="required">*</span>
+                  </label>
 
-                  {/* show existing / new preview */}
-                  {imagePreview ? (
-                    <div className="image-preview-wrapper">
+                  {!imagePreview ? (
+                    <div
+                      className={`imageUpload-dropzone ${isDragging ? "dragging" : ""} ${
+                        errors.image ? "input-error" : ""
+                      }`}
+                      onClick={() => fileInputRef.current.click()}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                    >
+                      <UploadIcon />
+                      <p className="imageUpload-text">
+                        Drag & drop your image here
+                      </p>
+                      <span className="imageUpload-orText">or</span>
+                      <button
+                        type="button"
+                        className="imageUpload-browseBtn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          fileInputRef.current.click();
+                        }}
+                      >
+                        Browse Local Files
+                      </button>
+                      <p className="imageUpload-formats">
+                        Supported formats: JPEG, PNG (Max {MAX_SIZE_MB}MB)
+                      </p>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg, image/png, image/webp"
+                        onChange={handleImageChange}
+                        hidden
+                      />
+                    </div>
+                  ) : (
+                    <div className="imageUpload-previewBox">
                       <img
                         src={imagePreview}
-                        alt="Preview"
-                        className="image-preview-thumb"
+                        alt="Category Preview"
+                        className="imageUpload-previewImg"
                         onClick={() => setLightboxOpen(true)}
                         title="Click to enlarge"
                         onError={(e) => {
                           e.target.style.display = "none";
-                          setImagePreview("");
                         }}
                       />
+                      <button
+                        type="button"
+                        className="imageUpload-removeBtn"
+                        onClick={handleRemoveImage}
+                        title="Remove image"
+                      >
+                        <TrashIcon />
+                      </button>
                       <span className="image-preview-hint">
                         Click image to enlarge
                       </span>
                     </div>
-                  ) : (
-                    <div className="no-image-placeholder">No image selected</div>
                   )}
 
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className={errors.image ? "input-error" : ""}
-                    style={{ marginTop: "10px" }}
-                  />
                   {errors.image && (
                     <span className="error-msg">{errors.image}</span>
                   )}
                 </div>
-              </div>
 
-              {/* Description */}
-              <div className="editCategory-formGroup">
-                <label>
-                  Description <span className="required">*</span>
-                </label>
-                <textarea
-                  rows="5"
-                  name="description"
-                  value={category.description}
-                  onChange={handleChange}
-                  className={errors.description ? "input-error" : ""}
-                />
-                {errors.description && (
-                  <span className="error-msg">{errors.description}</span>
-                )}
+                <div className="addCategory-formGroup">
+                  <label>
+                    Short Description <span className="required">*</span>
+                  </label>
+                  <textarea
+                    placeholder="Enter Category Description (min 10 characters)"
+                    value={description}
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                      setErrors((prev) => ({ ...prev, description: null }));
+                    }}
+                    className={errors.description ? "input-error" : ""}
+                  />
+                  {errors.description && (
+                    <span className="error-msg">{errors.description}</span>
+                  )}
+                </div>
               </div>
 
               {/* Actions */}
-              <div className="editCategory-actions">
+              <div className="addCategory-actions">
                 <button
                   type="button"
-                  className="editCategory-cancelBtn"
+                  className="addCategory-cancelBtn"
                   onClick={() => navigate(-1)}
                   disabled={loading}
                 >
@@ -245,7 +342,7 @@ const EditCategoryEvents = () => {
                 </button>
                 <button
                   type="submit"
-                  className="editCategory-submitBtn"
+                  className="addCategory-submitBtn"
                   disabled={loading}
                 >
                   {loading ? "Updating..." : "Update Category"}

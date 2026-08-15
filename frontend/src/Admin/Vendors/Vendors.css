@@ -1,6 +1,37 @@
-/* =====================================================
-   MANAGE VENDORS PAGE
-===================================================== */
+/* =========================================================
+   DESIGN TOKENS
+   Same token values as Events.css so the Vendors and Events
+   sections stay visually consistent. Safe to redeclare here —
+   identical values, so nothing overrides unexpectedly if both
+   files happen to load on the same page.
+========================================================= */
+
+:root {
+  --panel-bg: #0d2131;
+  --input-bg: #061521;
+  --text-primary: #fff7ee;
+  --text-muted: #8a9ba8;
+  --accent: #f1d49b;
+  --accent-dark: #062036;
+  --danger: #ef4444;
+  --danger-rgb: 239, 68, 68;
+
+  --accent-rgb: 241, 212, 155;
+  --success-rgb: 74, 222, 128;
+  --white-rgb: 255, 255, 255;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-pill: 20px;
+
+  --transition: 0.3s;
+}
+
+/* =========================================================
+   1. MANAGE VENDORS (list) PAGE
+========================================================= */
 
 .allVendors {
   padding: 0;
@@ -9,37 +40,37 @@
 .allVendors-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
-  gap: 20px;
+  align-items: center; /* was flex-start */
+  flex-wrap: nowrap; /* force single row */
+  gap: 16px;
+  margin-bottom: 25px;
 }
 
 .allVendors-header h2 {
-  color: #fff7ee;
-  margin: 0 0 5px 0;
+  color: var(--text-primary);
+  text-transform: capitalize;
+  margin-bottom: 5px;
 }
 
 .allVendors-header p {
-  color: #8a9ba8;
-  margin: 0;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 .add-vendor-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #062036, #f1d49b);
-  color: #fff7ee;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: var(--text-primary);
   border: none;
-  padding: 12px 22px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
+  font-weight: 600;
+  transition: var(--transition);
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .add-vendor-btn:hover {
@@ -51,22 +82,25 @@
   transform: translateY(0);
 }
 
-/* ── Search Bar ── */
+/* Search */
+
 .allVendors-searchBox {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   height: 50px;
   padding: 0 15px;
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 12px;
-  margin-bottom: 20px;
+  color: var(--text-muted);
+  margin-bottom: 25px;
+  transition: var(--transition);
 }
 
 .allVendors-searchBox:focus-within {
-  border-color: rgba(241, 212, 155, 0.35);
-  box-shadow: 0 0 0 3px rgba(241, 212, 155, 0.07);
+  border-color: rgba(var(--accent-rgb), 0.35);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.07);
 }
 
 .allVendors-searchBox input {
@@ -74,24 +108,24 @@
   border: none;
   outline: none;
   background: transparent;
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.9rem;
 }
 
 .allVendors-searchBox input::placeholder {
-  color: #8a9ba8;
+  color: var(--text-muted);
   padding: 0;
 }
 
 .search-icon-svg {
-  color: #8a9ba8;
+  color: var(--text-muted);
   flex-shrink: 0;
 }
 
 .clear-search-btn {
   background: none;
   border: none;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 22px;
   cursor: pointer;
   line-height: 1;
@@ -100,17 +134,18 @@
 }
 
 .clear-search-btn:hover {
-  color: #ef4444;
+  color: var(--danger);
 }
 
-/* ── Status Tabs ── */
+/* Status tabs */
+
 .allVendors-tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(241, 212, 155, 0.08);
-  padding-bottom: 10px;
   flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.08);
 }
 
 .tab-btn {
@@ -118,44 +153,59 @@
   align-items: center;
   gap: 8px;
   background: transparent;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  color: #8a9ba8;
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  color: var(--text-muted);
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition);
 }
 
 .tab-btn:hover {
-  color: #fff7ee;
-  border-color: rgba(241, 212, 155, 0.25);
-  background: rgba(241, 212, 155, 0.04);
+  color: var(--text-primary);
+  border-color: rgba(var(--accent-rgb), 0.25);
+  background: rgba(var(--accent-rgb), 0.04);
 }
 
 .tab-btn.active {
-  background: rgba(241, 212, 155, 0.1);
-  border-color: rgba(241, 212, 155, 0.3);
-  color: #f1d49b;
+  background: rgba(var(--accent-rgb), 0.1);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  color: var(--accent);
   font-weight: 600;
 }
 
 .tab-count {
-  background-color: rgba(241, 212, 155, 0.12);
-  color: #f1d49b;
+  background-color: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent);
   padding: 2px 8px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-size: 0.75rem;
   font-weight: 600;
 }
 
-/* ── Data Table ── */
+/* Table wrapper */
+
 .allVendors-tableWrapper {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
   border-radius: 15px;
   overflow: hidden;
+}
+
+.allVendors-tableScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.allVendors-tableScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.allVendors-tableScroll::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--accent-rgb), 0.2);
+  border-radius: var(--radius-pill);
 }
 
 .allVendors-table {
@@ -164,35 +214,37 @@
 }
 
 .allVendors-table thead {
-  background-color: rgba(241, 212, 155, 0.04);
+  background-color: rgba(var(--accent-rgb), 0.05);
 }
 
 .allVendors-table th {
   text-align: left;
   padding: 16px 18px;
-  color: #f1d49b;
+  color: var(--accent);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.3px;
+  white-space: nowrap;
 }
 
 .allVendors-table td {
   padding: 16px 18px;
-  color: #fff7ee;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   vertical-align: middle;
   font-size: 0.9rem;
 }
 
 .allVendors-table tbody tr:hover {
-  background-color: rgba(241, 212, 155, 0.02);
+  background-color: rgba(var(--accent-rgb), 0.02);
 }
 
-/* ── Table Cell Styles ── */
+/* Table cell content */
+
 .vendor-id-cell {
   font-family: monospace;
   font-size: 0.85rem;
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .vendor-title-cell {
@@ -202,12 +254,12 @@
 }
 
 .vendor-primary-name {
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.92rem;
 }
 
 .vendor-meta-email {
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.78rem;
 }
 
@@ -215,19 +267,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   width: fit-content;
   max-width: 100%;
-
   padding: 4px 12px;
-  background: #061521;
-  color: #f1d49b;
-  border: 1px solid rgba(241, 212, 155, 0.12);
-  border-radius: 8px;
-
+  background: var(--input-bg);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  border-radius: var(--radius-sm);
   font-size: 0.78rem;
   font-weight: 500;
-
   white-space: nowrap;
 }
 
@@ -243,7 +291,7 @@
 
 .contact-person-meta span {
   font-size: 0.78rem;
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .location-meta-row {
@@ -254,7 +302,7 @@
 }
 
 .loc-icon {
-  color: #8a9ba8;
+  color: var(--text-muted);
   flex-shrink: 0;
 }
 
@@ -262,69 +310,163 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background-color: rgba(241, 212, 155, 0.07);
+  background-color: rgba(var(--accent-rgb), 0.07);
   padding: 4px 10px;
-  border-radius: 20px;
-  border: 1px solid rgba(241, 212, 155, 0.12);
-  color: #f1d49b;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  color: var(--accent);
   font-weight: 600;
   font-size: 0.82rem;
 }
 
 .star-icon {
-  color: #f1d49b;
+  color: var(--accent);
 }
 
-/* ── Status Pills ── */
+/* Status pill */
+
 .status-pill {
   font-size: 0.72rem;
   padding: 4px 10px;
-  border-radius: 20px;
+  border-radius: var(--radius-pill);
   font-weight: 600;
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.status-pill.active   { background: rgba(74, 222, 128, 0.12);  color: #4ade80; }
-.status-pill.busy     { background: rgba(241, 212, 155, 0.12); color: #f1d49b; }
-.status-pill.suspended { background: rgba(239, 68, 68, 0.12);  color: #ef4444; }
+.status-pill.active {
+  background: rgba(var(--success-rgb), 0.12);
+  color: #4ade80;
+}
 
-/* ── Action Buttons ── */
+.status-pill.busy {
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent);
+}
+
+.status-pill.suspended {
+  background: rgba(var(--danger-rgb), 0.12);
+  color: var(--danger);
+}
+
+/* Action buttons + hover tooltip
+   Same custom-tooltip pattern as Events (.allEvents-actions button::after),
+   driven by data-tooltip instead of the native title attribute so the
+   label appears instantly and matches the app's styling. */
+
 .allVendors-actions {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   justify-content: flex-end;
 }
 
-.allEvents-actions-btn {
+.allVendors-actionBtn {
+  position: relative;
   width: 34px;
   height: 34px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: var(--transition);
 }
 
-.action-view    { background: rgba(99, 179, 237, 0.12); color: #63b3ed; }
-.action-edit    { background: rgba(241, 212, 155, 0.1);  color: #f1d49b; }
-.action-reject  { background: rgba(239, 68, 68, 0.1);   color: #ef4444; }
-.action-approve { background: rgba(74, 222, 128, 0.1);  color: #4ade80; }
+.action-view {
+  background: rgba(99, 179, 237, 0.12);
+  color: #63b3ed;
+}
 
-.action-view:hover    { background: rgba(99, 179, 237, 0.25); }
-.action-edit:hover    { background: rgba(241, 212, 155, 0.2); }
-.action-reject:hover  { background: rgba(239, 68, 68, 0.25);  }
-.action-approve:hover { background: rgba(74, 222, 128, 0.25); }
+.action-edit {
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
+}
 
-/* ── Empty / Loading States ── */
+.action-reject {
+  background: rgba(var(--danger-rgb), 0.1);
+  color: var(--danger);
+}
+
+.action-approve {
+  background: rgba(var(--success-rgb), 0.1);
+  color: #4ade80;
+}
+
+.action-view:hover {
+  background: rgba(99, 179, 237, 0.25);
+}
+
+.action-edit:hover {
+  background: rgba(var(--accent-rgb), 0.2);
+}
+
+.action-reject:hover {
+  background: rgba(var(--danger-rgb), 0.25);
+}
+
+.action-approve:hover {
+  background: rgba(var(--success-rgb), 0.25);
+}
+
+.allVendors-actionBtn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: var(--panel-bg);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  z-index: 20;
+}
+
+.allVendors-actionBtn:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Clamp the first/last tooltip to the row's own edges so they never
+   spill outside the card or table */
+
+.allVendors-actions .allVendors-actionBtn:first-child::after {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allVendors-actions .allVendors-actionBtn:first-child:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+.allVendors-actions .allVendors-actionBtn:last-child::after {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+.allVendors-actions .allVendors-actionBtn:last-child:hover::after {
+  transform: translateX(0) translateY(0);
+}
+
+/* Empty / loading states */
+
 .table-loading-state,
 .table-empty-state {
   padding: 60px 20px;
   text-align: center;
-  color: #8a9ba8;
+  color: var(--text-muted);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -332,11 +474,11 @@
 }
 
 .empty-state-icon {
-  color: rgba(138, 155, 168, 0.35);
+  color: rgba(var(--white-rgb), 0.15);
 }
 
 .table-empty-state h3 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -345,7 +487,6 @@
   font-size: 0.88rem;
 }
 
-/* ── Page loading state (used in EditVendor) ── */
 .page-loading-state {
   display: flex;
   flex-direction: column;
@@ -353,13 +494,227 @@
   justify-content: center;
   height: 300px;
   gap: 14px;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
-/* =====================================================
-   VENDOR DETAIL MODAL
-===================================================== */
+/* Card view — small-screen replacement for the table
+   (mirrors .allEvents-cardList / .allEvents-card on the Events page) */
+
+.allVendors-cardList {
+  display: none; /* hidden by default; enabled ≤768px */
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.allVendors-card {
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.allVendors-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.allVendors-card-titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.allVendors-card-titleBlock h4 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.allVendors-card-id {
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.allVendors-card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px; /* was: flex-direction: column; gap: 8px; */
+  margin-bottom: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.06);
+}
+
+.allVendors-card-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+/* Location can be long — let it take the full row so it doesn't truncate */
+.allVendors-card-row:nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+.allVendors-card-row svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.allVendors-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.06);
+}
+
+.allVendors-card-rate {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.allVendors-card-footer .allVendors-actions {
+  margin-left: auto;
+}
+
+/* Pagination */
+
+.allVendors-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 18px;
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
+}
+
+.pagination-info {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: rgba(var(--accent-rgb), 0.1);
+  border-color: var(--accent);
+}
+
+.pagination-btn.active {
+  background-color: var(--accent);
+  color: var(--accent-dark);
+  border-color: var(--accent);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Responsive — Manage Vendors page
+   ≤992px: Performance/Location columns drop to keep the table breathing
+   ≤768px: table swaps for the card list; header + tabs adapt
+   ≤480px: search box and Add button collapse for small screens */
+
+@media (max-width: 992px) {
+  .allVendors-table th:nth-child(6),
+  .allVendors-table td:nth-child(6),
+  .allVendors-table th:nth-child(7),
+  .allVendors-table td:nth-child(7) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .allVendors-table {
+    display: none;
+  }
+
+  .allVendors-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .allVendors-cardList {
+    display: flex;
+  }
+
+  .allVendors-pagination {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .allVendors-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .allVendors-tabs {
+    gap: 6px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tab-btn {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+  .add-vendor-btn {
+    padding: 12px;
+    gap: 0;
+    border-radius: 30px;
+  }
+  .add-vendor-btn-label {
+    display: none;
+  }
+
+  .addVendor-descriptionRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   2. VENDOR DETAIL MODAL
+========================================================= */
 
 .bookingModal-overlay {
   position: fixed;
@@ -373,9 +728,9 @@
 }
 
 .bookingModal-card {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  border-radius: 18px;
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-xl);
   width: 100%;
   max-width: 620px;
   max-height: 90vh;
@@ -387,22 +742,28 @@
 }
 
 @keyframes modalSlideUp {
-  from { transform: translateY(18px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .bookingModal-header {
   flex-shrink: 0;
-  background-color: rgba(241, 212, 155, 0.02);
+  background-color: rgba(var(--accent-rgb), 0.02);
   padding: 18px 25px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(var(--white-rgb), 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .bookingModal-header h3 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0;
   font-size: 1.1rem;
 }
@@ -410,7 +771,7 @@
 .closeModal-btn {
   background: none;
   border: none;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 26px;
   line-height: 1;
   cursor: pointer;
@@ -418,7 +779,7 @@
 }
 
 .closeModal-btn:hover {
-  color: #f1d49b;
+  color: var(--accent);
 }
 
 .bookingModal-body {
@@ -426,7 +787,7 @@
   overflow-y: auto;
   padding: 22px 25px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(241, 212, 155, 0.18) transparent;
+  scrollbar-color: rgba(var(--accent-rgb), 0.18) transparent;
 }
 
 .bookingModal-body::-webkit-scrollbar {
@@ -434,36 +795,35 @@
 }
 
 .bookingModal-body::-webkit-scrollbar-thumb {
-  background-color: rgba(241, 212, 155, 0.18);
-  border-radius: 10px;
+  background-color: rgba(var(--accent-rgb), 0.18);
+  border-radius: var(--radius-pill);
 }
 
-/* ── Modal Hero Row ── */
+/* Hero row */
+
 .vendorModal-hero {
   display: flex;
   align-items: center;
   gap: 16px;
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.08);
-  border-radius: 12px;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.08);
+  border-radius: var(--radius-md);
   padding: 18px 20px;
   margin-bottom: 20px;
   position: relative;
 }
 
-/* The image box wrapper */
 .vendorModal-imgBox {
   width: 80px;
   height: 80px;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  border: 2px solid rgba(241, 212, 155, 0.2);
-  background-color: rgba(241, 212, 155, 0.04);
+  border: 2px solid rgba(var(--accent-rgb), 0.2);
+  background-color: rgba(var(--accent-rgb), 0.04);
   position: relative;
 }
 
-/* Actual vendor image */
 .vendorModal-img {
   width: 100%;
   height: 100%;
@@ -471,7 +831,6 @@
   display: block;
 }
 
-/* Clickable cursor + hover effect on image */
 .vendorModal-img.clickable {
   cursor: zoom-in;
   transition: transform 0.2s;
@@ -481,7 +840,6 @@
   transform: scale(1.06);
 }
 
-/* Fallback when no image */
 .vendorModal-imgFallback {
   width: 100%;
   height: 100%;
@@ -490,10 +848,10 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.68rem;
   text-align: center;
-  background-color: rgba(241, 212, 155, 0.03);
+  background-color: rgba(var(--accent-rgb), 0.03);
 }
 
 .vendorModal-heroInfo {
@@ -505,7 +863,7 @@
 }
 
 .vendorModal-hero h4 {
-  color: #fff7ee;
+  color: var(--text-primary);
   margin: 0;
   font-size: 1.1rem;
   white-space: nowrap;
@@ -518,7 +876,7 @@
   align-items: center;
   gap: 4px;
   font-size: 0.8rem;
-  color: #8a9ba8;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -528,16 +886,25 @@
   right: 18px;
 }
 
-/* ── Info Grid ── */
+/* Info grid */
+
 .bookingModal-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   margin-bottom: 20px;
 }
 
+@media (min-width: 577px) {
+  .bookingModal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
 .bookingModal-infoBlock label {
-  color: #f1d49b;
+  color: var(--accent);
   display: block;
   font-size: 0.75rem;
   margin-bottom: 8px;
@@ -548,24 +915,25 @@
 
 .bookingModal-infoBlock p {
   margin: 5px 0;
-  color: #fff7ee;
+  color: var(--text-primary);
   font-size: 0.88rem;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-/* ── About Bio Block ── */
+/* About / bio */
+
 .vendorModal-about {
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.07);
-  border-radius: 10px;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.07);
+  border-radius: var(--radius-md);
   padding: 16px 18px;
   margin-top: 4px;
 }
 
 .vendorModal-about label {
-  color: #f1d49b;
+  color: var(--accent);
   display: block;
   font-size: 0.75rem;
   margin-bottom: 8px;
@@ -575,18 +943,19 @@
 }
 
 .vendorModal-about p {
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.88rem;
   line-height: 1.6;
   margin: 0;
 }
 
-/* ── Modal Footer ── */
+/* Footer */
+
 .bookingModal-footer {
   flex-shrink: 0;
   padding: 16px 25px;
   background-color: rgba(6, 21, 33, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -594,196 +963,141 @@
 
 .bookingModal-footer button {
   padding: 10px 18px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   cursor: pointer;
   font-size: 0.85rem;
-  transition: all 0.2s ease;
+  transition: var(--transition);
   border: none;
 }
 
 .btn-approve-submit {
-  background-color: #f1d49b;
-  color: #062036;
+  background-color: var(--accent);
+  color: var(--accent-dark);
 }
 
 .btn-approve-submit:hover {
-  background-color: #fff7ee;
+  background-color: var(--text-primary);
   transform: translateY(-1px);
 }
 
 .btn-reject-trigger {
-  background-color: rgba(239, 68, 68, 0.12);
-  color: #ef4444;
+  background-color: rgba(var(--danger-rgb), 0.12);
+  color: var(--danger);
 }
 
 .btn-reject-trigger:hover {
-  background-color: #ef4444;
-  color: #fff7ee;
+  background-color: var(--danger);
+  color: var(--text-primary);
 }
 
 .bookingModal-cancelBtn {
   background-color: transparent !important;
-  color: #8a9ba8;
-  border: 1px solid rgba(241, 212, 155, 0.15) !important;
+  color: var(--text-muted);
+  border: 1px solid rgba(var(--accent-rgb), 0.15) !important;
 }
 
 .bookingModal-cancelBtn:hover {
-  background-color: #061521 !important;
-  color: #fff7ee;
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary);
 }
 
-/* =====================================================
-   LIGHTBOX (shared across Add, Edit, Manage)
-===================================================== */
+/* Responsive — Vendor Detail Modal
+   ≤768px: info grid stacks to a single column */
 
-.lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(4, 11, 17, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  padding: 20px;
-  animation: fadeIn 0.2s ease;
+@media (max-width: 768px) {
+  .bookingModal-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .bookingModal-card {
+    max-height: 95vh;
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-.lightbox-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
-  animation: modalSlideUp 0.25s ease;
-}
-
-.lightbox-img {
-  display: block;
-  max-width: 90vw;
-  max-height: 85vh;
-  object-fit: contain;
-  border-radius: 12px;
-}
-
-.lightbox-close-btn {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  background: rgba(6, 21, 33, 0.75);
-  border: 1px solid rgba(241, 212, 155, 0.2);
-  color: #fff7ee;
-  font-size: 24px;
-  line-height: 1;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  z-index: 1;
-}
-
-.lightbox-close-btn:hover {
-  background: rgba(239, 68, 68, 0.8);
-  border-color: transparent;
-}
-
-/* =====================================================
-   ADD / EDIT VENDOR FORM
-===================================================== */
+/* =========================================================
+   3. ADD / EDIT VENDOR FORM
+========================================================= */
 
 .addVendor-page {
   padding: 0;
 }
 
-/* Page header: title on left, back button on right */
 .addVendor-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 24px;
   gap: 16px;
+  margin-bottom: 25px;
 }
 
 .addVendor-header h2 {
-  color: #fff7ee;
-  margin: 0 0 4px 0;
-  font-size: 1.5rem;
+  color: var(--text-primary);
+  text-transform: capitalize;
+  margin-bottom: 5px;
 }
 
 .addVendor-header p {
-  color: #8a9ba8;
-  margin: 0;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
-/* Back button — simple, right-aligned */
 .back-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: transparent;
-  border: 1px solid rgba(241, 212, 155, 0.18);
-  padding: 10px 18px;
-  border-radius: 10px;
-  color: #fff7ee;
+  background: var(--input-bg);
+  border: none;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
   cursor: pointer;
-  font-size: 0.85rem;
   font-weight: 600;
-  transition: all 0.2s;
+  transition: var(--transition);
   flex-shrink: 0;
 }
 
 .back-btn:hover {
-  background-color: #061521;
-  color: #f1d49b;
-  border-color: rgba(241, 212, 155, 0.4);
+  transform: translateY(-2px);
 }
 
-/* Required field star */
 .required-star {
-  color: #f1d49b;
+  color: var(--accent);
   margin-left: 2px;
 }
 
-/* Form card wrapper */
+/* Card */
+
 .addVendor-card {
-  background-color: #0d2131;
-  border: 1px solid rgba(241, 212, 155, 0.1);
-  border-radius: 16px;
-  padding: 28px 30px;
+  background-color: var(--panel-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: var(--radius-xl);
+  padding: 30px;
+  max-width: 1200px;
 }
 
-/* Section title row */
 .form-section-title {
   display: flex;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(var(--white-rgb), 0.05);
   padding-bottom: 12px;
   margin-bottom: 22px;
 }
 
 .form-section-title h3 {
-  color: #f1d49b;
+  color: var(--accent);
   margin: 0;
   font-size: 1rem;
 }
 
 .gold-icon {
-  color: #f1d49b;
+  color: var(--accent);
 }
 
-/* 4-column grid for form rows */
+/* Field grid */
+
 .addVendor-formGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -794,53 +1108,57 @@
 .addVendor-formGroup {
   display: flex;
   flex-direction: column;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .addVendor-formGroup label {
-  color: #f1d49b;
-  margin-bottom: 7px;
-  font-size: 0.82rem;
-  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
 }
 
-/* All form controls share these base styles */
 .addVendor-formGroup input,
 .addVendor-formGroup textarea {
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  border-radius: 10px;
-  padding: 11px 14px;
-  color: #fff7ee;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-md);
+  padding: 12px 15px;
+  color: var(--text-primary);
   outline: none;
   font-size: 0.88rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
   font-family: inherit;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .addVendor-formGroup input:focus,
 .addVendor-formGroup textarea:focus {
-  border-color: #f1d49b;
-  box-shadow: 0 0 0 3px rgba(241, 212, 155, 0.08);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08);
 }
 
 .addVendor-formGroup input::placeholder,
 .addVendor-formGroup textarea::placeholder {
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
-/* Remove number input arrows */
+.addVendor-formGroup textarea {
+  resize: none;
+  line-height: 1.6;
+}
+
 .addVendor-formGroup input[type="number"]::-webkit-inner-spin-button,
 .addVendor-formGroup input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
 
-/* ── Custom Select ── */
+/* Custom select */
+
 .custom-select-wrapper {
   position: relative;
 }
 
-/* The arrow chevron drawn with CSS */
 .custom-select-wrapper::after {
   content: "";
   position: absolute;
@@ -851,48 +1169,50 @@
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 6px solid #f1d49b;
+  border-top: 6px solid var(--accent);
   pointer-events: none;
 }
 
 .custom-select-wrapper select {
   width: 100%;
-  background-color: #061521;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  border-radius: 10px;
-  padding: 11px 40px 11px 14px; /* right padding for arrow */
-  color: #fff7ee;
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-md);
+  padding: 12px 40px 12px 15px;
+  color: var(--text-primary);
   outline: none;
   font-size: 0.88rem;
   font-family: inherit;
   cursor: pointer;
-  appearance: none;           /* hide native arrow */
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .custom-select-wrapper select:focus {
-  border-color: #f1d49b;
-  box-shadow: 0 0 0 3px rgba(241, 212, 155, 0.08);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08);
 }
 
-/* Style the dropdown options */
 .custom-select-wrapper select option {
-  background-color: #0d2131;
-  color: #fff7ee;
+  background-color: var(--panel-bg);
+  color: var(--text-primary);
   padding: 10px;
 }
 
 .custom-select-wrapper select option:disabled {
-  color: #8a9ba8;
+  color: var(--text-muted);
 }
 
 .custom-select-wrapper select.error {
-  border-color: #ef4444 !important;
+  border-color: var(--danger) !important;
 }
 
-/* ── Icon input wrapper ── */
+/* Icon input */
+
 .input-with-icon {
   position: relative;
 }
@@ -908,11 +1228,12 @@
   top: 50%;
   left: 13px;
   transform: translateY(-50%);
-  color: #8a9ba8;
+  color: var(--text-muted);
   pointer-events: none;
 }
 
-/* ── Bio + Upload row ── */
+/* Bio + upload row */
+
 .addVendor-descriptionRow {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
@@ -920,16 +1241,13 @@
   margin-bottom: 8px;
 }
 
-.addVendor-formGroup textarea {
-  resize: none;
-  line-height: 1.6;
-}
+/* Upload placeholder */
 
-/* ── File Upload placeholder ── */
 .addVendor-uploadPlaceholder {
-  border: 2px dashed rgba(241, 212, 155, 0.18);
-  border-radius: 12px;
-  background-color: #061521;
+  position: relative;
+  border: 1.5px dashed rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius-lg);
+  background-color: var(--input-bg);
   padding: 28px 15px;
   display: flex;
   flex-direction: column;
@@ -938,26 +1256,28 @@
   text-align: center;
   gap: 6px;
   min-height: 172px;
+  color: var(--text-muted);
   transition: border-color 0.2s;
 }
 
 .addVendor-uploadPlaceholder:hover {
-  border-color: rgba(241, 212, 155, 0.3);
+  border-color: rgba(var(--accent-rgb), 0.4);
 }
 
 .upload-cloud-icon {
-  color: rgba(138, 155, 168, 0.4);
+  color: var(--accent);
+  margin-bottom: 4px;
 }
 
 .addVendor-uploadPlaceholder p {
-  color: #fff7ee;
-  margin: 4px 0 0 0;
+  color: var(--text-primary);
+  margin: 0 0 4px;
   font-size: 0.88rem;
   font-weight: 500;
 }
 
 .addVendor-uploadPlaceholder span {
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.75rem;
 }
 
@@ -966,34 +1286,33 @@
 }
 
 .file-browse-btn {
-  background-color: rgba(241, 212, 155, 0.07);
-  border: 1px solid rgba(241, 212, 155, 0.22);
-  color: #f1d49b;
+  display: inline-block;
+  margin-top: 8px;
   padding: 8px 18px;
-  border-radius: 8px;
+  background-color: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent);
+  border-radius: var(--radius-sm);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
-  transition: all 0.2s;
-  display: inline-block;
+  transition: 0.2s;
 }
 
 .file-browse-btn:hover {
-  background-color: #f1d49b;
-  color: #062036;
+  background-color: rgba(var(--accent-rgb), 0.2);
 }
 
-/* ── Image preview box ── */
+/* Image preview */
+
 .addVendor-imagePreviewContainer {
   position: relative;
   width: 100%;
   min-height: 172px;
   height: 172px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid rgba(241, 212, 155, 0.18);
-  background-color: #061521;
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  background-color: var(--input-bg);
 }
 
 .addVendor-imagePreviewContainer img {
@@ -1003,7 +1322,6 @@
   display: block;
 }
 
-/* Clickable image hint text */
 .preview-img-clickable {
   cursor: zoom-in;
   transition: opacity 0.2s;
@@ -1019,7 +1337,7 @@
   left: 0;
   right: 0;
   background: rgba(6, 21, 33, 0.7);
-  color: #8a9ba8;
+  color: var(--text-muted);
   font-size: 0.72rem;
   text-align: center;
   padding: 5px;
@@ -1029,61 +1347,63 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: rgba(239, 68, 68, 0.88);
-  color: #fff7ee;
-  border: none;
   width: 34px;
   height: 34px;
-  border-radius: 8px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--danger);
+  color: var(--text-primary);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
+  transition: 0.2s;
   z-index: 1;
 }
 
 .remove-preview-btn:hover {
-  background-color: #ef4444;
+  background-color: #dc2626;
   transform: scale(1.08);
 }
 
-/* ── Error states ── */
+/* Errors */
+
 .error-lbl {
-  color: #ef4444;
+  color: var(--danger);
   font-size: 0.74rem;
   margin-top: 5px;
 }
 
 .addVendor-formGroup input.error {
-  border-color: #ef4444 !important;
+  border-color: var(--danger) !important;
 }
 
-/* ── Action buttons row ── */
+/* Action buttons */
+
 .addVendor-actionsRow {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(var(--white-rgb), 0.05);
   padding-top: 22px;
   margin-top: 8px;
 }
 
 .btn-cancel {
   background-color: transparent;
-  color: #8a9ba8;
-  border: 1px solid rgba(241, 212, 155, 0.15);
-  padding: 11px 22px;
-  border-radius: 10px;
+  color: var(--text-muted);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  padding: 14px 22px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
   font-size: 0.9rem;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
 .btn-cancel:hover {
-  background-color: #061521;
-  color: #fff7ee;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
 }
 
 .btn-cancel:disabled {
@@ -1092,23 +1412,23 @@
 }
 
 .btn-submit {
-  background-color: #f1d49b;
-  color: #062036;
-  border: none;
-  padding: 11px 24px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s;
+  background-color: var(--accent);
+  color: var(--accent-dark);
+  border: none;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .btn-submit:hover:not(:disabled) {
-  background-color: #fff7ee;
-  transform: translateY(-1px);
+  background-color: var(--text-primary);
+  transform: translateY(-2px);
 }
 
 .btn-submit:disabled {
@@ -1117,25 +1437,25 @@
   transform: none;
 }
 
-/* ── Spinner animation (for Loader2 icon) ── */
 .spin-icon {
   animation: spin 0.9s linear infinite;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media (max-width: 1100px) {
-  .addVendor-formGrid {
-    grid-template-columns: repeat(2, 1fr);
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
+
+/* Responsive — Add/Edit Vendor
+   ≤992px: 4-column field grid becomes 2 columns
+   ≤768px: header stacks, bio/upload row stacks
+   ≤576px: field grid becomes a single column, card padding shrinks,
+           a couple of low-priority table columns hide on the list page */
+
 
 @media (max-width: 768px) {
   .addVendor-header {
@@ -1148,41 +1468,106 @@
   }
 
   .addVendor-descriptionRow {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
-  .allVendors-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .add-vendor-btn {
-    align-self: flex-start;
-  }
-
-  .bookingModal-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .bookingModal-card {
-    max-height: 95vh;
+  .addVendor-formGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 576px) {
-  .addVendor-formGrid {
-    grid-template-columns: 1fr;
+  .addVendor-actionsRow {
+    flex-direction: column-reverse; /* primary action on top */
   }
 
-  .addVendor-card {
-    padding: 18px;
+  .addVendor-actionsRow button {
+    width: 100%;
+    justify-content: center;
   }
 
-  .allVendors-table th:nth-child(5),
-  .allVendors-table td:nth-child(5),
-  .allVendors-table th:nth-child(6),
-  .allVendors-table td:nth-child(6) {
-    display: none;
+  .vendorModal-hero {
+    flex-wrap: wrap;
+    row-gap: 10px;
   }
+
+  .vendorModal-badgeContainer {
+    position: static; /* stop overlapping */
+    order: 3;
+    width: 100%;
+  }
+
+  .vendorModal-heroInfo h4 {
+    padding-right: 0;
+  }
+}
+
+/* =========================================================
+   4. SHARED ACROSS ALL PAGES
+   Lightbox
+========================================================= */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 11, 17, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  animation: modalSlideUp 0.25s ease;
+}
+
+.lightbox-img {
+  display: block;
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(6, 21, 33, 0.75);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  color: var(--text-primary);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.lightbox-close-btn:hover {
+  background: rgba(var(--danger-rgb), 0.8);
+  border-color: transparent;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import "./Packages.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
@@ -131,19 +131,34 @@ const AddPackages = () => {
       return;
     }
 
+    // const payload = {
+    //   packageName: formData.packageName,
+    //   category: formData.category,
+    //   description: formData.description,
+    //   basePrice: originalPrice,
+    //   packageDiscount: {
+    //     type: formData.discountType,
+    //     value: Number(formData.discountValue) || 0,
+    //   },
+    //   tags: formData.tags,
+    //   status: formData.status,
+    //   services: selectedServices,
+    // };
+
     const payload = {
-      packageName: formData.packageName,
-      category: formData.category,
-      description: formData.description,
-      basePrice: originalPrice,
-      packageDiscount: {
-        type: formData.discountType,
-        value: Number(formData.discountValue) || 0,
-      },
-      tags: formData.tags,
-      status: formData.status,
-      services: selectedServices,
-    };
+  packageName: formData.packageName,
+  category: formData.category,
+  description: formData.description,
+
+  packageDiscount: {
+    type: formData.discountType,
+    value: Number(formData.discountValue) || 0,
+  },
+
+  tags: formData.tags,
+  status: formData.status,
+  services: selectedServices,
+};
 
     try {
       await axios.post(
@@ -411,6 +426,7 @@ const AddPackages = () => {
           </form>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };

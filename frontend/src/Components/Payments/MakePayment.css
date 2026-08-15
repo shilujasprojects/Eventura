@@ -1,0 +1,51 @@
+.payment-page {
+  margin-top: 95px;
+}
+
+.payment-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: #fffaf2!important;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 14px 40px rgba(6, 32, 54, 0.18);
+}
+
+.amount-due-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(200, 155, 92, 0.12);
+  border: 1px dashed #c89b5c;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.amount-due-box strong {
+  font-size: 1.3rem;
+  color: #062036;
+}
+
+.upi-details-box {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 6px 18px rgba(6, 32, 54, 0.08);
+}
+
+.upi-details-box p {
+  margin: 4px 0;
+}
+
+.retry-notice-box {
+  background: #fbe0df;
+  color: #a12f2a;
+  border: 1px solid #f3b7b3;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}

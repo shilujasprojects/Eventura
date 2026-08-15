@@ -1,81 +1,92 @@
-import React, { useState } from "react";
-import { 
-  Calendar, 
-  CreditCard, 
-  Users, 
-  Star, 
-  TrendingUp, 
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Calendar,
+  CreditCard,
+  Users,
+  Star,
+  TrendingUp,
   TrendingDown,
-  Clock,  
-  PlusCircle, 
+  Clock,
+  PlusCircle,
   ArrowRight,
   ShieldAlert,
   MapPin,
-  MessageSquare
+  MessageSquare,
 } from "lucide-react";
+import { toast, ToastContainer  } from "react-toastify";
+
 
 import "./Admin.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
+import { fetchDashboardStats } from "../../api/dashboardApi";
+import { dismissNotification } from  "../../api/notificationApi";
+import { useNavigate } from "react-router-dom";
 
-// Mock live data for the dashboard elements
-const MOCK_UPCOMING_EVENTS = [
-  { id: "EV-9401", client: "Rahul Sharma", event: "Royal Heritage Wedding", date: "24 Oct 2026", location: "Fort Kochi", status: "Confirmed" },
-  { id: "EV-9402", client: "Anita Joseph", event: "Neon Beats Birthday", date: "05 Nov 2026", location: "Trivandrum", status: "Pending Deposit" },
-  { id: "EV-9403", client: "Vikram Malhotra", event: "Corporate Tech Conclave", date: "12 Nov 2026", location: "Kochi Infopark", status: "Confirmed" }
-];
-
-const MOCK_SYSTEM_ALERTS = [
-  { id: 1, type: "payment", message: "Manual UPI payment receipt uploaded by Anita Joseph for verification.", time: "10 mins ago" },
-  { id: 2, type: "inquiry", message: "New custom catering catalog inquiry received from Divya Pillai.", time: "1 hour ago" }
-];
+const POLL_INTERVAL = 20000; // 20s — keeps alerts feeling "live" without needing sockets
 
 const DashboardCards = () => {
-  const [upcomingEvents, setUpcomingEvents] = useState(MOCK_UPCOMING_EVENTS);
-  const [alerts, setAlerts] = useState(MOCK_SYSTEM_ALERTS);
+  const [stats, setStats] = useState(null);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Dynamic calculations for cards
-  const stats = [
-    {
-      label: "Total Bookings",
-      value: "48",
-      growth: "+12% this month",
-      isPositive: true,
-      icon: Calendar,
-    },
-    {
-      label: "Revenue This Month",
-      value: "₹8.4L",
-      growth: "+8.3% vs last month",
-      isPositive: true,
-      icon: CreditCard,
-    },
-    {
-      label: "Active Clients",
-      value: "214",
-      growth: "+5 new this week",
-      isPositive: true,
-      icon: Users,
-    },
-    {
-      label: "Client Rating",
-      value: "4.9",
-      growth: "+0.1 this quarter",
-      isPositive: true,
-      icon: Star,
-    },
-  ];
+  const navigate = useNavigate();
 
-  // Dismiss a live alert notification
-  const handleDismissAlert = (id) => {
-    setAlerts(prev => prev.filter(alert => alert.id !== id));
+  const loadDashboard = useCallback(async (isBackgroundRefresh = false) => {
+    try {
+      const res = await fetchDashboardStats();
+      const { stats, upcomingEvents, alerts } = res.data.data;
+      setStats(stats);
+      setUpcomingEvents(upcomingEvents);
+      setAlerts(alerts);
+    } catch (error) {
+      if (!isBackgroundRefresh) {
+        toast.error("Couldn't load dashboard data. Please refresh the page.");
+      }
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadDashboard();
+    const interval = setInterval(() => loadDashboard(true), POLL_INTERVAL);
+    return () => clearInterval(interval);
+  }, [loadDashboard]);
+
+  const handleDismissAlert = async (id) => {
+    // Remove instantly from the screen, then confirm with the server
+    setAlerts((prev) => prev.filter((alert) => alert._id !== id));
+    try {
+      await dismissNotification(id);
+    } catch (error) {
+      toast.error("Could not dismiss the alert — it may reappear on refresh.");
+    }
   };
+
+  const statCards = stats
+    ? [
+        { label: "Total Bookings", value: stats.totalBookings, growth: stats.bookingsChange, isPositive: stats.bookingsUp, icon: Calendar },
+        { label: "Revenue This Month", value: `₹${(stats.revenueThisMonth / 100000).toFixed(1)}L`, growth: stats.revenueChange, isPositive: stats.revenueUp, icon: CreditCard },
+        { label: "Active Clients", value: stats.activeClients, growth: `+${stats.newClientsThisWeek} new this week`, isPositive: true, icon: Users },
+        { label: "Client Rating", value: stats.clientRating || "—", growth: "Based on client testimonials", isPositive: true, icon: Star },
+      ]
+    : [];
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="adminDashboard">
+          <p style={{ color: "#8a9ba8" }}>Loading dashboard...</p>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
       <div className="adminDashboard">
-        
-        {}
-        {/* Section 1: Dynamic Dashboard Welcome Banner */}
         <div className="adminDashboard-welcome">
           <div>
             <h1>Heritage Celebrations Desk</h1>
@@ -87,39 +98,31 @@ const DashboardCards = () => {
           </div>
         </div>
 
-        {}
-        {/* Section 2: Real-time Admin Action Alerts */}
         {alerts.length > 0 && (
           <div className="dashboard-alerts-section">
             {alerts.map((alert) => (
-              <div key={alert.id} className="dashboard-alert-card">
+              <div key={alert._id} className="dashboard-alert-card">
                 <div className="alert-content">
                   <ShieldAlert size={18} className="alert-warning-icon" />
                   <span className="alert-text"><strong>Action Required:</strong> {alert.message}</span>
-                  <span className="alert-time">{alert.time}</span>
+                  <span className="alert-time">{new Date(alert.createdAt).toLocaleString()}</span>
                 </div>
-                <button className="alert-dismiss-btn" onClick={() => handleDismissAlert(alert.id)}>&times;</button>
+                <button className="alert-dismiss-btn" onClick={() => handleDismissAlert(alert._id)}>&times;</button>
               </div>
             ))}
           </div>
         )}
 
-        {}
-        {/* Section 3: Primary KPI Metric Summary Cards */}
         <div className="adminDashboardCards-container">
-          {stats.map((card, index) => {
+          {statCards.map((card, index) => {
             const Icon = card.icon;
             return (
               <div key={index} className="adminDashboardCards-card">
                 <div className="card-header-row">
                   <span className="card-label">{card.label}</span>
-                  <div className="adminDashboardCards-icon">
-                    <Icon size={18} />
-                  </div>
+                  <div className="adminDashboardCards-icon"><Icon size={18} /></div>
                 </div>
-
                 <h2>{card.value}</h2>
-
                 <div className={`adminDashboardCards-growth ${card.isPositive ? "positive" : "negative"}`}>
                   {card.isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                   <span>{card.growth}</span>
@@ -129,11 +132,7 @@ const DashboardCards = () => {
           })}
         </div>
 
-        {}
-        {/* Section 4: Split Layout for Live Operational Tracking */}
         <div className="dashboard-operational-grid">
-          
-          {/* Left Side: Live Upcoming Bookings Table */}
           <div className="operations-card upcoming-bookings-panel">
             <div className="panel-header">
               <h3>Live Event Pipeline</h3>
@@ -143,42 +142,39 @@ const DashboardCards = () => {
             <div className="bookings-preview-table-wrapper">
               <table className="bookings-preview-table">
                 <thead>
-                  <tr>
-                    <th>Event details</th>
-                    <th>Date / Location</th>
-                    <th>Status</th>
-                  </tr>
+                  <tr><th>Event details</th><th>Date / Location</th><th>Status</th></tr>
                 </thead>
                 <tbody>
-                  {upcomingEvents.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="table-primary-cell">
-                          <strong>{item.event}</strong>
-                          <span>ID: {item.id} • {item.client}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="table-secondary-cell">
-                          <span className="date-txt">{item.date}</span>
-                          <span className="loc-txt">
-                            <MapPin size={12} /> {item.location}
+                  {upcomingEvents.length === 0 ? (
+                    <tr><td colSpan={3} style={{ color: "#8a9ba8", padding: "20px 12px" }}>No upcoming events right now.</td></tr>
+                  ) : (
+                    upcomingEvents.map((item) => (
+                      <tr key={item.id}>
+                        <td>
+                          <div className="table-primary-cell">
+                            <strong>{item.event}</strong>
+                            <span>ID: {item.id} • {item.client}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="table-secondary-cell">
+                            <span className="date-txt">{item.date}</span>
+                            <span className="loc-txt"><MapPin size={12} /> {item.location}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`status-pill ${item.status.toLowerCase().replace(/\s+/g, '-')}`}>
+                            {item.status}
                           </span>
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`status-pill ${item.status.toLowerCase().replace(/\s+/g, '-')}`}>
-                          {item.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
 
-          {/* Right Side: Quick Shortcuts & Controls */}
           <div className="operations-card quick-actions-panel">
             <div className="panel-header">
               <h3>Management Shortcuts</h3>
@@ -186,46 +182,33 @@ const DashboardCards = () => {
             </div>
 
             <div className="quick-shortcuts-list">
-              <button className="shortcut-action-item">
+              <button className="shortcut-action-item" onClick={() => navigate('/vendors')} >
                 <div className="shortcut-meta">
                   <PlusCircle size={18} className="shortcut-icon" />
-                  <div>
-                    <strong>Onboard Service Partner</strong>
-                    <span>Register a new vendor in Kochi/Trivandrum</span>
-                  </div>
+                  <div><strong>Onboard Service Partner</strong><span>Register a new vendor in Kochi/Trivandrum</span></div>
                 </div>
-                <ArrowRight size={16} className="arrow-right-icon" />
+                <ArrowRight size={16} className="arrow-right-icon"/>
               </button>
-
-              <button className="shortcut-action-item">
+              <button className="shortcut-action-item"  onClick={() => navigate('/payments')} >
                 <div className="shortcut-meta">
                   <CreditCard size={18} className="shortcut-icon" />
-                  <div>
-                    <strong>Audit Balance Ledger</strong>
-                    <span>Verify awaiting deposits and screen slips</span>
-                  </div>
+                  <div><strong>Audit Balance Ledger</strong><span>Verify awaiting deposits and screen slips</span></div>
                 </div>
-                <ArrowRight size={16} className="arrow-right-icon" />
+                <ArrowRight size={16} className="arrow-right-icon"/>
               </button>
-
-              <button className="shortcut-action-item">
+              <button className="shortcut-action-item" onClick={() => navigate('/support')} >
                 <div className="shortcut-meta">
                   <MessageSquare size={18} className="shortcut-icon" />
-                  <div>
-                    <strong>Respond to Inquiries</strong>
-                    <span>Review customer contact submissions</span>
-                  </div>
+                  <div><strong>Respond to Inquiries</strong><span>Review customer contact submissions</span></div>
                 </div>
-                <ArrowRight size={16} className="arrow-right-icon" />
+                <ArrowRight size={16} className="arrow-right-icon"  />
               </button>
             </div>
           </div>
-
         </div>
-
       </div>
+      <ToastContainer position="top-right" autoClose={4000} theme="dark" />
     </AdminLayout>
-    
   );
 };
 

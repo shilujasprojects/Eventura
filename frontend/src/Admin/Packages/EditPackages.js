@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowLeft, Save } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import "./Packages.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
@@ -146,7 +146,6 @@ const EditPackages = () => {
       packageName: formData.packageName,
       category: formData.category,
       description: formData.description,
-      basePrice: originalPrice,
       packageDiscount: { type: formData.discountType, value: Number(formData.discountValue) || 0 },
       tags: formData.tags,
       status: formData.status,
@@ -352,6 +351,7 @@ const EditPackages = () => {
           </form>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };

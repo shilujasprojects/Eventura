@@ -9,16 +9,18 @@ import React, { useEffect } from 'react';
 import Contact from './Pages/Contact';
 import BookNow from './Pages/Book_Now';
 import BookSummary from './Components/Book_Now/BookSummary';
-import WeddingExplore from './Components/Home/Event-Explore/Wedding-Explore/WeddingExplore';
-import BirthdayExplore from './Components/Home/Event-Explore/Birthday-Explore/BirthdayExplore ';
-import FuneralExplore from './Components/Home/Event-Explore/Funeral-Explore/FuneralExplore';
-import BabyShowerExplore from './Components/Home/Event-Explore/BabyShower-Explore/BabyShowerExplore';
+// import WeddingExplore from './Components/Home/Event-Explore/Wedding-Explore/WeddingExplore';
+// import BirthdayExplore from './Components/Home/Event-Explore/Birthday-Explore/BirthdayExplore ';
+// import FuneralExplore from './Components/Home/Event-Explore/Funeral-Explore/FuneralExplore';
+// import BabyShowerExplore from './Components/Home/Event-Explore/BabyShower-Explore/BabyShowerExplore';
 import Auth from './Components/Auth/Auth';
 
-import EngagementExplore from './Components/Home/Event-Explore/Engagement-Explore/EngagementExplore';
-import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Explore/HousewarmingExplore';
-import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
-import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
+import "react-toastify/dist/ReactToastify.css";
+
+// import EngagementExplore from './Components/Home/Event-Explore/Engagement-Explore/EngagementExplore';
+// import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Explore/HousewarmingExplore';
+// import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
+// import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
 import DashboardCards from './Admin/Shared/DashboardCards';
 import ViewCategoryEvents from './Admin/Categories/ViewCategoryEvents';
 import EditCategoryEvents from './Admin/Categories/EditCategoryEvents';
@@ -49,6 +51,13 @@ import ReportsAnalytics from './Admin/Reports_Analytics/ReportsAnalytics';
 import ManageCMS from './Admin/Content_CMS/ManageCMS';
 import ManageInquiries from './Admin/Inquiries_Support/ManageInquiries';
 import ManageSettings from './Admin/Settings/ManageSettings';
+import ClientInquiryForm from './Components/Inquiries_Form/ClientInquiryForm';
+import ClientMyInquiries from './Components/Profile/ClientMyInquiries';
+import ClientDashboard from './Components/Client_Dashboard/ClientDashboard';
+import MakePayment from './Components/Payments/MakePayment';
+import NotificationsPage from './Admin/Notifications/NotificationsPage';
+import AdminProtectedRoute from './utils/AdminProtectedRoute';
+import CategoryExplore from './Pages/CategoryExplore/CategoryExplore';
 
 
 
@@ -80,41 +89,67 @@ function App() {
             <Route path ='/contact' element={<Contact />} />
             <Route path = '/bookNow' element={<BookNow />} />
             <Route path = '/bookSummary' element={<BookSummary />} />
-            <Route path = '/birthday-explore' element={<BirthdayExplore />} />
-            <Route path= '/wedding-explore' element={<WeddingExplore/>} />
+            {/* <Route path = '/birthday-explore' element={<BirthdayExplore />} /> */}
+            {/* <Route path= '/wedding-explore' element={<WeddingExplore/>} />
             <Route path='/engagement-explore' element={<EngagementExplore /> } />
             <Route path = '/funeral-explore' element={<FuneralExplore />} />
             <Route path = '/babyshower-explore' element={<BabyShowerExplore />} />
             <Route path='/housewarming-explore' element={<HousewarmingExplore />} />
             <Route path='/anniversary-explore' element={<AnniversaryExplore />} />
-            <Route path='/corporate-explore' element={<CorporateExplore /> } />
-            <Route path='/adminDashboard' element={<DashboardCards />  } />
-            <Route path='/adminCategoryEvent' element={<AllCategoryEvents />}/>
-            <Route path='/addCategoryEvent' element={<AddCategoryEvents />} />
-            <Route path='/viewCategoryEvent/:id' element={<ViewCategoryEvents />} />
-            <Route path="/editCategoryEvent/:id" element={<EditCategoryEvents />} />
-            <Route path='/adminEvents' element={<AllEvents />} />
-            <Route path='/addEvents' element={<AddEvents />} />
-            <Route path='/viewEvents/:id' element={<ViewEvents />}/>
-            <Route path='/editEvents/:id' element={<EditEvent />}/>
-            <Route path='/adminPackages' element={<AllPackages />} />
-            <Route path='/addPackage' element={<AddPackages />} />
-            <Route path='/viewPackage/:id' element={<ViewPackages />} />
-            <Route path='/editPackage/:id' element={<EditPackages />}/>
-            <Route path='/adminServices' element={<AllServices />}/>
-            <Route path='/addService' element={<AddServices />} />
-            <Route path='/viewService/:id' element={<ViewService />} />
-            <Route path="/editService/:id" element={<EditService />} />
-           <Route path="/bookings" element={<ManageBookings />} />
-           <Route path='/clients' element={<ManageClients />} />
-           <Route path='/payments' element={<ManagePayments />}/>
-           <Route path='/vendors' element={<ManageVendors /> }/>
-           <Route path='/addVendors' element={<AddVendors /> }/>
-           <Route path='/editVendors/:id' element={<EditVendor /> } />
-           <Route path='/reports' element={<ReportsAnalytics />} />
-           <Route path='/Cms' element={<ManageCMS/>}/>
-           <Route path='/support' element={<ManageInquiries /> } />
-           <Route path='/settings' element={<ManageSettings />} />
+            <Route path='/corporate-explore' element={<CorporateExplore /> } /> */}
+            <Route path="/explore/:categoryId" element={<CategoryExplore />} />
+
+           <Route path='/inquiryForm' element={<ClientInquiryForm /> } />
+           <Route path='/clientResponse' element={<ClientMyInquiries /> } />
+          
+           <Route path='/clientDashboard' element={<ClientDashboard /> } />
+           <Route path="/payment/:bookingId" element={<MakePayment />} />
+           
+
+
+           {/* =========================================
+            ADMIN ROUTES - Protected by AdminProtectedRoute
+           ========================================= */}
+        <Route element={<AdminProtectedRoute />}>
+          <Route path="/adminDashboard" element={<DashboardCards />} />
+          
+          {/* Category Events */}
+          <Route path="/adminCategoryEvent" element={<AllCategoryEvents />} />
+          <Route path="/addCategoryEvent" element={<AddCategoryEvents />} />
+          <Route path="/viewCategoryEvent/:id" element={<ViewCategoryEvents />} />
+          <Route path="/editCategoryEvent/:id" element={<EditCategoryEvents />} />
+          
+          {/* Events */}
+          <Route path="/adminEvents" element={<AllEvents />} />
+          <Route path="/addEvents" element={<AddEvents />} />
+          <Route path="/viewEvents/:id" element={<ViewEvents />} />
+          <Route path="/editEvents/:id" element={<EditEvent />} />
+          
+          {/* Packages */}
+          <Route path="/adminPackages" element={<AllPackages />} />
+          <Route path="/addPackage" element={<AddPackages />} />
+          <Route path="/viewPackage/:id" element={<ViewPackages />} />
+          <Route path="/editPackage/:id" element={<EditPackages />} />
+          
+          {/* Services */}
+          <Route path="/adminServices" element={<AllServices />} />
+          <Route path="/addService" element={<AddServices />} />
+          <Route path="/viewService/:id" element={<ViewService />} />
+          <Route path="/editService/:id" element={<EditService />} />
+          
+          {/* Management & Settings */}
+          <Route path="/bookings" element={<ManageBookings />} />
+          <Route path="/clients" element={<ManageClients />} />
+          <Route path="/payments" element={<ManagePayments />} />
+          <Route path="/vendors" element={<ManageVendors />} />
+          <Route path="/addVendors" element={<AddVendors />} />
+          <Route path="/editVendors/:id" element={<EditVendor />} />
+          <Route path="/reports" element={<ReportsAnalytics />} />
+          <Route path="/Cms" element={<ManageCMS />} />
+          <Route path="/support" element={<ManageInquiries />} />
+          <Route path="/admin/notifications" element={<NotificationsPage />} />
+          <Route path="/settings" element={<ManageSettings />} />
+        </Route>
         </Routes>
       
     </>

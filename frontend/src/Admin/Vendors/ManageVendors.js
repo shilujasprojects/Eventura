@@ -14,12 +14,16 @@ import {
   Pencil,
   Plus,
   Loader2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import "./Vendors.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+
+const ROWS_PER_PAGE = 10;
 
 const ManageVendors = () => {
   const navigate = useNavigate();
@@ -29,6 +33,7 @@ const ManageVendors = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Modal state
   const [selectedVendor, setSelectedVendor] = useState(null);
@@ -53,14 +58,32 @@ const ManageVendors = () => {
         (vendor) =>
           vendor.name?.toLowerCase().includes(query) ||
           vendor.vendorId?.toLowerCase().includes(query) ||
-          vendor.serviceCategory?.serviceName?.toLowerCase().includes(query)||
+          vendor.serviceCategory?.serviceName?.toLowerCase().includes(query) ||
           vendor.location?.toLowerCase().includes(query) ||
-          vendor.contactPerson?.toLowerCase().includes(query)
+          vendor.contactPerson?.toLowerCase().includes(query),
       );
     }
 
     setFilteredVendors(result);
+    // Whenever the tab or search changes, the result set is different —
+    // jump back to page 1 so we don't land on an empty/out-of-range page.
+    setCurrentPage(1);
   }, [vendors, activeTab, searchQuery]);
+
+  // ── Pagination ──────────────────────────────────────────────
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredVendors.length / ROWS_PER_PAGE),
+  );
+  const paginatedVendors = filteredVendors.slice(
+    (currentPage - 1) * ROWS_PER_PAGE,
+    currentPage * ROWS_PER_PAGE,
+  );
+
+  const goToPage = (page) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
 
   const fetchVendors = async () => {
     setIsLoading(true);
@@ -82,7 +105,9 @@ const ManageVendors = () => {
       });
 
       toast.success(
-        status === "Active" ? "Vendor activated successfully" : "Vendor suspended"
+        status === "Active"
+          ? "Vendor activated successfully"
+          : "Vendor suspended",
       );
 
       // Close modal and refresh
@@ -104,10 +129,53 @@ const ManageVendors = () => {
   const countByStatus = (status) =>
     vendors.filter((v) => v.status === status).length;
 
+  // Shared action buttons — used in both the table row and the card.
+  // Uses data-tooltip (not the native title attribute) so the label
+  // renders instantly using the app's own tooltip styling, matching
+  // the pattern used on the Events page.
+  const ActionButtons = ({ vendor }) => (
+    <div className="allVendors-actions">
+      <button
+        className="allVendors-actionBtn action-view"
+        data-tooltip="View Vendor"
+        aria-label="View Vendor"
+        onClick={() => setSelectedVendor(vendor)}
+      >
+        <Eye size={16} />
+      </button>
+      <button
+        className="allVendors-actionBtn action-edit"
+        data-tooltip="Edit Vendor"
+        aria-label="Edit Vendor"
+        onClick={() => navigate(`/editVendors/${vendor._id}`)}
+      >
+        <Pencil size={16} />
+      </button>
+      {vendor.status !== "Suspended" ? (
+        <button
+          className="allVendors-actionBtn action-reject"
+          data-tooltip="Suspend Vendor"
+          aria-label="Suspend Vendor"
+          onClick={() => handleToggleStatus(vendor._id, "Suspended")}
+        >
+          <XCircle size={16} />
+        </button>
+      ) : (
+        <button
+          className="allVendors-actionBtn action-approve"
+          data-tooltip="Activate Vendor"
+          aria-label="Activate Vendor"
+          onClick={() => handleToggleStatus(vendor._id, "Active")}
+        >
+          <CheckCircle size={16} />
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <AdminLayout>
       <div className="allVendors">
-
         {/* Page Header */}
         <div className="allVendors-header">
           <div>
@@ -122,7 +190,7 @@ const ManageVendors = () => {
             onClick={() => navigate("/addVendors")}
           >
             <Plus size={16} />
-            Add Vendor
+            <span className="add-vendor-btn-label">Add Vendor</span>
           </button>
         </div>
 
@@ -162,7 +230,7 @@ const ManageVendors = () => {
           ))}
         </div>
 
-        {/* Data Table */}
+        {/* Data Table / Card List */}
         <div className="allVendors-tableWrapper">
           {isLoading ? (
             <div className="table-loading-state">
@@ -176,111 +244,177 @@ const ManageVendors = () => {
               <p>No vendor records match your current filters.</p>
             </div>
           ) : (
-            <table className="allVendors-table">
-              <thead>
-                <tr>
-                  <th>Vendor ID</th>
-                  <th>Company Name</th>
-                  <th>Service Type</th>
-                  <th>Rate</th>
-                  <th>Contact Person</th>
-                  <th>Location</th>
-                  <th>Performance</th>
-                  <th>Status</th>
-                  <th style={{ textAlign: "right" }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredVendors.map((vendor) => (
-                  <tr key={vendor._id}>
-                    <td className="vendor-id-cell">
-                      {vendor.vendorId || "N/A"}
-                    </td>
-                    <td>
-                      <div className="vendor-title-cell">
-                        <strong className="vendor-primary-name">
-                          {vendor.name}
-                        </strong>
-                        <span className="vendor-meta-email">{vendor.email}</span>
+            <>
+              {/* ---------- TABLE VIEW (large & medium screens) ---------- */}
+              <div className="allVendors-tableScroll">
+                <table className="allVendors-table">
+                  <thead>
+                    <tr>
+                      <th>Vendor ID</th>
+                      <th>Company Name</th>
+                      <th>Service Type</th>
+                      <th>Rate</th>
+                      <th>Contact Person</th>
+                      <th>Location</th>
+                      {/* <th>Performance</th> */}
+                      <th>Status</th>
+                      <th style={{ textAlign: "right" }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedVendors.map((vendor) => (
+                      <tr key={vendor._id}>
+                        <td className="vendor-id-cell">
+                          {vendor.vendorId || "N/A"}
+                        </td>
+                        <td>
+                          <div className="vendor-title-cell">
+                            <strong className="vendor-primary-name">
+                              {vendor.name}
+                            </strong>
+                            <span className="vendor-meta-email">
+                              {vendor.email}
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          <span className="vendor-category-badge">
+                            {vendor.serviceCategory?.serviceName || "N/A"}
+                          </span>
+                        </td>
+                        <td>₹{vendor.rate?.toLocaleString() || 0}</td>
+                        <td>
+                          <div className="contact-person-meta">
+                            <strong>{vendor.contactPerson}</strong>
+                            <span>{vendor.phone}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="location-meta-row">
+                            <MapPin size={13} className="loc-icon" />
+                            <span>{vendor.location}</span>
+                          </div>
+                        </td>
+                        {/* <td>
+                          <div className="rating-badge-container">
+                            <Star
+                              size={14}
+                              className="star-icon"
+                              fill="#f1d49b"
+                            />
+                            <span>{(vendor.rating || 0).toFixed(1)}</span>
+                          </div>
+                        </td> */}
+                        <td>
+                          <span
+                            className={`status-pill ${vendor.status?.toLowerCase()}`}
+                          >
+                            {vendor.status}
+                          </span>
+                        </td>
+                        <td>
+                          <ActionButtons vendor={vendor} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* ---------- CARD VIEW (small screens only) ---------- */}
+              <div className="allVendors-cardList">
+                {paginatedVendors.map((vendor) => (
+                  <div className="allVendors-card" key={vendor._id}>
+                    <div className="allVendors-card-top">
+                      <div className="allVendors-card-titleBlock">
+                        <h4>{vendor.name}</h4>
+                        <span className="allVendors-card-id">
+                          {vendor.vendorId || "N/A"}
+                        </span>
+                        <span className="vendor-category-badge">
+                          {vendor.serviceCategory?.serviceName || "N/A"}
+                        </span>
                       </div>
-                    </td>
-                    <td>
-                      <span className="vendor-category-badge">
-                        {vendor.serviceCategory?.serviceName || "N/A"}
-                      </span>
-                    </td>
-                    <td>₹{vendor.rate?.toLocaleString() || 0}</td>
-                    <td>
-                      <div className="contact-person-meta">
-                        <strong>{vendor.contactPerson}</strong>
-                        <span>{vendor.phone}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="location-meta-row">
-                        <MapPin size={13} className="loc-icon" />
-                        <span>{vendor.location}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="rating-badge-container">
-                        <Star size={14} className="star-icon" fill="#f1d49b" />
-                        <span>{(vendor.rating || 0).toFixed(1)}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`status-pill ${vendor.status?.toLowerCase()}`}>
+                      <span
+                        className={`status-pill ${vendor.status?.toLowerCase()}`}
+                      >
                         {vendor.status}
                       </span>
-                    </td>
-                    <td>
-                      <div className="allVendors-actions">
-                        {/* View details modal */}
-                        <button
-                          className="allEvents-actions-btn action-view"
-                          onClick={() => setSelectedVendor(vendor)}
-                          title="View Vendor Profile"
-                        >
-                          <Eye size={16} />
-                        </button>
+                    </div>
 
-                        {/* Edit */}
-                        <button
-                          className="allEvents-actions-btn action-edit"
-                          onClick={() => navigate(`/editVendors/${vendor._id}`)}
-                          title="Edit Vendor"
-                        >
-                          <Pencil size={16} />
-                        </button>
-
-                        {/* Toggle suspend / activate */}
-                        {vendor.status !== "Suspended" ? (
-                          <button
-                            className="allEvents-actions-btn action-reject"
-                            onClick={() =>
-                              handleToggleStatus(vendor._id, "Suspended")
-                            }
-                            title="Suspend Vendor"
-                          >
-                            <XCircle size={16} />
-                          </button>
-                        ) : (
-                          <button
-                            className="allEvents-actions-btn action-approve"
-                            onClick={() =>
-                              handleToggleStatus(vendor._id, "Active")
-                            }
-                            title="Activate Vendor"
-                          >
-                            <CheckCircle size={16} />
-                          </button>
-                        )}
+                    <div className="allVendors-card-body">
+                      <div className="allVendors-card-row">
+                        <User size={14} />
+                        <span>{vendor.contactPerson}</span>
                       </div>
-                    </td>
-                  </tr>
+                      <div className="allVendors-card-row">
+                        <Phone size={14} />
+                        <span>{vendor.phone}</span>
+                      </div>
+                      <div className="allVendors-card-row">
+                        <MapPin size={14} />
+                        <span>{vendor.location}</span>
+                        {/* <Star size={14} fill="#f1d49b" />
+                        <span>{(vendor.rating || 0).toFixed(1)} rating</span> */}
+                      </div>
+                      
+                    </div>
+
+                    <div className="allVendors-card-footer">
+                      <span className="allVendors-card-rate">
+                        ₹{vendor.rate?.toLocaleString() || 0}
+                      </span>
+                      <ActionButtons vendor={vendor} />
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+
+              <div className="allVendors-pagination">
+                <span className="pagination-info">
+                  Showing {(currentPage - 1) * ROWS_PER_PAGE + 1}–
+                  {Math.min(
+                    currentPage * ROWS_PER_PAGE,
+                    filteredVendors.length,
+                  )}{" "}
+                  of {filteredVendors.length}
+                </span>
+
+                <div className="pagination-controls">
+                  <button
+                    className="pagination-btn"
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        className={
+                          page === currentPage
+                            ? "pagination-btn active"
+                            : "pagination-btn"
+                        }
+                        onClick={() => goToPage(page)}
+                      >
+                        {page}
+                      </button>
+                    ),
+                  )}
+
+                  <button
+                    className="pagination-btn"
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </>
           )}
         </div>
 
@@ -307,10 +441,8 @@ const ManageVendors = () => {
 
               {/* Modal Body */}
               <div className="bookingModal-body">
-
                 {/* Hero Row: Image + Name + Category */}
                 <div className="vendorModal-hero">
-
                   {/* Vendor image or fallback */}
                   <div className="vendorModal-imgBox">
                     {selectedVendor.image ? (
@@ -333,7 +465,9 @@ const ManageVendors = () => {
                     {/* Fallback shown when no image or image fails */}
                     <div
                       className="vendorModal-imgFallback"
-                      style={{ display: selectedVendor.image ? "none" : "flex" }}
+                      style={{
+                        display: selectedVendor.image ? "none" : "flex",
+                      }}
                     >
                       <ImageOff size={28} />
                       <span>No Image</span>
@@ -362,7 +496,6 @@ const ManageVendors = () => {
 
                 {/* Info Grid */}
                 <div className="bookingModal-grid">
-
                   <div className="bookingModal-infoBlock">
                     <label>Primary Contact</label>
                     <p>
@@ -382,23 +515,31 @@ const ManageVendors = () => {
                   <div className="bookingModal-infoBlock">
                     <label>Pricing</label>
                     <p className="mb-3">
-                      <strong>Starting Rate: </strong>
-                      ₹{selectedVendor.rate?.toLocaleString() || 0}
+                      <strong>Starting Rate: </strong>₹
+                      {selectedVendor.rate?.toLocaleString() || 0}
                     </p>
-                    <label>Service Performance</label>
+                    {/* <label>Service Performance</label>
                     <p>
                       <strong>Total Assignments: </strong>
                       {selectedVendor.assignedEventsCount || 0} Events
                     </p>
-                    <p style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                    <p
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
                       <strong>Quality Rating:</strong>
-                      <span className="rating-badge-container" style={{ display: "inline-flex", padding: "2px 8px" }}>
+                      <span
+                        className="rating-badge-container"
+                        style={{ display: "inline-flex", padding: "2px 8px" }}
+                      >
                         <Star size={12} className="star-icon" fill="#f1d49b" />
                         &nbsp;{(selectedVendor.rating || 0).toFixed(1)}
                       </span>
-                    </p>
+                    </p> */}
                   </div>
-
                 </div>
 
                 {/* About / Bio section */}
@@ -408,7 +549,6 @@ const ManageVendors = () => {
                     <p>{selectedVendor.about}</p>
                   </div>
                 )}
-
               </div>
 
               {/* Modal Footer */}
@@ -439,7 +579,6 @@ const ManageVendors = () => {
                   Dismiss Panel
                 </button>
               </div>
-
             </div>
           </div>
         )}
@@ -468,8 +607,8 @@ const ManageVendors = () => {
             </div>
           </div>
         )}
-
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };
