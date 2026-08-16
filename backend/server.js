@@ -35,6 +35,7 @@ app.use("/api/payments", require("./routers/paymentRoutes"));
 app.use("/api/reports", require("./routers/reportRoutes"));
 app.use("/api/notifications", require("./routers/notificationRoutes"));
 app.use("/api/dashboard", require("./routers/dashboardRoutes"));
+app.use("/api/newsletter" , require("./routers/Newsletterroutes"))
 
 app.use("/uploads", express.static("uploads"));   // Used to serve static files like images; makes the uploads folder publicly accessible
 

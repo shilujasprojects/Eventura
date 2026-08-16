@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance';
 import { toast, ToastContainer } from 'react-toastify';
 import {
   Edit,
@@ -10,6 +10,8 @@ import {
   FileText,
   HelpCircle,
   MessageSquare,
+  Mail,
+  Search,
   Check,
   Eye,
   EyeOff,
@@ -59,6 +61,9 @@ const validateFaqField = (name, value) => {
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
 
+const formatSubscriberDate = (dateStr) =>
+  new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
 const ManageCMS = () => {
   const [activeSubTab, setActiveSubTab] = useState("Hero Banner");
   const [pageLoading, setPageLoading] = useState(true);
@@ -90,9 +95,18 @@ const ManageCMS = () => {
   // Testimonials state
   const [testimonials, setTestimonials] = useState([]);
 
+  // Newsletter Subscribers state
+  const [newsletterList, setNewsletterList] = useState([]);
+  const [newsletterTotalSubscribed, setNewsletterTotalSubscribed] = useState(0);
+  const [newsletterSearch, setNewsletterSearch] = useState("");
+  const [newsletterPage, setNewsletterPage] = useState(1);
+  const [newsletterTotalPages, setNewsletterTotalPages] = useState(1);
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [updatingSubscriberId, setUpdatingSubscriberId] = useState(null);
+
   const fetchBanner = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/banner`);
+      const res = await axiosInstance.get("/api/banner");
       setBannerState(res.data.data);
       setBannerError(false);
     } catch (error) {
@@ -103,7 +117,7 @@ const ManageCMS = () => {
 
   const fetchFaqs = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/faqs`);
+      const res = await axiosInstance.get("/api/faqs");
       setFaqList(res.data.data);
     } catch (error) {
       toast.error("Failed to load FAQs.");
@@ -112,10 +126,27 @@ const ManageCMS = () => {
 
   const fetchTestimonials = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/testimonials`);
+      const res = await axiosInstance.get("/api/testimonials");
       setTestimonials(res.data.data);
     } catch (error) {
       toast.error("Failed to load testimonials.");
+    }
+  };
+
+  const fetchNewsletter = async (page = 1, search = "") => {
+    setNewsletterLoading(true);
+    try {
+      const res = await axiosInstance.get("/api/newsletter", {
+        params: { page, limit: 10, search: search || undefined },
+      });
+      setNewsletterList(res.data.data);
+      setNewsletterTotalSubscribed(res.data.totalSubscribed);
+      setNewsletterTotalPages(res.data.totalPages);
+      setNewsletterPage(res.data.page);
+    } catch (error) {
+      toast.error("Failed to load newsletter subscribers.");
+    } finally {
+      setNewsletterLoading(false);
     }
   };
 
@@ -123,7 +154,7 @@ const ManageCMS = () => {
   // Using allSettled instead of all — one failing request shouldn't block the others.
   useEffect(() => {
     const fetchAllContent = async () => {
-      await Promise.allSettled([fetchBanner(), fetchFaqs(), fetchTestimonials()]);
+      await Promise.allSettled([fetchBanner(), fetchFaqs(), fetchTestimonials(), fetchNewsletter()]);
       setPageLoading(false);
     };
 
@@ -164,7 +195,7 @@ const ManageCMS = () => {
 
     setSavingBanner(true);
     try {
-      const res = await axios.put(`${BASE_URL}/api/banner`, bannerDraft);
+      const res = await axiosInstance.put("/api/banner", bannerDraft);
       setBannerState(res.data.data);
       setIsEditingBanner(false);
       toast.success("Homepage hero banner updated successfully!");
@@ -180,7 +211,7 @@ const ManageCMS = () => {
     const formData = new FormData();
     formData.append('image', file);
 
-    const res = await axios.post(`${BASE_URL}/api/banner/upload-image`, formData, {
+    const res = await axiosInstance.post("/api/banner/upload-image", formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     setBannerState(res.data.data);
@@ -235,7 +266,7 @@ const ManageCMS = () => {
 
   const handleDeleteImage = async (filename) => {
     try {
-      const res = await axios.delete(`${BASE_URL}/api/banner/image/${filename}`);
+      const res = await axiosInstance.delete(`/api/banner/image/${filename}`);
       setBannerState(res.data.data);
       toast.success("Hero image removed.");
     } catch (error) {
@@ -265,7 +296,7 @@ const ManageCMS = () => {
 
     setAddingFaq(true);
     try {
-      const res = await axios.post(`${BASE_URL}/api/faqs`, newFaq);
+      const res = await axiosInstance.post("/api/faqs", newFaq);
       setFaqList(prev => [res.data.data, ...prev]);
       setNewFaq({ question: "", answer: "" });
       setNewFaqErrors({ question: "", answer: "" });
@@ -301,7 +332,7 @@ const ManageCMS = () => {
     }
 
     try {
-      const res = await axios.put(`${BASE_URL}/api/faqs/${id}`, editingFaqData);
+      const res = await axiosInstance.put(`/api/faqs/${id}`, editingFaqData);
       setFaqList(prev => prev.map(item => (item._id === id ? res.data.data : item)));
       setEditingFaqId(null);
       toast.success("FAQ updated successfully!");
@@ -312,7 +343,7 @@ const ManageCMS = () => {
 
   const handleDeleteFaq = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/api/faqs/${id}`);
+      await axiosInstance.delete(`/api/faqs/${id}`);
       setFaqList(prev => prev.filter(item => item._id !== id));
       toast.success("FAQ deleted successfully.");
     } catch (error) {
@@ -323,11 +354,45 @@ const ManageCMS = () => {
   // ---------- TESTIMONIALS ----------
   const handleToggleTestimonialFeatured = async (id) => {
     try {
-      const res = await axios.patch(`${BASE_URL}/api/testimonials/${id}/toggle-featured`);
+      const res = await axiosInstance.patch(`/api/testimonials/${id}/toggle-featured`);
       setTestimonials(prev => prev.map(item => (item._id === id ? res.data.data : item)));
       toast.success(res.data.data.featured ? "Review featured on home layout!" : "Review hidden from landing layout.");
     } catch (error) {
       toast.error("Failed to update testimonial. Please try again.");
+    }
+  };
+
+  // ---------- NEWSLETTER SUBSCRIBERS ----------
+  const handleNewsletterSearch = (e) => {
+    e.preventDefault();
+    fetchNewsletter(1, newsletterSearch);
+  };
+
+  const handleToggleSubscriberStatus = async (subscriber) => {
+    const newStatus = subscriber.status === "Subscribed" ? "Unsubscribed" : "Subscribed";
+    setUpdatingSubscriberId(subscriber._id);
+    try {
+      const res = await axiosInstance.patch(`/api/newsletter/${subscriber._id}/status`, { status: newStatus });
+      setNewsletterList(prev => prev.map(item => (item._id === subscriber._id ? res.data.data : item)));
+      setNewsletterTotalSubscribed(prev => (newStatus === "Subscribed" ? prev + 1 : Math.max(prev - 1, 0)));
+      toast.success(`Subscriber marked as ${newStatus}.`);
+    } catch (error) {
+      toast.error("Failed to update subscriber status. Please try again.");
+    } finally {
+      setUpdatingSubscriberId(null);
+    }
+  };
+
+  const handleDeleteSubscriber = async (id, wasSubscribed) => {
+    try {
+      await axiosInstance.delete(`/api/newsletter/${id}`);
+      setNewsletterList(prev => prev.filter(item => item._id !== id));
+      if (wasSubscribed) {
+        setNewsletterTotalSubscribed(prev => Math.max(prev - 1, 0));
+      }
+      toast.success("Subscriber deleted.");
+    } catch (error) {
+      toast.error("Failed to delete subscriber. Please try again.");
     }
   };
 
@@ -348,7 +413,7 @@ const ManageCMS = () => {
         <div className="cmsPage-header">
           <div>
             <h2>Website Content Manager (CMS)</h2>
-            <p>Alter banner copy, manage operational FAQs, and control testimonial layouts on the homepage.</p>
+            <p>Alter banner copy, manage operational FAQs, control testimonial layouts, and manage newsletter subscribers on the homepage.</p>
           </div>
         </div>
 
@@ -373,6 +438,13 @@ const ManageCMS = () => {
           >
             <MessageSquare size={16} />
             <span>Homepage Testimonials</span>
+          </button>
+          <button
+            className={activeSubTab === "Newsletter Subscribers" ? "tab-btn active" : "tab-btn"}
+            onClick={() => setActiveSubTab("Newsletter Subscribers")}
+          >
+            <Mail size={16} />
+            <span>Newsletter Subscribers</span>
           </button>
         </div>
 
@@ -699,6 +771,104 @@ const ManageCMS = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* VIEW TAB 4: NEWSLETTER SUBSCRIBERS */}
+          {activeSubTab === "Newsletter Subscribers" && (
+            <div className="cms-card">
+              <div className="cms-cardHeader">
+                <Mail className="gold-icon" size={20} />
+                <h3>Newsletter Subscribers</h3>
+              </div>
+
+              <div className="newsletter-statsRow">
+                <p className="newsletter-totalCount">
+                  Total Subscribers: <strong>{newsletterTotalSubscribed}</strong>
+                </p>
+                <form className="newsletter-searchForm" onSubmit={handleNewsletterSearch}>
+                  <Search size={16} className="newsletter-searchIcon" />
+                  <input
+                    type="text"
+                    placeholder="Search by email..."
+                    value={newsletterSearch}
+                    onChange={(e) => setNewsletterSearch(e.target.value)}
+                  />
+                  <button type="submit" className="cms-btn edit">Search</button>
+                </form>
+              </div>
+
+              {newsletterLoading ? (
+                <p className="faq-answer-txt">Loading subscribers...</p>
+              ) : newsletterList.length === 0 ? (
+                <p className="faq-answer-txt">No subscribers found.</p>
+              ) : (
+                <>
+                  <div className="newsletter-tableWrap">
+                    <table className="newsletter-table">
+                      <thead>
+                        <tr>
+                          <th>Email</th>
+                          <th>Date</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {newsletterList.map((subscriber) => (
+                          <tr key={subscriber._id}>
+                            <td>{subscriber.email}</td>
+                            <td>{formatSubscriberDate(subscriber.subscribedAt)}</td>
+                            <td>
+                              <span className={`status-pill ${subscriber.status === "Subscribed" ? "featured" : "hidden"}`}>
+                                {subscriber.status}
+                              </span>
+                            </td>
+                            <td>
+                              <div className="newsletter-rowActions">
+                                <button
+                                  className={`btn-toggle-featured ${subscriber.status === "Subscribed" ? "hide-btn" : "show-btn"}`}
+                                  onClick={() => handleToggleSubscriberStatus(subscriber)}
+                                  disabled={updatingSubscriberId === subscriber._id}
+                                >
+                                  {subscriber.status === "Subscribed" ? "Unsubscribe" : "Resubscribe"}
+                                </button>
+                                <button
+                                  className="icon-control-btn delete"
+                                  title="Delete subscriber"
+                                  onClick={() => handleDeleteSubscriber(subscriber._id, subscriber.status === "Subscribed")}
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {newsletterTotalPages > 1 && (
+                    <div className="newsletter-pagination">
+                      <button
+                        className="cms-btn cancel"
+                        disabled={newsletterPage <= 1}
+                        onClick={() => fetchNewsletter(newsletterPage - 1, newsletterSearch)}
+                      >
+                        Previous
+                      </button>
+                      <span>Page {newsletterPage} of {newsletterTotalPages}</span>
+                      <button
+                        className="cms-btn cancel"
+                        disabled={newsletterPage >= newsletterTotalPages}
+                        onClick={() => fetchNewsletter(newsletterPage + 1, newsletterSearch)}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           )}
 

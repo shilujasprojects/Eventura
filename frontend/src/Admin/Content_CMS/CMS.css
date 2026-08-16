@@ -720,3 +720,103 @@
   text-align: center;
   font-size: 1rem;
 }
+
+/* =====================================================
+   TAB 4: NEWSLETTER SUBSCRIBERS
+   (append this block to the end of your existing CMS.css —
+   everything else in that file stays untouched)
+===================================================== */
+
+.newsletter-statsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.newsletter-totalCount {
+  color: #8a9ba8;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.newsletter-totalCount strong {
+  color: #f1d49b;
+}
+
+.newsletter-searchForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 10px;
+  padding: 6px 12px;
+}
+
+.newsletter-searchIcon {
+  color: #8a9ba8;
+  flex-shrink: 0;
+}
+
+.newsletter-searchForm input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff7ee;
+  font-size: 0.9rem;
+  min-width: 200px;
+}
+
+.newsletter-tableWrap {
+  overflow-x: auto;
+}
+
+.newsletter-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.newsletter-table th,
+.newsletter-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.newsletter-table th {
+  color: #f1d49b;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.newsletter-table td {
+  color: #d7dee3;
+}
+
+.newsletter-rowActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.newsletter-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  color: #8a9ba8;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 576px) {
+  .newsletter-searchForm input {
+    min-width: 140px;
+  }
+}
