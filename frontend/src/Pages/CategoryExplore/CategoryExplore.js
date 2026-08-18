@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CategoryExplore.css";
 import Navbar from "../../Components/Navbar/Navbar";
@@ -6,21 +6,70 @@ import Footer from "../../Components/Footer/Footer";
 import useCategoryDetails from "../../hooks/useCategoryDetails";
 import useCategoryEvents from "../../hooks/useCategoryEvents";
 import useCategoryPackages from "../../hooks/useCategoryPackages";
+import useCategoryGallery from "../../hooks/useCategoryGallery";
 import { IMG_URL } from "../../api/api";
+
+const SERVICE_LIMIT = 4;
 
 export default function CategoryExplore() {
   const { categoryId } = useParams();
+  const navigate = useNavigate();
 
   const { category, loading: categoryLoading } = useCategoryDetails(categoryId);
   const { events, loading: eventsLoading } = useCategoryEvents(categoryId);
   const { packages, loading: packagesLoading } = useCategoryPackages(categoryId);
 
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const { images: momentImages, loading: galleryLoading } = useCategoryGallery(
+    category?.categoryName,
+    9,
+  );
 
-  const openEvent = (event) => setSelectedEvent(event);
-  const closeEvent = () => setSelectedEvent(null);
+  const galleryRef = useRef(null);
+  const autoSlideRef = useRef(null);
 
-  const navigate = useNavigate();
+  const [lightbox, setLightbox] = useState(false);
+  const [selectedImg, setSelectedImg] = useState("");
+  const [expandedPackages, setExpandedPackages] = useState({});
+
+  const toggleExpand = (id) => {
+    setExpandedPackages((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  /* Scroll buttons */
+  const scrollGallery = (value) => {
+    galleryRef.current.scrollLeft += value;
+  };
+
+  /* Auto slide */
+  const startAutoSlide = () => {
+    autoSlideRef.current = setInterval(() => {
+      if (!galleryRef.current) return;
+
+      galleryRef.current.scrollLeft += 300;
+
+      if (
+        galleryRef.current.scrollLeft + galleryRef.current.clientWidth >=
+        galleryRef.current.scrollWidth
+      ) {
+        galleryRef.current.scrollLeft = 0;
+      }
+    }, 2000);
+  };
+
+  useEffect(() => {
+    startAutoSlide();
+    return () => clearInterval(autoSlideRef.current);
+  }, []);
+
+  /* Lightbox */
+  const openLightbox = (src) => {
+    setSelectedImg(src);
+    setLightbox(true);
+  };
+
+  const closeLightbox = () => {
+    setLightbox(false);
+  };
 
   if (categoryLoading) {
     return (
@@ -42,13 +91,16 @@ export default function CategoryExplore() {
     );
   }
 
+  const hasEvents = !eventsLoading && events.length > 0;
+  const hasMoments = !galleryLoading && momentImages.length > 0;
+  const hasPackages = !packagesLoading && packages.length > 0;
+
   return (
     <>
       <Navbar />
 
       <div className="category-explore">
-
-        {/* HERO — uses the category's own image + description from DB */}
+        {/* HERO */}
         <section className="category-explore-hero">
           <img src={`${IMG_URL}${category.image}`} alt={category.categoryName} />
           <div className="category-explore-overlay">
@@ -58,22 +110,17 @@ export default function CategoryExplore() {
           </div>
         </section>
 
-        {/* EVENTS GRID — real events under this category */}
-        <section className="category-explore-events">
-          <h2>{category.categoryName} Moments</h2>
+        {/* EVENTS GRID — only shown once real events exist */}
+        {hasEvents && (
+          <section className="category-explore-events">
+            <div className="category-explore-section-heading">
+              <p>EVENTURA {category.categoryName.toUpperCase()}</p>
+              <h2>{category.categoryName} Events</h2>
+            </div>
 
-          {eventsLoading ? (
-            <p className="category-explore-empty">Loading events...</p>
-          ) : events.length === 0 ? (
-            <p className="category-explore-empty">No events added under this category yet.</p>
-          ) : (
             <div className="category-explore-events-grid">
               {events.map((event) => (
-                <div
-                  key={event._id}
-                  className="category-explore-event-card"
-                  onClick={() => openEvent(event)}
-                >
+                <div key={event._id} className="category-explore-event-card">
                   <img src={`${IMG_URL}${event.coverImage}`} alt={event.eventName} />
                   <div className="category-explore-event-info">
                     <h3>{event.eventName}</h3>
@@ -82,74 +129,124 @@ export default function CategoryExplore() {
                 </div>
               ))}
             </div>
-          )}
-        </section>
+          </section>
+        )}
 
-        {/* EVENT DETAIL MODAL */}
-        {selectedEvent && (
-          <div className="category-explore-modal-backdrop" onClick={closeEvent}>
-            <div
-              className="category-explore-modal"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <span className="category-explore-modal-close" onClick={closeEvent}>
-                &times;
-              </span>
-
-              <img
-                src={`${IMG_URL}${selectedEvent.coverImage}`}
-                alt={selectedEvent.eventName}
-              />
-
-              <h3>{selectedEvent.eventName}</h3>
-              <p>{selectedEvent.longDescription}</p>
-
-              {selectedEvent.galleryImages?.length > 0 && (
-                <div className="category-explore-modal-gallery">
-                  {selectedEvent.galleryImages.map((img) => (
-                    <img key={img} src={`${IMG_URL}${img}`} alt="gallery" />
-                  ))}
-                </div>
-              )}
+        {/* MOMENTS — only shown once gallery images exist */}
+        {hasMoments && (
+          <section className="category-explore-gallery">
+            <div className="category-explore-section-heading">
+              <p>EVENTURA MOMENTS</p>
+              <h2>{category.categoryName} Moments</h2>
             </div>
+
+            <div className="category-explore-gallery-wrapper">
+              <button
+                className="category-explore-scroll-btn left"
+                onClick={() => scrollGallery(-300)}
+              >
+                ❮
+              </button>
+
+              <div
+                className="category-explore-gallery-row"
+                ref={galleryRef}
+                onMouseEnter={() => clearInterval(autoSlideRef.current)}
+                onMouseLeave={startAutoSlide}
+              >
+                {momentImages.map((img) => (
+                  <img
+                    key={img}
+                    src={img}
+                    alt={`${category.categoryName} moment`}
+                    loading="lazy"
+                    onClick={() => openLightbox(img)}
+                  />
+                ))}
+              </div>
+
+              <button
+                className="category-explore-scroll-btn right"
+                onClick={() => scrollGallery(300)}
+              >
+                ❯
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* LIGHTBOX */}
+        {lightbox && (
+          <div className="category-explore-lightbox" onClick={closeLightbox}>
+            <span className="category-explore-lightbox-close" onClick={closeLightbox}>
+              &times;
+            </span>
+            <img src={selectedImg} alt="preview" onClick={(e) => e.stopPropagation()} />
           </div>
         )}
 
-        {/* PACKAGES — real packages under this category */}
-        <section className="category-explore-packages-wrapper">
-          <div className="category-explore-package-heading">
-            <p>EVENTURA PACKAGES</p>
-            <h2>{category.categoryName} Packages</h2>
-          </div>
-
-          {packagesLoading ? (
-            <p className="category-explore-empty">Loading packages...</p>
-          ) : packages.length === 0 ? (
-            <p className="category-explore-empty">No packages added under this category yet.</p>
-          ) : (
-            <div className="category-explore-packages">
-              {packages.map((pkg) => (
-                <div key={pkg._id} className="category-explore-package-card">
-                  {pkg.tags?.length > 0 && (
-                    <div className="category-explore-package-tag">{pkg.tags[0]}</div>
-                  )}
-
-                  <h3>{pkg.packageName}</h3>
-                  <h2>₹{pkg.finalPrice.toLocaleString()}</h2>
-
-                  <ul>
-                    {pkg.services.map((s) => (
-                      <li key={s.service?._id}>{s.service?.serviceName}</li>
-                    ))}
-                  </ul>
-
-                  <button onClick={() => navigate('/bookNow')}>Choose Package</button>
-                </div>
-              ))}
+        {/* PACKAGES — only shown once real packages exist */}
+        {hasPackages && (
+          <section className="category-explore-packages-wrapper">
+            <div className="category-explore-section-heading">
+              <p>EVENTURA PACKAGES</p>
+              <h2>{category.categoryName} Packages</h2>
             </div>
-          )}
-        </section>
 
+            <div className="category-explore-packages">
+              {packages.map((pkg) => {
+                const isExpanded = expandedPackages[pkg._id];
+                const visibleServices = isExpanded
+                  ? pkg.services
+                  : pkg.services.slice(0, SERVICE_LIMIT);
+                const hiddenCount = pkg.services.length - SERVICE_LIMIT;
+
+                return (
+                  <div key={pkg._id} className="category-explore-package-card">
+                    {pkg.tags?.length > 0 && (
+                      <div className="category-explore-package-tag">{pkg.tags[0]}</div>
+                    )}
+
+                    <h3>{pkg.packageName}</h3>
+                    <h2>₹{pkg.finalPrice.toLocaleString()}</h2>
+
+                    <ul>
+                      {visibleServices.map((s) => (
+                        <li key={s.service?._id}>{s.service?.serviceName}</li>
+                      ))}
+                    </ul>
+
+                    {hiddenCount > 0 && (
+                      <p
+                        className="category-explore-package-toggle"
+                        onClick={() => toggleExpand(pkg._id)}
+                      >
+                        {isExpanded ? "Show less" : `+${hiddenCount} more`}
+                      </p>
+                    )}
+
+                    <button onClick={() => navigate("/bookNow")}>
+                      Choose Package
+                    </button>
+                  </div>
+                );
+              })}
+
+              {/* Static Custom package card — always shown alongside real packages */}
+              <div className="category-explore-package-card category-explore-package-card--custom">
+                <h3>Custom</h3>
+                <p className="category-explore-package-custom-text">
+                  Don't see a package that fits? Build your own with the exact
+                  services your event needs.
+                </p>
+
+                <button onClick={() => navigate("/bookNow")}>
+                  Request Custom Package
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
       </div>
 
       <Footer />

@@ -132,7 +132,7 @@ export default function Navbar() {
             </NavLink>
           </li>
           <li className="nav-item">
-            <Link to="/BookNow" className="btn btn-warning" id="book-now">
+            <Link to="/BookNow" className="btn btn-warning  my-2 my-lg-0" id="book-now">
               Book Now
             </Link>
           </li>
@@ -142,7 +142,7 @@ export default function Navbar() {
             <li className="nav-item">
               <Link
                 to="/loginSign"
-                className="btn btn-warning mx-2"
+                className="btn btn-warning mx-0 mx-lg-2 my-2 my-lg-0"
                 id="book-now"
               >
                 Login / SignUp

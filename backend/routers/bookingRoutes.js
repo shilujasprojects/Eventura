@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   createBooking,
   getAllBookings,
+  getUpcomingBookings,
   getClientBookings,
   getBookingById,
   approveBooking,
@@ -15,6 +16,7 @@ const {
 
 router.post("/", createBooking);
 router.get("/", getAllBookings);
+router.get("/upcoming/list", getUpcomingBookings);
 router.get("/:id", getBookingById);
 router.get("/client/:clientId", getClientBookings);
 router.patch("/:id/approve", approveBooking);

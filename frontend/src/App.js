@@ -9,18 +9,18 @@ import React, { useEffect } from 'react';
 import Contact from './Pages/Contact';
 import BookNow from './Pages/Book_Now';
 import BookSummary from './Components/Book_Now/BookSummary';
-// import WeddingExplore from './Components/Home/Event-Explore/Wedding-Explore/WeddingExplore';
-// import BirthdayExplore from './Components/Home/Event-Explore/Birthday-Explore/BirthdayExplore ';
-// import FuneralExplore from './Components/Home/Event-Explore/Funeral-Explore/FuneralExplore';
-// import BabyShowerExplore from './Components/Home/Event-Explore/BabyShower-Explore/BabyShowerExplore';
+import WeddingExplore from './Components/Home/Event-Explore/Wedding-Explore/WeddingExplore';
+import BirthdayExplore from './Components/Home/Event-Explore/Birthday-Explore/BirthdayExplore ';
+import FuneralExplore from './Components/Home/Event-Explore/Funeral-Explore/FuneralExplore';
+import BabyShowerExplore from './Components/Home/Event-Explore/BabyShower-Explore/BabyShowerExplore';
 import Auth from './Components/Auth/Auth';
 
 import "react-toastify/dist/ReactToastify.css";
 
-// import EngagementExplore from './Components/Home/Event-Explore/Engagement-Explore/EngagementExplore';
-// import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Explore/HousewarmingExplore';
-// import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
-// import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
+import EngagementExplore from './Components/Home/Event-Explore/Engagement-Explore/EngagementExplore';
+import HousewarmingExplore from './Components/Home/Event-Explore/HouseWarming-Explore/HousewarmingExplore';
+import AnniversaryExplore from './Components/Home/Event-Explore/Anniversary-Explore/AnniversaryExplore';
+import CorporateExplore from './Components/Home/Event-Explore/Corporate-Explore/CorporateExplore';
 import DashboardCards from './Admin/Shared/DashboardCards';
 import ViewCategoryEvents from './Admin/Categories/ViewCategoryEvents';
 import EditCategoryEvents from './Admin/Categories/EditCategoryEvents';
@@ -58,6 +58,7 @@ import MakePayment from './Components/Payments/MakePayment';
 import NotificationsPage from './Admin/Notifications/NotificationsPage';
 import AdminProtectedRoute from './utils/AdminProtectedRoute';
 import CategoryExplore from './Pages/CategoryExplore/CategoryExplore';
+import ViewMoreEvents from './Components/Events/Recent-Events/ViewMoreEvents';
 
 
 
@@ -84,19 +85,20 @@ function App() {
             <Route path='/loginSign' element={<Auth />} />
            
             <Route path ='/events' element={<Events />} />
+            <Route path='/view-more' element={<ViewMoreEvents />}/>
             <Route path ='/services' element={<Services />} />
             <Route path ='/about' element={<Story />} />
             <Route path ='/contact' element={<Contact />} />
             <Route path = '/bookNow' element={<BookNow />} />
             <Route path = '/bookSummary' element={<BookSummary />} />
             {/* <Route path = '/birthday-explore' element={<BirthdayExplore />} /> */}
-            {/* <Route path= '/wedding-explore' element={<WeddingExplore/>} />
+            <Route path= '/wedding-explore' element={<WeddingExplore/>} />
             <Route path='/engagement-explore' element={<EngagementExplore /> } />
             <Route path = '/funeral-explore' element={<FuneralExplore />} />
             <Route path = '/babyshower-explore' element={<BabyShowerExplore />} />
             <Route path='/housewarming-explore' element={<HousewarmingExplore />} />
             <Route path='/anniversary-explore' element={<AnniversaryExplore />} />
-            <Route path='/corporate-explore' element={<CorporateExplore /> } /> */}
+            <Route path='/corporate-explore' element={<CorporateExplore /> } />
             <Route path="/explore/:categoryId" element={<CategoryExplore />} />
 
            <Route path='/inquiryForm' element={<ClientInquiryForm /> } />

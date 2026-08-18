@@ -1,51 +1,44 @@
-/* -------------------- Events Showcase -------------------- */
+/* -------------------- All Events Page -------------------- */
 
-.events-showcase {
+.all-events-page {
   color: #062036;
   background-color: #f1d49b;
   font-family: Cinzel, serif;
-  padding: 20px;
+  padding: 20px 0 60px;
+  margin-top: 50px;
 }
 
-.events-showcase__inner {
+.all-events-page__inner {
   max-width: 1350px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.events-showcase__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.all-events-page__title {
+  font-size: 38px;
+  font-family: "Courgette", cursive;
   margin: 40px 0 32px;
 }
 
-.events-showcase__title {
-  font-size: 38px;
-  font-family: "Courgette", cursive;
-  margin: 0;
-}
-
-.events-showcase__link {
-  display: inline-block;
-  padding: 10px 22px;
-  background-color: #d3b679;
-  color: #fff;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 15px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.events-showcase__link:hover {
-  background-color: #d6aa5f;
-  color: #062036;
-}
-
-.events-showcase__status {
+.all-events-page__status {
   text-align: center;
   padding: 32px 0;
 }
+
+.events-category {
+  margin-bottom: 48px;
+}
+
+.events-category__title {
+  font-size: 24px;
+  font-family: "Courgette", cursive;
+  color: #062036;
+  border-bottom: 2px solid #d3b679;
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+}
+
+/* -------------------- Event Card (shared with RecentEvents) -------------------- */
 
 .events-showcase__grid {
   display: grid;
@@ -112,16 +105,11 @@
 }
 
 @media (max-width: 576px) {
+  .all-events-page__title {
+    font-size: 28px;
+  }
 
   .events-showcase__grid {
     grid-template-columns: 1fr;
-  }
-
-  .events-showcase__inner{
-    padding: 0;
-  }
-
-  .events-showcase__title{
-    font-size: 28px;
   }
 }

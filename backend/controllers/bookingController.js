@@ -339,3 +339,26 @@ exports.cancelEvent = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// GET /api/bookings/upcoming/list — public, used by the homepage carousel.
+// Only returns non-sensitive fields (no client name/phone/email).
+exports.getUpcomingBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({
+      status: { $in: ["Confirmed", "ReadyForApproval"] },
+      eventDate: { $gte: new Date() },
+    })
+      .select("eventDate startTime endTime city venueName event")
+      .populate({
+        path: "event",
+        select: "eventName coverImage category",
+        populate: { path: "category", select: "categoryName" },
+      })
+      .sort({ eventDate: 1 })
+      .limit(6);
+
+    res.status(200).json({ success: true, data: bookings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

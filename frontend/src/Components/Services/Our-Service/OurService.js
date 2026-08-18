@@ -19,7 +19,11 @@ function OurService() {
           // Only keep services that actually have a banner image —
           // this section is a visual image grid, so a card with no
           // image would just render as a broken icon.
-          setServices(data.data.filter((service) => service.bannerImage));
+          const withImages = data.data.filter((service) => service.bannerImage);
+          const sorted = [...withImages].sort((a, b) =>
+            a.serviceName.localeCompare(b.serviceName),
+          );
+          setServices(sorted);
         } else {
           setError("Could not load services");
         }

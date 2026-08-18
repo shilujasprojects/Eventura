@@ -1,9 +1,7 @@
-/* Footer Section */
+/* -------------------- Footer -------------------- */
 
 .eventura-footer {
-  /* background-color: #041c32; */
   background: linear-gradient(to bottom, #041c32, #031526);
-
   padding: 60px 0 0;
   color: #dcdcdc;
 }
@@ -12,32 +10,25 @@
   padding-bottom: 60px;
 }
 
-.footer-logo {
-  font-family: Cinzel;
-  color: #e0bc74;
-  margin-bottom: 15px;
-}
-
 .img-fluid-footer {
   width: 200px;
   height: 80px;
   padding-right: 50px;
 }
 
-@media (max-width: 576px) {
-  .img-fluid-footer {
-    padding-right: 80px;
-  }
+.footer-logo {
+  font-family: Cinzel;
+  color: #e0bc74;
+  margin-bottom: 15px;
 }
 
 .footer-text {
   font-size: 15px;
   line-height: 26px;
   font-family: Cinzel;
-  /* padding-right: 16px; adjust as needed */
 }
 
-.footer-text i{
+.footer-text i {
   padding: 4px;
   color: #e0bc74;
 }
@@ -49,7 +40,7 @@
 }
 
 .footer-links {
-  font-family: cinzel;
+  font-family: Cinzel;
   list-style: none;
   padding: 0;
 }
@@ -61,10 +52,24 @@
 .footer-links li a {
   color: #dcdcdc;
   text-decoration: none;
+  transition: 0.3s;
 }
 
 .footer-links a:hover {
   color: #e0bc74;
+  padding-left: 5px;
+}
+
+.footer-toggle {
+  color: #fff7ee;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.footer-toggle:hover {
+  color: #f1d49b;
   padding-left: 5px;
 }
 
@@ -97,5 +102,9 @@
 
   .eventura-footer .container {
     padding-bottom: 0;
+  }
+
+  .img-fluid-footer {
+    padding-right: 80px;
   }
 }

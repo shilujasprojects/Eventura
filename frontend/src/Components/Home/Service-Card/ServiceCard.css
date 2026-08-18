@@ -1,4 +1,4 @@
-/* ------------------Service Card Section ------------------ */
+/* ------------------ Service Card Section ------------------ */
 
 .service-part {
   background-color: #062036;
@@ -6,78 +6,131 @@
   padding-bottom: 70px;
 }
 
+.service-part__inner {
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
 .service-heading {
   font-size: 55px;
   color: white;
   text-transform: capitalize;
   margin-bottom: 45px;
-  font-family: 'Great Vibes', cursive;
+  font-family: "Great Vibes", cursive;
   font-weight: 580;
+  text-align: center;
 }
 
-.service-part .col-lg-3,
-.service-part .col-md-6,
-.service-part .col-sm-6,
-.service-part .col-12 {
-  display: flex;
+.service-part__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 }
 
-.card-service {
-  border: none;
-  border-radius: 15px !important;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;              /* card fills the full column height */
+/* -------- Category Card -------- */
+
+.category-card {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  background-color: #062036;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(6, 32, 54, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.image-card-top {
-  border-radius: 15px 15px 0 0 !important;
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(6, 32, 54, 0.15);
+}
+
+.category-card__image-wrap {
   width: 100%;
-  height: 220px;
-  object-fit: cover;
-  flex-shrink: 0;            /* image keeps fixed height, never squished */
+  height: 150px;
+  overflow: hidden;
 }
 
-.image-card-top:hover{
+.category-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.category-card:hover .category-card__image {
   transform: scale(1.1);
 }
 
-.card-service .body-card {
-  background: #f1d49b !important;
-  color: #062036 !important;
-  padding: 20px;
-  flex: 1;                   /* body stretches to fill remaining space */
+.category-card__body {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  padding: 20px;
+  background-color: #f1d49b;
+  color: #062036;
 }
 
-.title-card {
-  color: #062036 !important;
-  font-family: 'Courgette', cursive;
+.category-card__title {
+  margin: 0 0 8px;
+  font-family: "Courgette", cursive;
   text-transform: capitalize;
 }
 
-.text-card {
-  font-size: 15px !important;
-  max-width: 100%;
+.category-card__text {
+  font-size: 15px;
   font-weight: 450;
-  flex: 1;        
-             /* pushes the button down evenly */
+  margin: 0;
+  text-align: start;
+  flex: 1; /* pushes the button down evenly */
 }
 
-.btn-explore {
-  background-color: #062036 !important;
-  color: white !important;
-  border-radius: 10px !important;
-  /* margin: 0 auto; */
+.category-card__btn {
+  display: inline-block;
+  align-self: flex-start;
+  background-color: #062036;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 18px;
   margin-top: 15px;
-  /* margin-right: 60px; */
-  justify-content: flex-start;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.category-card__btn:hover {
+  background-color: #0d3a5c;
+  color: white;
+}
+
+.show-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 100%;
+  color: #f1d49b;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 32px;
+  cursor: pointer;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.show-toggle:hover {
+  color: #d3b679;
 }
 
 /* ------------------ Responsive Design ------------------ */
+
+@media (max-width: 992px) {
+  .service-part__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media (max-width: 991px) {
   .service-heading {
@@ -91,12 +144,14 @@
     margin-bottom: 25px;
   }
 
-  .image-card-top {
-    height: 190px;
+  .category-card__text {
+    font-size: 14px;
   }
+}
 
-  .text-card {
-    font-size: 14px !important;
+@media (max-width: 576px) {
+  .service-part__grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -110,7 +165,7 @@
     font-size: 28px;
   }
 
-  .image-card-top {
+  .category-card__image-wrap {
     height: 170px;
   }
 }
