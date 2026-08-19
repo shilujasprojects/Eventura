@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ShieldAlert, Bell, CheckCheck, Trash2 } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import {
   fetchNotifications,
@@ -148,6 +148,7 @@ const NotificationsPage = () => {
           )}
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
 };
