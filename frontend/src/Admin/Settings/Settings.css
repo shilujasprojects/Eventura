@@ -112,7 +112,7 @@
 
 .settings-formRow.split-2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .settings-formGroup {
@@ -175,41 +175,6 @@
   font-size: 0.75rem;
   margin-top: 6px;
   line-height: 1.4;
-}
-
-/* Checkbox specific alignments */
-.settings-formGroup.checkbox-group {
-  background-color: #061521;
-  padding: 18px;
-  border-radius: 10px;
-  border: 1px solid rgba(241, 212, 155, 0.08);
-}
-
-.checkbox-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.checkbox-wrapper input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #f1d49b;
-  cursor: pointer;
-}
-
-.checkbox-wrapper label {
-  color: #fff7ee;
-  font-size: 0.9rem;
-  margin-bottom: 0;
-  cursor: pointer;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-.checkbox-hint {
-  margin-top: 8px;
-  margin-left: 28px;
 }
 
 /* Sections Split Divider */
@@ -324,9 +289,14 @@
 @media (max-width: 768px) {
   .settingsPage-tabs .tab-btn.active {
     color: #f1d49b;
+   
+  }
+  .settingsPage-tabs{
+     display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
   .settings-formRow.split-2 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
   .settings-formRow {
     flex-direction: column;
@@ -430,42 +400,6 @@
   border-color: #f1d49b;
 }
 
-/* Image Preview Thumbnail */
-.image-preview-thumbnail {
-  margin-top: 15px;
-  width: 120px;
-  height: 120px;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-  border: 1px solid rgba(241, 212, 155, 0.2);
-}
-
-.image-preview-thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.image-preview-thumbnail .overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(6, 32, 54, 0.7);
-  color: #f1d49b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.image-preview-thumbnail:hover .overlay {
-  opacity: 1;
-}
 
 /* Full Screen Image Modal */
 .image-modal-overlay {
@@ -507,4 +441,94 @@
 
 .close-modal-btn:hover {
   color: #f1d49b;
+}
+
+/* Organizer profile image — same look as Category cover image upload */
+
+.profile-image-previewBox {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.profile-image-previewImg {
+  width: 100%;
+  max-width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid rgba(241, 212, 155, 0.3);
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  display: block;
+}
+
+.profile-image-previewImg:hover {
+  border-color: #f1d49b;
+  opacity: 0.9;
+}
+
+.profile-image-removeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(6, 21, 33, 0.85);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+
+.profile-image-removeBtn:hover {
+  background: #ef4444;
+  color: #fff7ee;
+}
+
+.image-preview-hint {
+  display: block;
+  color: #8a9ba8;
+  font-size: 0.75rem;
+  margin-top: 8px;
+}
+
+@media(max-width: 320px){
+  .settingsPage-tabs{
+    grid-template-columns: 1fr;
+  }
+
+  .settings-formRow.split-2{
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Organizer tab: name, title, phone, website, image — one flat responsive grid.
+   3 fields land in row1 on desktop (name,title,phone), then website+image
+   naturally fall into row2. On medium screens it drops to 2 columns, so the
+   same 5 items reflow to (name,title) / (phone,website) / (image alone).
+   On small screens it drops to 1 column — each field on its own row. */
+.organizerFieldsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 1024px) {
+  .organizerFieldsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .organizerFieldsGrid {
+    grid-template-columns: 1fr;
+  }
 }

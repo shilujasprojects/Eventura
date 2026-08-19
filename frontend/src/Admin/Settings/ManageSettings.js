@@ -14,7 +14,8 @@ import {
   Eye,
   EyeOff,
   Briefcase,
-  UploadCloud
+  UploadCloud,
+  Trash2,
 } from "lucide-react";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import "./Settings.css";
@@ -50,7 +51,7 @@ const EMPTY_ORGANIZER = { name: "", title: "", phone: "", website: "" };
 
 // Regex patterns used across the form validators below
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^\+?[0-9]{10,15}$/;
+const PHONE_REGEX = /^\+?[0-9]{10}$/;
 const GST_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 const URL_REGEX = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
 
@@ -143,7 +144,10 @@ const ManageSettings = () => {
         // Business: same pattern, keyed off companyName. Fall back to "" for
         // description in case an older settings document doesn't have it yet.
         const hasSavedBusinessData = Boolean(business?.companyName?.trim());
-        const normalizedBusiness = { ...business, description: business?.description || "" };
+        const normalizedBusiness = {
+          ...business,
+          description: business?.description || "",
+        };
         setBusinessForm(normalizedBusiness);
         setSavedBusiness(normalizedBusiness);
         setIsEditingBusiness(!hasSavedBusinessData);
@@ -162,11 +166,10 @@ const ManageSettings = () => {
           setOrganizerForm(organizer);
           setSavedOrganizer(organizer);
           if (organizer.profileImage) {
-             setPreviewUrl(`http://localhost:5000${organizer.profileImage}`);
+            setPreviewUrl(`http://localhost:5000${organizer.profileImage}`);
           }
           setIsEditingOrganizer(!hasSavedOrganizer);
         }
-
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to load settings");
       } finally {
@@ -233,6 +236,14 @@ const ManageSettings = () => {
     }
   };
 
+  const handleRemoveImage = (e) => {
+    e.stopPropagation();
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setOrganizerForm((prev) => ({ ...prev, profileImage: "" }));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   // ---------- Validators (return an errors object; empty object = valid) ----------
   const validateAccount = () => {
     const errors = {};
@@ -240,7 +251,10 @@ const ManageSettings = () => {
     const trimmedName = accountForm.adminName.trim();
     if (!trimmedName) {
       errors.adminName = "Admin name is required";
-    } else if (trimmedName.length < ADMIN_NAME_MIN || trimmedName.length > ADMIN_NAME_MAX) {
+    } else if (
+      trimmedName.length < ADMIN_NAME_MIN ||
+      trimmedName.length > ADMIN_NAME_MAX
+    ) {
       errors.adminName = `Admin name must be between ${ADMIN_NAME_MIN} and ${ADMIN_NAME_MAX} characters`;
     }
 
@@ -267,7 +281,8 @@ const ManageSettings = () => {
         !/[A-Za-z]/.test(accountForm.newPassword) ||
         !/[0-9]/.test(accountForm.newPassword)
       ) {
-        errors.newPassword = "New password must include at least one letter and one number";
+        errors.newPassword =
+          "New password must include at least one letter and one number";
       }
       if (
         accountForm.currentPassword &&
@@ -292,7 +307,10 @@ const ManageSettings = () => {
     const trimmedCompany = businessForm.companyName.trim();
     if (!trimmedCompany) {
       errors.companyName = "Company name is required";
-    } else if (trimmedCompany.length < COMPANY_NAME_MIN || trimmedCompany.length > COMPANY_NAME_MAX) {
+    } else if (
+      trimmedCompany.length < COMPANY_NAME_MIN ||
+      trimmedCompany.length > COMPANY_NAME_MAX
+    ) {
       errors.companyName = `Company name must be between ${COMPANY_NAME_MIN} and ${COMPANY_NAME_MAX} characters`;
     }
 
@@ -311,14 +329,20 @@ const ManageSettings = () => {
     const trimmedAddress = businessForm.officeAddress.trim();
     if (!trimmedAddress) {
       errors.officeAddress = "Office address is required";
-    } else if (trimmedAddress.length < OFFICE_ADDRESS_MIN || trimmedAddress.length > OFFICE_ADDRESS_MAX) {
+    } else if (
+      trimmedAddress.length < OFFICE_ADDRESS_MIN ||
+      trimmedAddress.length > OFFICE_ADDRESS_MAX
+    ) {
       errors.officeAddress = `Address must be between ${OFFICE_ADDRESS_MIN} and ${OFFICE_ADDRESS_MAX} characters`;
     }
 
     const trimmedDescription = (businessForm.description || "").trim();
     if (!trimmedDescription) {
       errors.description = "A short business description is required";
-    } else if (trimmedDescription.length < DESCRIPTION_MIN || trimmedDescription.length > DESCRIPTION_MAX) {
+    } else if (
+      trimmedDescription.length < DESCRIPTION_MIN ||
+      trimmedDescription.length > DESCRIPTION_MAX
+    ) {
       errors.description = `Description must be between ${DESCRIPTION_MIN} and ${DESCRIPTION_MAX} characters`;
     }
 
@@ -370,16 +394,20 @@ const ManageSettings = () => {
   const validateOrganizer = () => {
     const errors = {};
     if (!organizerForm.name.trim()) errors.name = "Organizer name is required";
-    if (!organizerForm.title.trim()) errors.title = "Professional title is required";
+    if (!organizerForm.title.trim())
+      errors.title = "Professional title is required";
     if (!organizerForm.phone.trim()) errors.phone = "Contact phone is required";
-    else if (!PHONE_REGEX.test(organizerForm.phone.trim())) errors.phone = "Enter a valid phone number";
-    
-    if (organizerForm.website && !URL_REGEX.test(organizerForm.website.trim())) {
+    else if (!PHONE_REGEX.test(organizerForm.phone.trim()))
+      errors.phone = "Enter a valid phone number";
+
+    if (
+      organizerForm.website &&
+      !URL_REGEX.test(organizerForm.website.trim())
+    ) {
       errors.website = "Enter a valid URL (e.g., www.example.com)";
     }
     return errors;
   };
-
 
   // ---------- Account edit-mode controls ----------
   const startEditingAccount = () => {
@@ -423,7 +451,7 @@ const ManageSettings = () => {
     setIsEditingSystem(false);
   };
 
-    // ---------- Organizer edit-mode controls ----------
+  // ---------- Organizer edit-mode controls ----------
   const startEditingOrganizer = () => setIsEditingOrganizer(true);
 
   const cancelEditingOrganizer = () => {
@@ -437,7 +465,6 @@ const ManageSettings = () => {
     }
     setIsEditingOrganizer(false);
   };
-
 
   // ---------- Submit handlers ----------
   const saveAccountSettings = async (e) => {
@@ -481,7 +508,8 @@ const ManageSettings = () => {
       setShowPassword({ current: false, new: false, confirm: false });
       setIsEditingAccount(false); // lock the card back to read-only after a successful save
     } catch (error) {
-      const message = error.response?.data?.message || "Failed to update profile";
+      const message =
+        error.response?.data?.message || "Failed to update profile";
       toast.error(message);
 
       if (message.toLowerCase().includes("current password")) {
@@ -513,7 +541,9 @@ const ManageSettings = () => {
       setIsEditingBusiness(false);
       toast.success(res.data.message || "Business profile saved successfully!");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update business profile");
+      toast.error(
+        error.response?.data?.message || "Failed to update business profile",
+      );
     } finally {
       setSavingBusiness(false);
     }
@@ -574,11 +604,13 @@ const ManageSettings = () => {
       const res = await axios.put(`${API_BASE}/organizer`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
+
       setOrganizerForm(res.data.data);
       setSavedOrganizer(res.data.data);
       setIsEditingOrganizer(false);
-      toast.success(res.data.message || "Organizer profile saved successfully!");
+      toast.success(
+        res.data.message || "Organizer profile saved successfully!",
+      );
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to save organizer");
     } finally {
@@ -634,7 +666,10 @@ const ManageSettings = () => {
             <Sliders size={16} />
             <span>System Preferences</span>
           </button>
-          <button className={activeTab === "Organizer" ? "tab-btn active" : "tab-btn"} onClick={() => setActiveTab("Organizer")}>
+          <button
+            className={activeTab === "Organizer" ? "tab-btn active" : "tab-btn"}
+            onClick={() => setActiveTab("Organizer")}
+          >
             <Briefcase size={16} /> <span>Organizer Profile</span>
           </button>
         </div>
@@ -1129,14 +1164,22 @@ const ManageSettings = () => {
                 <Briefcase className="gold-icon" size={20} />
                 <h3>Event Organizer Details</h3>
                 {!isEditingOrganizer && (
-                  <button type="button" className="settings-btn edit settings-cardHeader-action" onClick={startEditingOrganizer}>
+                  <button
+                    type="button"
+                    className="settings-btn edit settings-cardHeader-action"
+                    onClick={startEditingOrganizer}
+                  >
                     <Pencil size={14} /> <span>Edit</span>
                   </button>
                 )}
               </div>
 
-              <form onSubmit={saveOrganizerProfile} className="settings-form" noValidate>
-                <div className="settings-formRow split-2">
+              <form
+                onSubmit={saveOrganizerProfile}
+                className="settings-form"
+                noValidate
+              >
+                {/* <div className="settings-formRow split-2">
                   <div className="settings-formGroup">
                     <label>Organizer Name</label>
                     <input
@@ -1146,7 +1189,11 @@ const ManageSettings = () => {
                       onChange={handleOrganizerChange}
                       disabled={!isEditingOrganizer}
                     />
-                    {organizerErrors.name && <small className="settings-field-error">{organizerErrors.name}</small>}
+                    {organizerErrors.name && (
+                      <small className="settings-field-error">
+                        {organizerErrors.name}
+                      </small>
+                    )}
                   </div>
                   <div className="settings-formGroup">
                     <label>Professional Title</label>
@@ -1158,11 +1205,12 @@ const ManageSettings = () => {
                       onChange={handleOrganizerChange}
                       disabled={!isEditingOrganizer}
                     />
-                    {organizerErrors.title && <small className="settings-field-error">{organizerErrors.title}</small>}
+                    {organizerErrors.title && (
+                      <small className="settings-field-error">
+                        {organizerErrors.title}
+                      </small>
+                    )}
                   </div>
-                </div>
-
-                <div className="settings-formRow split-2">
                   <div className="settings-formGroup">
                     <label>Contact Phone</label>
                     <input
@@ -1172,8 +1220,15 @@ const ManageSettings = () => {
                       onChange={handleOrganizerChange}
                       disabled={!isEditingOrganizer}
                     />
-                    {organizerErrors.phone && <small className="settings-field-error">{organizerErrors.phone}</small>}
+                    {organizerErrors.phone && (
+                      <small className="settings-field-error">
+                        {organizerErrors.phone}
+                      </small>
+                    )}
                   </div>
+                </div> */}
+
+                {/* <div className="settings-formRow split-2">
                   <div className="settings-formGroup">
                     <label>Website URL (Optional)</label>
                     <input
@@ -1184,42 +1239,224 @@ const ManageSettings = () => {
                       onChange={handleOrganizerChange}
                       disabled={!isEditingOrganizer}
                     />
-                    {organizerErrors.website && <small className="settings-field-error">{organizerErrors.website}</small>}
+                    {organizerErrors.website && (
+                      <small className="settings-field-error">
+                        {organizerErrors.website}
+                      </small>
+                    )}
                   </div>
-                </div>
-
-                <div className="settings-formRow">
                   <div className="settings-formGroup">
                     <label>Profile Image</label>
-                    <div 
-                      className={`file-upload-zone ${!isEditingOrganizer ? 'disabled' : ''}`}
-                      onDrop={handleFileDrop}
-                      onDragOver={(e) => e.preventDefault()}
-                    >
-                      <UploadCloud size={32} className="upload-icon" />
-                      <p>Select profile image or drag drop files</p>
-                      <small>Formats accepted: JPEG, PNG</small>
-                      <button 
-                        type="button" 
-                        className="browse-btn"
-                        onClick={() => fileInputRef.current.click()}
-                        disabled={!isEditingOrganizer}
+
+                    {!previewUrl ? (
+                      <div
+                        className={`file-upload-zone ${!isEditingOrganizer ? "disabled" : ""}`}
+                        onClick={() =>
+                          isEditingOrganizer && fileInputRef.current.click()
+                        }
+                        onDrop={handleFileDrop}
+                        onDragOver={(e) => e.preventDefault()}
                       >
-                        Browse Local Files
-                      </button>
-                      <input 
-                        type="file" 
-                        hidden 
-                        ref={fileInputRef} 
-                        onChange={handleFileSelect} 
-                        accept="image/jpeg, image/png" 
-                      />
-                    </div>
-                    {previewUrl && (
-                      <div className="image-preview-thumbnail" onClick={() => setImagePreviewModal(true)}>
-                        <img src={previewUrl} alt="Preview" />
-                        <div className="overlay"><Eye size={16}/> Preview</div>
+                        <UploadCloud size={32} className="upload-icon" />
+                        <p>Select profile image or drag drop files</p>
+                        <small>Formats accepted: JPEG, PNG</small>
+                        <button
+                          type="button"
+                          className="browse-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            fileInputRef.current.click();
+                          }}
+                          disabled={!isEditingOrganizer}
+                        >
+                          Browse Local Files
+                        </button>
+                        <input
+                          type="file"
+                          hidden
+                          ref={fileInputRef}
+                          onChange={handleFileSelect}
+                          accept="image/jpeg, image/png"
+                        />
                       </div>
+                    ) : (
+                      <div className="profile-image-previewBox">
+                        <img
+                          src={previewUrl}
+                          alt="Organizer profile"
+                          className="profile-image-previewImg"
+                          onClick={() => setImagePreviewModal(true)}
+                          title="Click to enlarge"
+                        />
+                        {isEditingOrganizer && (
+                          <button
+                            type="button"
+                            className="profile-image-removeBtn"
+                            onClick={handleRemoveImage}
+                            title="Remove image"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                        <span className="image-preview-hint">
+                          Click image to enlarge
+                        </span>
+                        <input
+                          type="file"
+                          hidden
+                          ref={fileInputRef}
+                          onChange={handleFileSelect}
+                          accept="image/jpeg, image/png"
+                        />
+                      </div>
+                    )}
+
+                    {organizerErrors.profileImage && (
+                      <small className="settings-field-error">
+                        {organizerErrors.profileImage}
+                      </small>
+                    )}
+                  </div>
+                </div> */}
+
+                {/* Row 1+2 combined into one responsive grid: name, title, phone, website, image */}
+                <div className="organizerFieldsGrid">
+                  <div className="settings-formGroup">
+                    <label>Organizer Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={organizerForm.name}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.name && (
+                      <small className="settings-field-error">
+                        {organizerErrors.name}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="settings-formGroup">
+                    <label>Professional Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="e.g. Certified Wedding Planner"
+                      value={organizerForm.title}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.title && (
+                      <small className="settings-field-error">
+                        {organizerErrors.title}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="settings-formGroup">
+                    <label>Contact Phone</label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={organizerForm.phone}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.phone && (
+                      <small className="settings-field-error">
+                        {organizerErrors.phone}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="settings-formGroup">
+                    <label>Website URL (Optional)</label>
+                    <input
+                      type="text"
+                      name="website"
+                      placeholder="www.example.com"
+                      value={organizerForm.website}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.website && (
+                      <small className="settings-field-error">
+                        {organizerErrors.website}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="settings-formGroup">
+                    <label>Profile Image</label>
+
+                    {!previewUrl ? (
+                      <div
+                        className={`file-upload-zone ${!isEditingOrganizer ? "disabled" : ""}`}
+                        onClick={() =>
+                          isEditingOrganizer && fileInputRef.current.click()
+                        }
+                        onDrop={handleFileDrop}
+                        onDragOver={(e) => e.preventDefault()}
+                      >
+                        <UploadCloud size={32} className="upload-icon" />
+                        <p>Select profile image or drag drop files</p>
+                        <small>Formats accepted: JPEG, PNG</small>
+                        <button
+                          type="button"
+                          className="browse-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            fileInputRef.current.click();
+                          }}
+                          disabled={!isEditingOrganizer}
+                        >
+                          Browse Local Files
+                        </button>
+                        <input
+                          type="file"
+                          hidden
+                          ref={fileInputRef}
+                          onChange={handleFileSelect}
+                          accept="image/jpeg, image/png"
+                        />
+                      </div>
+                    ) : (
+                      <div className="profile-image-previewBox">
+                        <img
+                          src={previewUrl}
+                          alt="Organizer profile"
+                          className="profile-image-previewImg"
+                          onClick={() => setImagePreviewModal(true)}
+                          title="Click to enlarge"
+                        />
+                        {isEditingOrganizer && (
+                          <button
+                            type="button"
+                            className="profile-image-removeBtn"
+                            onClick={handleRemoveImage}
+                            title="Remove image"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                        <span className="image-preview-hint">
+                          Click image to enlarge
+                        </span>
+                        <input
+                          type="file"
+                          hidden
+                          ref={fileInputRef}
+                          onChange={handleFileSelect}
+                          accept="image/jpeg, image/png"
+                        />
+                      </div>
+                    )}
+
+                    {organizerErrors.profileImage && (
+                      <small className="settings-field-error">
+                        {organizerErrors.profileImage}
+                      </small>
                     )}
                   </div>
                 </div>
@@ -1227,12 +1464,24 @@ const ManageSettings = () => {
                 {isEditingOrganizer && (
                   <div className="settings-btnGroup">
                     {Boolean(savedOrganizer.name?.trim()) && (
-                      <button type="button" className="settings-btn cancel" onClick={cancelEditingOrganizer} disabled={savingOrganizer}>
+                      <button
+                        type="button"
+                        className="settings-btn cancel"
+                        onClick={cancelEditingOrganizer}
+                        disabled={savingOrganizer}
+                      >
                         <X size={16} /> <span>Cancel</span>
                       </button>
                     )}
-                    <button type="submit" className="settings-btn save" disabled={savingOrganizer}>
-                      <Save size={16} /> <span>{savingOrganizer ? "Saving..." : "Save Organizer"}</span>
+                    <button
+                      type="submit"
+                      className="settings-btn save"
+                      disabled={savingOrganizer}
+                    >
+                      <Save size={16} />{" "}
+                      <span>
+                        {savingOrganizer ? "Saving..." : "Save Organizer"}
+                      </span>
                     </button>
                   </div>
                 )}
@@ -1244,15 +1493,25 @@ const ManageSettings = () => {
 
       {/* Image Preview Modal */}
       {imagePreviewModal && (
-        <div className="image-modal-overlay" onClick={() => setImagePreviewModal(false)}>
-          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal-btn" onClick={() => setImagePreviewModal(false)}><X size={24} /></button>
+        <div
+          className="image-modal-overlay"
+          onClick={() => setImagePreviewModal(false)}
+        >
+          <div
+            className="image-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="close-modal-btn"
+              onClick={() => setImagePreviewModal(false)}
+            >
+              <X size={24} />
+            </button>
             <img src={previewUrl} alt="Full Preview" />
           </div>
         </div>
       )}
-        
-     
+
       <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );
