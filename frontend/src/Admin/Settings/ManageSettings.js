@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Ensure toast styles are loaded
 import {
   User,
   Building,
@@ -12,6 +13,8 @@ import {
   X,
   Eye,
   EyeOff,
+  Briefcase,
+  UploadCloud
 } from "lucide-react";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import "./Settings.css";
@@ -43,10 +46,13 @@ const EMPTY_SYSTEM = {
   configured: false,
 };
 
+const EMPTY_ORGANIZER = { name: "", title: "", phone: "", website: "" };
+
 // Regex patterns used across the form validators below
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^\+?[0-9]{10,15}$/;
 const GST_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+const URL_REGEX = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
 
 // Field length limits used by the validators below.
 // Keep these in sync with the matching limits in settingController.js on the backend.
@@ -62,19 +68,29 @@ const DESCRIPTION_MAX = 500;
 const ManageSettings = () => {
   const [activeTab, setActiveTab] = useState("Account");
   const [loading, setLoading] = useState(true);
+
   const [savingAccount, setSavingAccount] = useState(false);
   const [savingBusiness, setSavingBusiness] = useState(false);
   const [savingSystem, setSavingSystem] = useState(false);
+  const [savingOrganizer, setSavingOrganizer] = useState(false);
 
   // Whether each card is unlocked for editing. All three follow the same rule:
   // start unlocked, then the fetch below locks a card if it already has saved data.
   const [isEditingAccount, setIsEditingAccount] = useState(true);
   const [isEditingBusiness, setIsEditingBusiness] = useState(true);
   const [isEditingSystem, setIsEditingSystem] = useState(true);
+  const [isEditingOrganizer, setIsEditingOrganizer] = useState(true);
 
   const [accountForm, setAccountForm] = useState(EMPTY_ACCOUNT);
   const [businessForm, setBusinessForm] = useState(EMPTY_BUSINESS);
   const [systemForm, setSystemForm] = useState(EMPTY_SYSTEM);
+  const [organizerForm, setOrganizerForm] = useState(EMPTY_ORGANIZER);
+
+  // Image handling for Organizer
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [imagePreviewModal, setImagePreviewModal] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Last-saved values, used to restore each form if the user cancels an edit
   const [savedAccount, setSavedAccount] = useState({
@@ -84,11 +100,13 @@ const ManageSettings = () => {
   });
   const [savedBusiness, setSavedBusiness] = useState(EMPTY_BUSINESS);
   const [savedSystem, setSavedSystem] = useState(EMPTY_SYSTEM);
+  const [savedOrganizer, setSavedOrganizer] = useState(EMPTY_ORGANIZER);
 
   // Per-field error messages, keyed by field name, for each tab
   const [accountErrors, setAccountErrors] = useState({});
   const [businessErrors, setBusinessErrors] = useState({});
   const [systemErrors, setSystemErrors] = useState({});
+  const [organizerErrors, setOrganizerErrors] = useState({});
 
   const [showPassword, setShowPassword] = useState({
     current: false,
@@ -105,7 +123,7 @@ const ManageSettings = () => {
     const fetchSettings = async () => {
       try {
         const res = await axios.get(API_BASE);
-        const { account, business, system } = res.data.data;
+        const { account, business, system, organizer } = res.data.data;
 
         // Account: if the admin already has a saved name/email, lock the card
         // read-only. Otherwise leave it unlocked so it can be filled in directly.
@@ -137,6 +155,18 @@ const ManageSettings = () => {
         setSystemForm(hasSavedSystemData ? system : EMPTY_SYSTEM);
         setSavedSystem(hasSavedSystemData ? system : EMPTY_SYSTEM);
         setIsEditingSystem(!hasSavedSystemData);
+
+        // Organizer logic
+        if (organizer) {
+          const hasSavedOrganizer = Boolean(organizer?.name?.trim());
+          setOrganizerForm(organizer);
+          setSavedOrganizer(organizer);
+          if (organizer.profileImage) {
+             setPreviewUrl(`http://localhost:5000${organizer.profileImage}`);
+          }
+          setIsEditingOrganizer(!hasSavedOrganizer);
+        }
+
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to load settings");
       } finally {
@@ -169,6 +199,38 @@ const ManageSettings = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
     setSystemErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const handleOrganizerChange = (e) => {
+    const { name, value } = e.target;
+    setOrganizerForm((prev) => ({ ...prev, [name]: value }));
+    setOrganizerErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  // --- Image Upload Handlers ---
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    if (!isEditingOrganizer) return;
+    const file = e.dataTransfer.files[0];
+    validateAndSetImage(file);
+  };
+
+  const handleFileSelect = (e) => {
+    if (!isEditingOrganizer) return;
+    const file = e.target.files[0];
+    validateAndSetImage(file);
+  };
+
+  const validateAndSetImage = (file) => {
+    if (file) {
+      if (file.type === "image/jpeg" || file.type === "image/png") {
+        setSelectedFile(file);
+        setPreviewUrl(URL.createObjectURL(file));
+        setOrganizerErrors((prev) => ({ ...prev, profileImage: "" }));
+      } else {
+        toast.error("Invalid file format. Please upload JPEG or PNG.");
+      }
+    }
   };
 
   // ---------- Validators (return an errors object; empty object = valid) ----------
@@ -305,6 +367,20 @@ const ManageSettings = () => {
     return errors;
   };
 
+  const validateOrganizer = () => {
+    const errors = {};
+    if (!organizerForm.name.trim()) errors.name = "Organizer name is required";
+    if (!organizerForm.title.trim()) errors.title = "Professional title is required";
+    if (!organizerForm.phone.trim()) errors.phone = "Contact phone is required";
+    else if (!PHONE_REGEX.test(organizerForm.phone.trim())) errors.phone = "Enter a valid phone number";
+    
+    if (organizerForm.website && !URL_REGEX.test(organizerForm.website.trim())) {
+      errors.website = "Enter a valid URL (e.g., www.example.com)";
+    }
+    return errors;
+  };
+
+
   // ---------- Account edit-mode controls ----------
   const startEditingAccount = () => {
     setIsEditingAccount(true);
@@ -346,6 +422,22 @@ const ManageSettings = () => {
     setSystemErrors({});
     setIsEditingSystem(false);
   };
+
+    // ---------- Organizer edit-mode controls ----------
+  const startEditingOrganizer = () => setIsEditingOrganizer(true);
+
+  const cancelEditingOrganizer = () => {
+    setOrganizerForm(savedOrganizer);
+    setOrganizerErrors({});
+    setSelectedFile(null);
+    if (savedOrganizer.profileImage) {
+      setPreviewUrl(`http://localhost:5000${savedOrganizer.profileImage}`);
+    } else {
+      setPreviewUrl(null);
+    }
+    setIsEditingOrganizer(false);
+  };
+
 
   // ---------- Submit handlers ----------
   const saveAccountSettings = async (e) => {
@@ -459,6 +551,41 @@ const ManageSettings = () => {
     }
   };
 
+  const saveOrganizerProfile = async (e) => {
+    e.preventDefault();
+    const errors = validateOrganizer();
+    setOrganizerErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      toast.error("Please fix the highlighted fields");
+      return;
+    }
+
+    setSavingOrganizer(true);
+    try {
+      const formData = new FormData();
+      formData.append("name", organizerForm.name);
+      formData.append("title", organizerForm.title);
+      formData.append("phone", organizerForm.phone);
+      formData.append("website", organizerForm.website);
+      if (selectedFile) {
+        formData.append("profileImage", selectedFile);
+      }
+
+      const res = await axios.put(`${API_BASE}/organizer`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      
+      setOrganizerForm(res.data.data);
+      setSavedOrganizer(res.data.data);
+      setIsEditingOrganizer(false);
+      toast.success(res.data.message || "Organizer profile saved successfully!");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to save organizer");
+    } finally {
+      setSavingOrganizer(false);
+    }
+  };
+
   if (loading) {
     return (
       <AdminLayout>
@@ -506,6 +633,9 @@ const ManageSettings = () => {
           >
             <Sliders size={16} />
             <span>System Preferences</span>
+          </button>
+          <button className={activeTab === "Organizer" ? "tab-btn active" : "tab-btn"} onClick={() => setActiveTab("Organizer")}>
+            <Briefcase size={16} /> <span>Organizer Profile</span>
           </button>
         </div>
 
@@ -991,8 +1121,138 @@ const ManageSettings = () => {
               </form>
             </div>
           )}
+
+          {/* TAB 4: ORGANIZER PROFILE */}
+          {activeTab === "Organizer" && (
+            <div className="settings-card">
+              <div className="settings-cardHeader">
+                <Briefcase className="gold-icon" size={20} />
+                <h3>Event Organizer Details</h3>
+                {!isEditingOrganizer && (
+                  <button type="button" className="settings-btn edit settings-cardHeader-action" onClick={startEditingOrganizer}>
+                    <Pencil size={14} /> <span>Edit</span>
+                  </button>
+                )}
+              </div>
+
+              <form onSubmit={saveOrganizerProfile} className="settings-form" noValidate>
+                <div className="settings-formRow split-2">
+                  <div className="settings-formGroup">
+                    <label>Organizer Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={organizerForm.name}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.name && <small className="settings-field-error">{organizerErrors.name}</small>}
+                  </div>
+                  <div className="settings-formGroup">
+                    <label>Professional Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="e.g. Certified Wedding Planner"
+                      value={organizerForm.title}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.title && <small className="settings-field-error">{organizerErrors.title}</small>}
+                  </div>
+                </div>
+
+                <div className="settings-formRow split-2">
+                  <div className="settings-formGroup">
+                    <label>Contact Phone</label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={organizerForm.phone}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.phone && <small className="settings-field-error">{organizerErrors.phone}</small>}
+                  </div>
+                  <div className="settings-formGroup">
+                    <label>Website URL (Optional)</label>
+                    <input
+                      type="text"
+                      name="website"
+                      placeholder="www.example.com"
+                      value={organizerForm.website}
+                      onChange={handleOrganizerChange}
+                      disabled={!isEditingOrganizer}
+                    />
+                    {organizerErrors.website && <small className="settings-field-error">{organizerErrors.website}</small>}
+                  </div>
+                </div>
+
+                <div className="settings-formRow">
+                  <div className="settings-formGroup">
+                    <label>Profile Image</label>
+                    <div 
+                      className={`file-upload-zone ${!isEditingOrganizer ? 'disabled' : ''}`}
+                      onDrop={handleFileDrop}
+                      onDragOver={(e) => e.preventDefault()}
+                    >
+                      <UploadCloud size={32} className="upload-icon" />
+                      <p>Select profile image or drag drop files</p>
+                      <small>Formats accepted: JPEG, PNG</small>
+                      <button 
+                        type="button" 
+                        className="browse-btn"
+                        onClick={() => fileInputRef.current.click()}
+                        disabled={!isEditingOrganizer}
+                      >
+                        Browse Local Files
+                      </button>
+                      <input 
+                        type="file" 
+                        hidden 
+                        ref={fileInputRef} 
+                        onChange={handleFileSelect} 
+                        accept="image/jpeg, image/png" 
+                      />
+                    </div>
+                    {previewUrl && (
+                      <div className="image-preview-thumbnail" onClick={() => setImagePreviewModal(true)}>
+                        <img src={previewUrl} alt="Preview" />
+                        <div className="overlay"><Eye size={16}/> Preview</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {isEditingOrganizer && (
+                  <div className="settings-btnGroup">
+                    {Boolean(savedOrganizer.name?.trim()) && (
+                      <button type="button" className="settings-btn cancel" onClick={cancelEditingOrganizer} disabled={savingOrganizer}>
+                        <X size={16} /> <span>Cancel</span>
+                      </button>
+                    )}
+                    <button type="submit" className="settings-btn save" disabled={savingOrganizer}>
+                      <Save size={16} /> <span>{savingOrganizer ? "Saving..." : "Save Organizer"}</span>
+                    </button>
+                  </div>
+                )}
+              </form>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Image Preview Modal */}
+      {imagePreviewModal && (
+        <div className="image-modal-overlay" onClick={() => setImagePreviewModal(false)}>
+          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-modal-btn" onClick={() => setImagePreviewModal(false)}><X size={24} /></button>
+            <img src={previewUrl} alt="Full Preview" />
+          </div>
+        </div>
+      )}
+        
+     
       <ToastContainer position="top-right" autoClose={3000} />
     </AdminLayout>
   );

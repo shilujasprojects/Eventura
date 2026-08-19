@@ -367,3 +367,144 @@
 .password-toggleBtn:hover {
   color: #f1d49b;
 }
+
+/* --- Add these to the bottom of your Settings.css --- */
+
+/* File Upload Zone matching screenshot */
+.file-upload-zone {
+  background-color: #061521;
+  border: 2px dashed rgba(241, 212, 155, 0.2);
+  border-radius: 12px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.3s ease;
+  margin-top: 5px;
+}
+
+.file-upload-zone.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.file-upload-zone:hover:not(.disabled) {
+  border-color: #f1d49b;
+  background-color: #081a29;
+}
+
+.file-upload-zone .upload-icon {
+  color: #8a9ba8;
+  margin-bottom: 15px;
+}
+
+.file-upload-zone p {
+  color: #fff7ee;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+}
+
+.file-upload-zone small {
+  color: #5c7285;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+}
+
+.file-upload-zone .browse-btn {
+  background-color: #112a40;
+  color: #f1d49b;
+  border: 1px solid rgba(241, 212, 155, 0.3);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-upload-zone .browse-btn:hover:not(:disabled) {
+  background-color: rgba(241, 212, 155, 0.1);
+  border-color: #f1d49b;
+}
+
+/* Image Preview Thumbnail */
+.image-preview-thumbnail {
+  margin-top: 15px;
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid rgba(241, 212, 155, 0.2);
+}
+
+.image-preview-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-preview-thumbnail .overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(6, 32, 54, 0.7);
+  color: #f1d49b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.image-preview-thumbnail:hover .overlay {
+  opacity: 1;
+}
+
+/* Full Screen Image Modal */
+.image-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.image-modal-content {
+  position: relative;
+  max-width: 80%;
+  max-height: 80vh;
+}
+
+.image-modal-content img {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  border: 2px solid #f1d49b;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  background: none;
+  border: none;
+  color: #fff7ee;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+  color: #f1d49b;
+}

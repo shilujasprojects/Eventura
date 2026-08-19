@@ -136,10 +136,26 @@ function BookSummary() {
                 ))
               )}
             </div>
-            <div className="info-row mt-2">
+            {/* <div className="info-row mt-2">
               <span>Total Amount</span>
               <strong>₹{data.totalAmount?.toLocaleString()}</strong>
-            </div>
+            </div> */}
+            <div className="info-row">
+  <span>Subtotal</span>
+  <strong>₹{data.subtotal?.toLocaleString()}</strong>
+</div>
+<div className="info-row">
+  <span>GST ({data.taxPercentage}%)</span>
+  <strong>₹{data.taxAmount?.toLocaleString()}</strong>
+</div>
+<div className="info-row">
+  <span>Total Amount</span>
+  <strong>₹{data.totalAmount?.toLocaleString()}</strong>
+</div>
+<div className="info-row">
+  <span>Advance Due Now ({data.advancePercentage}%)</span>
+  <strong>₹{data.estimatedAdvance?.toLocaleString()}</strong>
+</div>
           </div>
 
           {/* Guests */}

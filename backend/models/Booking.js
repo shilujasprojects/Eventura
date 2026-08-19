@@ -50,6 +50,8 @@ const bookingSchema = new mongoose.Schema(
 
     packagePrice: { type: Number, default: 0 },
     extraServicesTotal: { type: Number, default: 0 },
+    taxPercentage: { type: Number, default: 0 }, 
+    taxAmount: { type: Number, default: 0 },
     totalAmount: { type: Number, required: true },
 
     // Payment tracking — 50% advance, 50% after the event is completed

@@ -2,7 +2,21 @@ const Booking = require("../models/Booking");
 const Event = require("../models/Events");
 const Package = require("../models/Package");
 const Client = require("../models/Client");
+const Settings = require("../models/Settings");
 const sendBookingWhatsApp = require("../utils/sendWhatsApp");
+
+// Small helper — same "find or create with defaults" pattern settingController uses.
+// Booking creation should never crash just because no admin has saved System
+// Preferences yet, so this always returns *something* usable.
+const getSystemConfig = async () => {
+  const settings = await Settings.findOne();
+  if (settings?.system?.configured) return settings.system;
+  return {
+    advanceDepositPercentage: 50,
+    serviceTaxPercentage: 18,
+    minimumBookingMarginDays: 7,
+  };
+};
 
 // CREATE - called from website BookSummary page on "Confirm Booking"
 exports.createBooking = async (req, res) => {
@@ -27,6 +41,27 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({ success: false, message: "Select a package or choose Build Your Own" });
     }
 
+    // Server-side minimum notice check — the frontend already blocks this,
+    // but a direct API call could skip past it, so we enforce it here too.
+    const systemConfig = await getSystemConfig();
+    const marginDays = systemConfig.minimumBookingMarginDays;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const minAllowedDate = new Date(today);
+    minAllowedDate.setDate(minAllowedDate.getDate() + marginDays);
+
+    const chosenDate = new Date(eventDate);
+    if (isNaN(chosenDate.getTime())) {
+      return res.status(400).json({ success: false, message: "Invalid event date" });
+    }
+    if (chosenDate < minAllowedDate) {
+      return res.status(400).json({
+        success: false,
+        message: `Bookings require at least ${marginDays} day(s) advance notice.`,
+      });
+    }
+
     let packagePrice = 0;
 
     if (isCustomPackage) {
@@ -45,7 +80,17 @@ exports.createBooking = async (req, res) => {
       (sum, s) => sum + Number(s.price || 0),
       0
     );
-    const totalAmount = packagePrice + extraServicesTotal;
+
+    // Price is always computed server-side from packagePrice/extraServicesTotal —
+    // never trust a totalAmount sent from the browser.
+    const subtotal = packagePrice + extraServicesTotal;
+    const taxPercentage = systemConfig.serviceTaxPercentage;
+    const taxAmount = Math.round(subtotal * (taxPercentage / 100));
+    const totalAmount = subtotal + taxAmount;
+
+    const advancePercentage = systemConfig.advanceDepositPercentage;
+    const advanceAmount = Math.round(totalAmount * (advancePercentage / 100));
+    const balanceAmount = totalAmount - advanceAmount;
 
     // Find an existing client by email or phone, otherwise create a new record.
     let client = await Client.findOne({ $or: [{ email }, { phone }] });
@@ -76,10 +121,12 @@ exports.createBooking = async (req, res) => {
       fullName, phone, email, whatsappUpdates,
       packagePrice,
       extraServicesTotal,
+      taxPercentage,
+      taxAmount,
       totalAmount,
       paymentSummary: {
-        advanceAmount: Math.round(totalAmount * 0.5),
-        balanceAmount: totalAmount - Math.round(totalAmount * 0.5),
+        advanceAmount,
+        balanceAmount,
       },
     });
 
@@ -275,7 +322,6 @@ exports.getClientBookings = async (req, res) => {
 };
 
 // GET - single booking, used by the client's payment page
-// GET - single booking, used by the client's payment page
 exports.getBookingById = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
@@ -290,12 +336,17 @@ exports.getBookingById = async (req, res) => {
       return res.status(404).json({ success: false, message: "Booking not found" });
     }
 
-    if (!booking.paymentSummary) {
+    // Legacy safety net for any booking created before paymentSummary existed.
+    // Uses the CURRENT admin-configured advance %, not a hardcoded 50/50 split.
+    if (!booking.paymentSummary || (!booking.paymentSummary.advanceAmount && !booking.paymentSummary.balanceAmount)) {
+      const systemConfig = await getSystemConfig();
+      const advanceAmount = Math.round(booking.totalAmount * (systemConfig.advanceDepositPercentage / 100));
       booking.paymentSummary = {
-        advanceAmount: Math.round(booking.totalAmount * 0.5),
-        balanceAmount: booking.totalAmount - Math.round(booking.totalAmount * 0.5),
-        advanceStatus: "Not Paid",
-        finalStatus: "Not Paid",
+        ...booking.paymentSummary,
+        advanceAmount,
+        balanceAmount: booking.totalAmount - advanceAmount,
+        advanceStatus: booking.paymentSummary?.advanceStatus || "Not Paid",
+        finalStatus: booking.paymentSummary?.finalStatus || "Not Paid",
       };
       await booking.save();
     }

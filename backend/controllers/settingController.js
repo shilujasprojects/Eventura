@@ -61,12 +61,34 @@ const getSettings = async (req, res) => {
         },
         business: settings.business,
         system: settings.system,
+        organizer: settings.organizer,
       },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Failed to load settings",
+      error: error.message,
+    });
+  }
+};
+
+// GET /api/settings/booking-config — public, used by the client-facing
+// booking flow (BookNow page). Only exposes the three numbers that flow
+// actually needs — never the admin email, password hash, GST number, etc.
+const getBookingConfig = async (req, res) => {
+  try {
+    const settings = await getOrCreateSettingsDoc();
+    const { minimumBookingMarginDays, advanceDepositPercentage, serviceTaxPercentage } = settings.system;
+
+    res.status(200).json({
+      success: true,
+      data: { minimumBookingMarginDays, advanceDepositPercentage, serviceTaxPercentage },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to load booking configuration",
       error: error.message,
     });
   }
@@ -274,10 +296,48 @@ const changePassword = async (req, res) => {
   }
 };
 
+//  this new function to handle Organizer updates
+const updateOrganizerProfile = async (req, res) => {
+  try {
+    const { name, title, phone, website } = req.body;
+
+    // Validation
+    if (!name?.trim()) return res.status(400).json({ success: false, message: "Organizer name is required" });
+    if (!title?.trim()) return res.status(400).json({ success: false, message: "Professional title is required" });
+    if (!PHONE_REGEX.test(phone || "")) return res.status(400).json({ success: false, message: "Enter a valid phone number" });
+
+    const settings = await getOrCreateSettingsDoc();
+
+    settings.organizer.name = name.trim();
+    settings.organizer.title = title.trim();
+    settings.organizer.phone = phone.trim();
+    settings.organizer.website = website?.trim() || "";
+
+    // If a file was uploaded via Multer, save the path
+    if (req.file) {
+      // Assuming you serve the uploads folder statically in server.js
+      settings.organizer.profileImage = `/uploads/${req.file.filename}`;
+    }
+
+    await settings.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Organizer profile updated successfully",
+      data: settings.organizer,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to update organizer profile", error: error.message });
+  }
+};
+
+// Don't forget to export it!
 module.exports = {
   getSettings,
+  getBookingConfig, // NEW
   updateBusinessSettings,
   updateSystemSettings,
   updateAccountProfile,
   changePassword,
+  updateOrganizerProfile,
 };

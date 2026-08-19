@@ -22,6 +22,14 @@ const settingsSchema = new mongoose.Schema(
       autoApproveBookings: { type: Boolean, default: false },
       configured: { type: Boolean, default: false },
     },
+    // Organizer Section
+    organizer: {
+      name: { type: String, default: "", trim: true },
+      title: { type: String, default: "", trim: true },
+      phone: { type: String, default: "", trim: true },
+      website: { type: String, default: "", trim: true, lowercase: true },
+      profileImage: { type: String, default: "" }, // Will store the file path from Multer
+    }
   },
   { timestamps: true }
 );

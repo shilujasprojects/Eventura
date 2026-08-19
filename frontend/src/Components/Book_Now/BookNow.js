@@ -6,6 +6,7 @@ import "./BookNow.css";
 
 // 👈 Update this if your login page's route is different
 const LOGIN_ROUTE = "/loginSign";
+const BASE_URL = "http://localhost:5000";
 
 function BookNow() {
   const navigate = useNavigate();
@@ -30,13 +31,34 @@ function BookNow() {
   const [checkingStatus, setCheckingStatus] = useState(!!loggedInClient);
   const [isSuspended, setIsSuspended] = useState(false);
 
+  // Admin-configured booking rules (margin days, deposit %, GST %).
+  // Defaults here match the old hardcoded behavior, so the form still
+  // works even if this fetch fails for some reason.
+  const [bookingConfig, setBookingConfig] = useState({
+    minimumBookingMarginDays: 1,
+    advanceDepositPercentage: 50,
+    serviceTaxPercentage: 18,
+  });
+
+  useEffect(() => {
+    const fetchBookingConfig = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/settings/booking-config`);
+        setBookingConfig(res.data.data);
+      } catch (error) {
+        console.error("Could not load booking configuration, using defaults", error);
+      }
+    };
+    fetchBookingConfig();
+  }, []);
+
   useEffect(() => {
     if (!loggedInClient) return;
 
     const checkStatus = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/public/clients/${loggedInClient._id}/status`
+          `${BASE_URL}/api/public/clients/${loggedInClient._id}/status`,
         );
         setIsSuspended(res.data.status === "Suspended");
       } catch (error) {
@@ -95,7 +117,7 @@ function BookNow() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/category?status=Active");
+        const res = await axios.get(`${BASE_URL}/api/category?status=Active`);
         setCategories(res.data);
       } catch (error) {
         toast.error("Failed to load event categories. Please refresh the page.");
@@ -110,7 +132,7 @@ function BookNow() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/services?status=Active");
+        const res = await axios.get(`${BASE_URL}/api/services?status=Active`);
         setServices(res.data.data);
       } catch (error) {
         console.error("Failed to load services", error);
@@ -135,7 +157,7 @@ function BookNow() {
       setSelectedExtraServices([]);
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/events?category=${selectedCategory._id}&status=Active`
+          `${BASE_URL}/api/events?category=${selectedCategory._id}&status=Active`,
         );
         setEvents(res.data.data);
       } catch (error) {
@@ -161,7 +183,7 @@ function BookNow() {
       setSelectedExtraServices([]);
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/packages?category=${selectedCategory._id}&status=Active`
+          `${BASE_URL}/api/packages?category=${selectedCategory._id}&status=Active`,
         );
         setPackages(res.data.data);
       } catch (error) {
@@ -196,14 +218,25 @@ function BookNow() {
       if (exists) return prev.filter((s) => s.service !== service._id);
       return [
         ...prev,
-        { service: service._id, serviceName: service.serviceName, price: service.servicePrice },
+        {
+          service: service._id,
+          serviceName: service.serviceName,
+          price: service.servicePrice,
+        },
       ];
     });
   };
 
+  // Pricing — subtotal from package/services, GST and advance % pulled
+  // from bookingConfig (admin-configured), same formula the backend uses.
   const packagePrice = !isCustom && selectedPackage ? selectedPackage.finalPrice : 0;
   const extraServicesTotal = selectedExtraServices.reduce((sum, s) => sum + s.price, 0);
-  const estimatedTotal = packagePrice + extraServicesTotal;
+  const subtotal = packagePrice + extraServicesTotal;
+  const taxAmount = Math.round(subtotal * (bookingConfig.serviceTaxPercentage / 100));
+  const estimatedTotal = subtotal + taxAmount;
+  const estimatedAdvance = Math.round(
+    estimatedTotal * (bookingConfig.advanceDepositPercentage / 100),
+  );
 
   const validate = () => {
     const newErrors = {};
@@ -219,18 +252,22 @@ function BookNow() {
       newErrors.package = "Select at least one service for your custom booking.";
     }
 
+    // Date validation respects the admin-configured minimum notice period.
     if (!formData.eventDate) {
       newErrors.eventDate = "Event date is required.";
     } else {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const chosenDate = new Date(formData.eventDate);
-      const oneDayMs = 24 * 60 * 60 * 1000;
+      const marginDays = bookingConfig.minimumBookingMarginDays || 1;
+      const minAllowedDate = new Date(today);
+      minAllowedDate.setDate(minAllowedDate.getDate() + marginDays);
 
-      if (chosenDate < today) {
-        newErrors.eventDate = "Event date cannot be in the past.";
-      } else if (chosenDate - today < oneDayMs) {
-        newErrors.eventDate = "Please book at least 1 day in advance.";
+      if (chosenDate < minAllowedDate) {
+        newErrors.eventDate =
+          marginDays === 1
+            ? "Please book at least 1 day in advance."
+            : `Please book at least ${marginDays} days in advance.`;
       }
     }
 
@@ -307,7 +344,12 @@ function BookNow() {
 
       extraServices: selectedExtraServices,
       extraServicesTotal,
+      subtotal,
+      taxPercentage: bookingConfig.serviceTaxPercentage,
+      taxAmount,
       totalAmount: estimatedTotal,
+      advancePercentage: bookingConfig.advanceDepositPercentage,
+      estimatedAdvance,
 
       ...formData,
       fullName: formData.fullName.trim(),
@@ -349,10 +391,16 @@ function BookNow() {
           <div className="suspended-blocker">
             <h4>Account Suspended</h4>
             <p>
-              Your account is currently suspended, so new bookings can't be made right now.
-              Please contact our support team to reactivate your account before booking an event.
+              Your account is currently suspended, so new bookings can't be made
+              right now. Please contact our support team to reactivate your
+              account before booking an event.
             </p>
-            <a href="https://wa.me/9114155238886" target="_blank" rel="noopener noreferrer" className="btn btn-gold px-4 py-2 mt-2">
+            <a
+              href="https://wa.me/9114155238886"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-gold px-4 py-2 mt-2"
+            >
               Contact Support
             </a>
           </div>
@@ -372,7 +420,9 @@ function BookNow() {
             {categoriesLoading ? (
               <p>Loading categories...</p>
             ) : categories.length === 0 ? (
-              <p className="text-muted">No categories available right now. Please check back later.</p>
+              <p className="text-muted">
+                No categories available right now. Please check back later.
+              </p>
             ) : (
               <div className="row g-3">
                 {categories.map((category) => (
@@ -381,7 +431,10 @@ function BookNow() {
                       className={`event-card ${selectedCategory?._id === category._id ? "active" : ""}`}
                       onClick={() => setSelectedCategory(category)}
                     >
-                      <img src={`http://localhost:5000/uploads/${category.image}`} alt={category.categoryName} />
+                      <img
+                        src={`${BASE_URL}/uploads/${category.image}`}
+                        alt={category.categoryName}
+                      />
                       <p>{category.categoryName}</p>
                     </div>
                   </div>
@@ -408,7 +461,10 @@ function BookNow() {
                         className={`event-card ${selectedEvent?._id === event._id ? "active" : ""}`}
                         onClick={() => setSelectedEvent(event)}
                       >
-                        <img src={`http://localhost:5000/uploads/${event.coverImage}`} alt={event.eventName} />
+                        <img
+                          src={`${BASE_URL}/uploads/${event.coverImage}`}
+                          alt={event.eventName}
+                        />
                         <p>{event.eventName}</p>
                       </div>
                     </div>
@@ -488,7 +544,9 @@ function BookNow() {
                       </div>
                     ))}
                   </div>
-                  {errors.package && <small className="error-text d-block mt-2">{errors.package}</small>}
+                  {errors.package && (
+                    <small className="error-text d-block mt-2">{errors.package}</small>
+                  )}
                 </div>
 
                 <div className="col-lg-3 mt-4 mt-lg-0">
@@ -522,7 +580,12 @@ function BookNow() {
                       value={formData.eventDate}
                       onChange={(e) => handleInputChange("eventDate", e.target.value)}
                     />
-                    {errors.eventDate && <small className="error-text">{errors.eventDate}</small>}
+                    <small className="text-muted">
+                      Minimum {bookingConfig.minimumBookingMarginDays} day(s) notice required.
+                    </small>
+                    {errors.eventDate && (
+                      <small className="error-text d-block">{errors.eventDate}</small>
+                    )}
                   </div>
                   <div className="col-md-3">
                     <label>Start Time</label>
@@ -570,7 +633,7 @@ function BookNow() {
                       type="number"
                       className="form-control"
                       placeholder="Enter number of guests"
-                      min="100"
+                      min="1"
                       max="5000"
                       value={formData.guestCount}
                       onChange={(e) => handleInputChange("guestCount", e.target.value)}
@@ -580,7 +643,9 @@ function BookNow() {
                       onWheel={(e) => e.target.blur()}
                     />
                     <small className="text-muted">Approximate guest count</small>
-                    {errors.guestCount && <small className="error-text d-block">{errors.guestCount}</small>}
+                    {errors.guestCount && (
+                      <small className="error-text d-block">{errors.guestCount}</small>
+                    )}
                   </div>
                 </div>
               </div>
@@ -613,11 +678,37 @@ function BookNow() {
                           maxLength="500"
                           placeholder="Tell us anything specific about your event..."
                           value={formData.specialRequirements}
-                          onChange={(e) => handleInputChange("specialRequirements", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("specialRequirements", e.target.value)
+                          }
                         ></textarea>
                         {errors.specialRequirements && (
                           <small className="error-text">{errors.specialRequirements}</small>
                         )}
+                      </div>
+                    </div>
+
+                    {/* Custom flow gets the same GST/advance breakdown as a package,
+                        so the client knows the estimate before submitting. */}
+                    <div className="price-summary-box p-3 mt-3">
+                      <div className="d-flex justify-content-between">
+                        <span>Selected Services Total</span>
+                        <strong>₹{subtotal.toLocaleString()}</strong>
+                      </div>
+                      <div className="d-flex justify-content-between">
+                        <span>GST ({bookingConfig.serviceTaxPercentage}%)</span>
+                        <strong>₹{taxAmount.toLocaleString()}</strong>
+                      </div>
+                      <hr />
+                      <div className="d-flex justify-content-between">
+                        <span>Estimated Total</span>
+                        <strong>₹{estimatedTotal.toLocaleString()}</strong>
+                      </div>
+                      <div className="d-flex justify-content-between mt-1">
+                        <span className="text-muted">
+                          Advance due now ({bookingConfig.advanceDepositPercentage}%)
+                        </span>
+                        <span className="text-muted">₹{estimatedAdvance.toLocaleString()}</span>
                       </div>
                     </div>
                   </>
@@ -627,12 +718,22 @@ function BookNow() {
                     <div className="price-summary-box p-3 mb-3">
                       <div className="d-flex justify-content-between">
                         <span>{selectedPackage.packageName}</span>
-                        <strong>₹{packagePrice.toLocaleString()}</strong>
+                        <strong>₹{subtotal.toLocaleString()}</strong>
+                      </div>
+                      <div className="d-flex justify-content-between">
+                        <span>GST ({bookingConfig.serviceTaxPercentage}%)</span>
+                        <strong>₹{taxAmount.toLocaleString()}</strong>
                       </div>
                       <hr />
                       <div className="d-flex justify-content-between">
-                        <span>Estimated Total</span>
+                        <span>Total Amount</span>
                         <strong>₹{estimatedTotal.toLocaleString()}</strong>
+                      </div>
+                      <div className="d-flex justify-content-between mt-1">
+                        <span className="text-muted">
+                          Advance due now ({bookingConfig.advanceDepositPercentage}%)
+                        </span>
+                        <span className="text-muted">₹{estimatedAdvance.toLocaleString()}</span>
                       </div>
                     </div>
                     <label>Special Requirements</label>
@@ -642,7 +743,9 @@ function BookNow() {
                       maxLength="500"
                       placeholder="Tell us anything specific about your event..."
                       value={formData.specialRequirements}
-                      onChange={(e) => handleInputChange("specialRequirements", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("specialRequirements", e.target.value)
+                      }
                     ></textarea>
                     {errors.specialRequirements && (
                       <small className="error-text">{errors.specialRequirements}</small>
@@ -696,7 +799,9 @@ function BookNow() {
                         type="checkbox"
                         id="whatsappConfirm"
                         checked={formData.whatsappUpdates}
-                        onChange={(e) => handleInputChange("whatsappUpdates", e.target.checked)}
+                        onChange={(e) =>
+                          handleInputChange("whatsappUpdates", e.target.checked)
+                        }
                       />
                       <label className="form-check-label" htmlFor="whatsappConfirm">
                         Send updates via WhatsApp
@@ -721,7 +826,12 @@ function BookNow() {
         </div>
       </div>
 
-      <a href="https://wa.me/9114155238886" target="_blank" rel="noopener noreferrer" className="whatsapp-float">
+      <a
+        href="https://wa.me/9114155238886"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="whatsapp-float"
+      >
         <i className="bi bi-whatsapp"></i>
       </a>
       <ToastContainer position="top-right" autoClose={3000} />

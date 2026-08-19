@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import './AboutEvent.css'
 import decoration_table from "../Event-Images/decoration-table.jpg";
@@ -13,9 +13,56 @@ import hall_decor from "../Event-Images/hall-decor.jpg";
 import couple_wedding from "../Event-Images/couple-wedding.jpg";
 import cater_seets from "../Event-Images/cater-seets.jpg";
 import funeral_flower2 from "../Event-Images/funeral-flower2.jpg";
-import profile from '../Event-Images/profile3.jpg'
+import profileFallback from '../Event-Images/profile3.jpg';
+import axios from "axios";
 
 function AboutEvent() {
+
+  // State to hold the dynamic organizer data
+  const [organizer, setOrganizer] = useState({
+    name: "Loading...",
+    title: "Loading...",
+    phone: "",
+    website: "",
+    profileImage: ""
+  });
+
+// Fetch the settings data when the component mounts
+  useEffect(() => {
+    const fetchSettingsData = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/settings");
+        
+        // Check if the backend returned the organizer object
+        if (res.data.data.organizer) {
+          const fetchedData = res.data.data.organizer;
+          
+          // Set the state, but if the database string is empty, use our default dummy text
+          setOrganizer({
+            name: fetchedData.name || "Sarah Morgan",
+            title: fetchedData.title || "Certified Wedding Planner",
+            phone: fetchedData.phone || "",
+            website: fetchedData.website || "",
+            profileImage: fetchedData.profileImage || ""
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch organizer data:", error);
+        
+        // If the server is down, remove the "Loading..." text and show dummy data so the UI doesn't break
+        setOrganizer({
+          name: "Sarah Morgan",
+          title: "Certified Wedding Planner",
+          phone: "+1 123-456-7890",
+          website: "www.sarahmorgan.com",
+          profileImage: ""
+        });
+      }
+    };
+    
+    fetchSettingsData();
+  }, []);
+
   return (
     // About Event Section
 
@@ -164,29 +211,66 @@ function AboutEvent() {
 
                 <hr />
 
-                <h4 className="mb-4">Event Organizer</h4>
+               <h4 className="mb-4 text-center text-lg-start">Event Organizer</h4>
 
-                <div className="row g-2">
-                  <div className="col-4">
-                    <img src={ profile } alt="profile pic" className="img-fluid" />
+                {/* MODIFIED RESPONSIVE ROW: Fixed overlap on medium devices */}
+                <div className="row g-2 align-items-center text-center text-lg-start">
+                  
+                  {/* Image Column: 100% width on sm/md (Stacked), 33% width on lg (Side-by-side) */}
+                  <div className="col-12 col-md-12 col-lg-4 mb-3 mb-lg-0 d-flex justify-content-center justify-content-lg-start">
+                    <img 
+                      src={organizer.profileImage ? `http://localhost:5000${organizer.profileImage}` : profileFallback} 
+                      alt="Organizer Profile" 
+                      className="img-fluid" 
+                      style={{ 
+                        borderRadius: "50%", 
+                        objectFit: "cover", 
+                        width: "120px", /* Fixed exact dimensions prevents grid breaking */
+                        height: "120px"
+                      }} 
+                    />
                   </div>
-                  <div className="col-8">
-                    <h4>Sarah Morgan</h4>
-                    <p id="planner">Certified Wedding Planner</p>
-                    <p>
-                      <i className="bi bi-telephone-inbound"></i>
-                      <span className="px-1" style={{color: '#6'}}>+1 123-456-7890</span>
-                    </p>
-                    <p>
-                      <i className="bi bi-globe-americas"></i>
-                      <span id="email-id">www.sarahmorgan.com</span>
-                    </p>
+                  
+                  {/* Text Details Column: 100% width on sm/md (Stacked), 66% width on lg (Side-by-side) */}
+                  <div className="col-12 col-md-12 col-lg-8" style={{ wordWrap: "break-word", overflowWrap: "break-word" }}>
+                    <h4 style={{textTransform: 'capitalize'}}>{organizer.name || "Organizer Name"}</h4>
+                    <p id="planner" style={{textTransform: 'capitalize'}}>{organizer.title || "Organizer Title"}</p>
+                    
+                    {organizer.phone && (
+                      <p className="d-flex justify-content-center justify-content-lg-start align-items-center">
+                        <i className="bi bi-telephone-inbound me-2"></i>
+                        <span style={{ textDecoration: 'none', color: '#062036'}}>{organizer.phone}</span>
+                      </p>
+                    )}
+                    
+                    {organizer.website && (
+                      <p className=" justify-content-lg-start align-items-center mb-0">
+                        <i className="bi bi-globe-americas me-2"></i>
+                        <a 
+                          href={organizer.website.startsWith('http') ? organizer.website : `https://${organizer.website}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          id="email-id"
+                          style={{ textDecoration: 'none', paddingLeft: 0, backgroundColor: 'transparent', wordBreak: 'break-word' }}
+                        >
+                          {organizer.website}
+                        </a>
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <Link to="#" className="btn mt-3">
-                  Contact Organizer
-                </Link>
+                {/* Automatically formats the phone number for WhatsApp */}
+                {organizer.phone ? (
+                  <a 
+                    href={`https://wa.me/${organizer.phone.replace(/[^0-9]/g, '')}`} 
+                    className="btn mt-4 w-100"
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <i className="bi bi-whatsapp me-2"></i> Contact on WhatsApp
+                  </a>
+                ) : null}
               </div>
             </div>
           </div>
