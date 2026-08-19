@@ -462,7 +462,7 @@ const EditVendors = () => {
                 ) : (
                   <>
                     <CheckCircle size={16} />
-                    <span>Update Changes</span>
+                    <span className="p-1">Update Changes</span>
                   </>
                 )}
               </button>

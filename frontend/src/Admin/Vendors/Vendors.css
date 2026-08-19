@@ -667,7 +667,7 @@
   .allVendors-table {
     display: none;
   }
-
+  
   .allVendors-tabs {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -706,9 +706,19 @@
     display: none;
   }
 
-  .addVendor-descriptionRow {
-    grid-template-columns: 1fr;
+
+  .addVendor-actionsRow {
+    flex-direction: column-reverse;
+    gap: 10px;
   }
+
+  .btn-cancel,
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  
 }
 
 
@@ -1383,17 +1393,17 @@
 .addVendor-actionsRow {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  gap: 15px;
   border-top: 1px solid rgba(var(--white-rgb), 0.05);
   padding-top: 22px;
   margin-top: 8px;
 }
 
-.btn-cancel {
-  background-color: transparent;
+.vendor-cancel {
+  background: transparent;
   color: var(--text-muted);
-  border: 1px solid rgba(var(--accent-rgb), 0.15);
-  padding: 14px 22px;
+  border: 1px solid rgba(var(--white-rgb), 0.15);
+  padding: 14px 20px;
   border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
@@ -1401,24 +1411,22 @@
   transition: var(--transition);
 }
 
-.btn-cancel:hover {
-  background-color: var(--input-bg);
+.vendor-cancel:hover {
+  border-color: rgba(var(--accent-rgb), 0.3);
   color: var(--text-primary);
 }
 
-.btn-cancel:disabled {
+.vendor-cancel:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.btn-submit {
-  display: inline-flex;
-  align-items: center;
+.vendor-submit {
   gap: 8px;
   background-color: var(--accent);
   color: var(--accent-dark);
   border: none;
-  padding: 14px 24px;
+  padding: 14px 20px;
   border-radius: var(--radius-md);
   font-weight: 700;
   font-size: 0.9rem;
@@ -1426,12 +1434,12 @@
   transition: var(--transition);
 }
 
-.btn-submit:hover:not(:disabled) {
+.vendor-submit:hover:not(:disabled) {
   background-color: var(--text-primary);
   transform: translateY(-2px);
 }
 
-.btn-submit:disabled {
+.vendor-submit:disabled {
   opacity: 0.65;
   cursor: not-allowed;
   transform: none;
@@ -1477,14 +1485,6 @@
 }
 
 @media (max-width: 576px) {
-  .addVendor-actionsRow {
-    flex-direction: column-reverse; /* primary action on top */
-  }
-
-  .addVendor-actionsRow button {
-    width: 100%;
-    justify-content: center;
-  }
 
   .vendorModal-hero {
     flex-wrap: wrap;
@@ -1499,6 +1499,13 @@
 
   .vendorModal-heroInfo h4 {
     padding-right: 0;
+  }
+  .addVendor-formGrid{
+    grid-template-columns: 1fr;
+  }
+  .addVendor-descriptionRow {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 }
 
