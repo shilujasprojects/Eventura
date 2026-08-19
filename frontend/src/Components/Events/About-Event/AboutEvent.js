@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import './AboutEvent.css'
 import decoration_table from "../Event-Images/decoration-table.jpg";
 import birth from "../Event-Images/birth.jpg";
@@ -17,6 +17,8 @@ import profileFallback from '../Event-Images/profile3.jpg';
 import axios from "axios";
 
 function AboutEvent() {
+  // Grab the specific package ID from the URL (e.g., /about-event/64a7f9b...)
+  const { id } = useParams();
 
   // State to hold the dynamic organizer data
   const [organizer, setOrganizer] = useState({
@@ -27,17 +29,17 @@ function AboutEvent() {
     profileImage: ""
   });
 
-// Fetch the settings data when the component mounts
+  // State to hold the dynamic package/service data
+  const [eventPackage, setEventPackage] = useState(null);
+
+  // 1. Fetch the organizer settings data
   useEffect(() => {
     const fetchSettingsData = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/settings");
         
-        // Check if the backend returned the organizer object
         if (res.data.data.organizer) {
           const fetchedData = res.data.data.organizer;
-          
-          // Set the state, but if the database string is empty, use our default dummy text
           setOrganizer({
             name: fetchedData.name || "Sarah Morgan",
             title: fetchedData.title || "Certified Wedding Planner",
@@ -48,8 +50,6 @@ function AboutEvent() {
         }
       } catch (error) {
         console.error("Failed to fetch organizer data:", error);
-        
-        // If the server is down, remove the "Loading..." text and show dummy data so the UI doesn't break
         setOrganizer({
           name: "Sarah Morgan",
           title: "Certified Wedding Planner",
@@ -63,16 +63,39 @@ function AboutEvent() {
     fetchSettingsData();
   }, []);
 
+  // 2. Fetch the specific package data based on the URL ID
+  useEffect(() => {
+    const fetchPackageData = async () => {
+      if (!id) return; // Skip if there is no ID in the URL
+      try {
+        // Hitting the getPackageById controller you made!
+        const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
+        if (res.data.success) {
+          setEventPackage(res.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch package data:", error);
+      }
+    };
+
+    fetchPackageData();
+  }, [id]);
+
   return (
     // About Event Section
-
     <div className="container-fluid about-event">
       <div className="container">
       <div className="row">
         <div className="col-lg-8 mt-3 mt-lg-5">
-          <h3>About the Event</h3>
+          {/* We can make this title dynamic later too! */}
+          <h3 style={{textTransform: 'capitalize'}}>
+            {eventPackage ? eventPackage.packageName : "About the Event"}
+          </h3>
+          
           <p className="text-start">
-            Join us in celebrating a beautiful and memorable baby shower
+            {eventPackage?.description ? eventPackage.description : (
+              <>
+                Join us in celebrating a beautiful and memorable baby shower
             ceremony filled with love, laughter, and heartfelt moments. This
             special occasion is thoughtfully organized to bless the mother-to-be
             and welcome the new beginning with traditional customs, joyful
@@ -82,6 +105,8 @@ function AboutEvent() {
             unforgettable. Every detail is carefully planned to create a
             stress-free experience, allowing families to focus on joy,
             togetherness, and cherished memories that will last a lifetime.
+              </>
+            )}
           </p>
 
           <hr className="mt-4" />
@@ -91,11 +116,7 @@ function AboutEvent() {
 
             <div className="row g-3 mt-3 ">
               <div className="col-lg-4 col-md-4" data-aos="zoom-in">
-                <img
-                  src={decoration_table}
-                  alt=""
-                  className="img-fluid img-gallery"
-                />
+                <img src={decoration_table} alt="" className="img-fluid img-gallery" />
               </div>
               <div className="col-lg-4  col-md-4" data-aos="zoom-in"  data-aos-duration="1500">
                 <img src={birth} alt="" className="img-fluid img-gallery" />
@@ -113,11 +134,7 @@ function AboutEvent() {
                 <img src={makeup_girl} alt="" className="img-fluid img-gallery" />
               </div>
               <div className="col-lg-4 col-md-4" data-aos="zoom-in"  data-aos-duration="1500">
-                <img
-                  src={catering_foood}
-                  alt=""
-                  className="img-fluid img-gallery"
-                />
+                <img src={catering_foood} alt="" className="img-fluid img-gallery" />
               </div>
               <div className="col-lg-4 col-md-4" data-aos="zoom-in"  data-aos-duration="1500">
                 <img src={dj_party} alt="" className="img-fluid img-gallery" />
@@ -126,21 +143,13 @@ function AboutEvent() {
                 <img src={hall_decor} alt="" className="img-fluid img-gallery" />
               </div>
               <div className="col-lg-4 col-md-4" data-aos="zoom-in"  data-aos-duration="1500">
-                <img
-                  src={couple_wedding}
-                  alt=""
-                  className="img-fluid img-gallery"
-                />
+                <img src={couple_wedding} alt="" className="img-fluid img-gallery" />
               </div>
               <div className="col-lg-4 col-md-4" data-aos="zoom-in">
                 <img src={cater_seets} alt="" className="img-fluid img-gallery" />
               </div>
               <div className="col-lg-4 col-md-4" data-aos="zoom-in">
-                <img
-                  src={funeral_flower2}
-                  alt=""
-                  className="img-fluid img-gallery"
-                />
+                <img src={funeral_flower2} alt="" className="img-fluid img-gallery" />
               </div>
             </div>
           </div>
@@ -148,30 +157,39 @@ function AboutEvent() {
 
         <div className="col-lg-4">
           <div className="row">
+            
             {/* LEFT SIDE on md: Price + Gallery */}
-
             <div className="col-12 col-md-6 col-lg-12">
-              {/* Price Card */}
-
+              
+              {/* --- DYNAMIC PACKAGE PRICE CARD --- */}
+              {/* --- EVENT BOOKING CARD --- */}
               <div className="side-card">
-                <h2>₹250&nbsp;Per person</h2>
+                
+                {/* Replaced Price with a welcoming Heading */}
+                <h2>
+                  Tailored Event Packages
+                  <span style={{fontSize: '1rem', color: '#8a9ba8', display: 'block', marginTop: '5px'}}>
+                    Customizable options for your special day
+                  </span>
+                </h2>
+                
                 <hr />
 
                 <div className="icon d-flex">
-                  <i className="bi bi-bag mx-3"></i>
-                  <p>Sat, January 16, 2026</p>
-                </div>
-                <div className="icon d-flex">
-                  <i className="bi bi-check2-circle mx-3"></i>
-                  <p>5:00 PM onwards</p>
+                  <i className="bi bi-calendar-check mx-3"></i>
+                  <p>Flexible Dates Available</p>
                 </div>
                 <div className="icon d-flex">
                   <i className="bi bi-geo-alt mx-3"></i>
-                  <p>Lakeside Gardens, Kumarakom, Kottayam, Kerala</p>
+                  <p>Venue Sourcing Assistance</p>
+                </div>
+                <div className="icon d-flex">
+                  <i className="bi bi-star mx-3"></i>
+                  <p>Premium Service Guarantee</p>
                 </div>
 
-                <Link className="btn" to="#">
-                  Book Now
+                <Link className="btn" to={"/bookNow"} >
+                  Explore & Book
                 </Link>
               </div>
 
@@ -183,40 +201,80 @@ function AboutEvent() {
                   <p>
                     Experience this unforgettable event with seamless planning.
                   </p>
-                  <Link to="#" className="btn ms-0">
+                  <Link to={"/bookNow"} className="btn ms-0">
                     Continue
                   </Link>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT SIDE on md: Schedule + Organizer */}
-
+            {/* RIGHT SIDE on md: Included Services + Organizer */}
             <div className="col-12 col-md-6 col-lg-12">
+              
+              {/* --- DYNAMIC INCLUDED SERVICES CARD --- */}
               <div className="side-card">
-                <h4 className="mb-4">Schedules</h4>
+                <h4 className="mb-lg-4 mb-2">Included Services</h4>
 
-                <div className="icon d-flex">
-                  <i className="bi bi-play-circle mx-3"></i>
-                  <p>5:00 PM Welcome Reception</p>
-                </div>
-                <div className="icon d-flex">
-                  <i className="bi bi-play-circle mx-3"></i>
-                  <p>5:30 PM Ceremony Starts</p>
-                </div>
-                <div className="icon d-flex">
-                  <i className="bi bi-play-circle mx-3"></i>
-                  <p>7:00 PM Cocktail Hour</p>
-                </div>
+                {eventPackage?.services?.length > 0 ? (
+                  /* --- REAL DATA FROM DATABASE (Runs when URL has an ID) --- */
+                  eventPackage.services.map((item, index) => (
+                    <div className="icon d-flex align-items-center mb-3" key={index}>
+                      <i className="bi bi-check2-circle mx-3"></i>
+                      <div>
+                        <p className="mb-0 fw-bold" style={{textTransform: 'capitalize'}}>
+                          {item.service.serviceName}
+                        </p>
+                        {item.isOptional && (
+                          <small style={{color: '#8a9ba8', display: 'block', lineHeight: '1'}}>
+                            *Optional Add-on
+                          </small>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  /* --- DUMMY FALLBACK DATA (Runs when just viewing the UI normally) --- */
+                  <>
+                    <div className="icon d-flex align-items-center mb-lg-2 mb-1">
+                      <i className="bi bi-check2-circle mx-3"></i>
+                      <div>
+                        <p className="mb-0 fw-bold">Premium Catering</p>
+                      </div>
+                    </div>
+                    
+                    <div className="icon d-flex align-items-center mb-lg-2 mb-1">
+                      <i className="bi bi-check2-circle mx-3"></i>
+                      <div>
+                        <p className="mb-0 fw-bold">Venue Decoration</p>
+                      </div>
+                    </div>
+                    
+                    <div className="icon d-flex align-items-center mb-lg-2 mb-1">
+                      <i className="bi bi-check2-circle mx-3"></i>
+                      <div>
+                        <p className="mb-0 fw-bold">Professional Photography</p>
+                      </div>
+                    </div>
+                    <div className="icon d-flex align-items-center mb-lg-2 mb-1">
+                      <i className="bi bi-check2-circle mx-3"></i>
+                      <div>
+                        <p className="mb-0 fw-bold">Professional Videography</p>
+                        <small style={{color: '#8a9ba8', display: 'block', lineHeight: '1'}}>
+                          *Optional Add-on
+                        </small>
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 <hr />
 
-               <h4 className="mb-4 text-center text-lg-start">Event Organizer</h4>
+                <h4 className="mb-4 text-center text-lg-start">Event Organizer</h4>
 
                 {/* MODIFIED RESPONSIVE ROW: Fixed overlap on medium devices */}
                 <div className="row g-2 align-items-center text-center text-lg-start">
                   
-                  {/* Image Column: 100% width on sm/md (Stacked), 33% width on lg (Side-by-side) */}
+                  {/* Image Column */}
                   <div className="col-12 col-md-12 col-lg-4 mb-3 mb-lg-0 d-flex justify-content-center justify-content-lg-start">
                     <img 
                       src={organizer.profileImage ? `http://localhost:5000${organizer.profileImage}` : profileFallback} 
@@ -225,13 +283,13 @@ function AboutEvent() {
                       style={{ 
                         borderRadius: "50%", 
                         objectFit: "cover", 
-                        width: "120px", /* Fixed exact dimensions prevents grid breaking */
+                        width: "120px",
                         height: "120px"
                       }} 
                     />
                   </div>
                   
-                  {/* Text Details Column: 100% width on sm/md (Stacked), 66% width on lg (Side-by-side) */}
+                  {/* Text Details Column */}
                   <div className="col-12 col-md-12 col-lg-8" style={{ wordWrap: "break-word", overflowWrap: "break-word" }}>
                     <h4 style={{textTransform: 'capitalize'}}>{organizer.name || "Organizer Name"}</h4>
                     <p id="planner" style={{textTransform: 'capitalize'}}>{organizer.title || "Organizer Title"}</p>
@@ -244,7 +302,7 @@ function AboutEvent() {
                     )}
                     
                     {organizer.website && (
-                      <p className=" justify-content-lg-start align-items-center mb-0">
+                      <p className="justify-content-lg-start align-items-center mb-0">
                         <i className="bi bi-globe-americas me-2"></i>
                         <a 
                           href={organizer.website.startsWith('http') ? organizer.website : `https://${organizer.website}`} 
@@ -283,4 +341,4 @@ function AboutEvent() {
   )
 }
 
-export default AboutEvent
+export default AboutEvent;
