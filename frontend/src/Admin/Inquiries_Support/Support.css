@@ -357,6 +357,57 @@
   padding: 16px;
 }
 
+.inquiries-rowList {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.inquiry-row {
+  background-color: var(--input-bg);
+  border: 1px solid rgba(var(--accent-rgb), 0.1);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.inquiry-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.inquiry-row-idBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.inquiry-row-date {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.inquiry-row-client {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(var(--white-rgb), 0.06);
+}
+
+.inquiry-row-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .inquiry-card {
   background-color: var(--input-bg);
   border: 1px solid rgba(var(--accent-rgb), 0.1);
@@ -827,7 +878,7 @@
 
 @media (max-width: 992px) {
   .supportPage-tableScroll { display: none; }
-  .inquiries-card-list { display: flex; }
+   .inquiries-rowList { display: flex; }
 
   .supportPage-tabs {
     display: grid;
@@ -880,6 +931,9 @@
     align-items: flex-start;
   }
 
+  .inquiries-rowList { display: flex; }
+  .inquiries-card-list { display: none; }
+
   .bookingModal-card { max-height: 95vh; }
   .bookingModal-body { padding: 15px; }
   .bookingModal-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -927,4 +981,6 @@
   .confirmation-actions button {
     width: 100%;
   }
+  
+  
 }

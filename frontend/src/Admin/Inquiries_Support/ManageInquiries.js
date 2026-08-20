@@ -300,6 +300,36 @@ const ManageInquiries = () => {
                 </table>
               </div>
 
+              {/* ===== TABLET (768–992px) — compact row list ===== */}
+<div className="inquiries-rowList">
+  {paginatedInquiries.map((inq) => (
+    <div className="inquiry-row" key={inq._id}>
+      <div className="inquiry-row-top">
+        <div className="inquiry-row-idBlock">
+          <span className="support-id-cell">{inq.ticketId}</span>
+          <span className="inquiry-row-date">{formatDate(inq.createdAt)}</span>
+        </div>
+        <span className={`status-pill ${inq.status.toLowerCase().replace(/\s+/g, '-')}`}>
+          {inq.status}
+        </span>
+      </div>
+
+      <div className="inquiry-row-client">
+        <strong className="client-primary-name">{inq.clientName}</strong>
+        <span className="client-email">{inq.email}</span>
+      </div>
+
+      <div className="inquiry-row-bottom">
+        <div className="subject-meta">
+          <strong>{inq.subject}</strong>
+          <span className="message-snippet">{inq.message.substring(0, 50)}...</span>
+        </div>
+        <div className="supportPage-actions">{renderActions(inq)}</div>
+      </div>
+    </div>
+  ))}
+</div>
+
               {/* ===== MOBILE & TABLET CARD VIEW (≤992px) ===== */}
               <div className="inquiries-card-list">
                 {paginatedInquiries.map((inq) => (
