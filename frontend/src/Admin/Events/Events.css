@@ -1279,6 +1279,7 @@
   border-radius: var(--radius-md);
   padding: 15px;
   transition: var(--transition);
+  min-width: 0; /* allow the box itself to shrink in its grid cell */
 }
 
 .viewEvent-infoBox:hover {
@@ -1301,12 +1302,17 @@
   font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
+  overflow-wrap: break-word;
 }
 
 .viewEvent-divider {
   margin: 28px 0;
   border: none;
   border-top: 1px solid rgba(var(--white-rgb), 0.08);
+}
+ 
+.viewEvent-infoBox > div {
+  min-width: 0; /* allow inner flex child to shrink */
 }
 
 /* Available packages */
@@ -1492,8 +1498,9 @@
   .viewEvent-editBtn {
     padding: 8px;
   }
-  .viewEvent-imageCard img{
-    width: 83%;
+  
+  .viewEvent-packagesGrid {
+    grid-template-columns: 1fr; /* single column, no forced min-width */
   }
 }
 
