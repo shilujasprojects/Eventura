@@ -272,12 +272,12 @@
 
 @media (max-width: 768px) {
   .addCategory-formRow.media-description {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
 
   .addCategory-formRow.media-description textarea {
-    min-height: 160px;
+    min-height: 200px;
   }
 
   .imageUpload-dropzone {
@@ -299,8 +299,12 @@
     gap: 16px;
   }
 
+  .addCategory-formRow.media-description{
+    grid-template-columns: 1fr;
+  }
+
   .addCategory-formRow.media-description textarea {
-    min-height: 140px;
+    min-height: 180px;
   }
 
   .imageUpload-dropzone {

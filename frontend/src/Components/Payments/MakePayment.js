@@ -143,7 +143,7 @@ function MakePayment() {
     <>
     <Navbar />
     <div className="container payment-page py-4">
-      <div className="payment-card">
+      <div className="make-payment-card">
         <h3 className="mb-1">{stage === "Advance" ? "Advance Payment" : "Final Payment"}</h3>
         <p className="text-muted mb-4">
           Booking {booking.bookingId} — {new Date(booking.eventDate).toLocaleDateString("en-IN")}

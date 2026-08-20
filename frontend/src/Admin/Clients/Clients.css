@@ -873,6 +873,11 @@
     
   }
 
+  .allClients-tabs{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
   .allClients-pagination {
     flex-direction: row;
     align-items: flex-start;
@@ -938,6 +943,7 @@
   }
 
   .allClients-tabs {
+    grid-template-columns: 1fr;
     flex-wrap: wrap;
   }
 

@@ -1492,6 +1492,9 @@
   .viewEvent-editBtn {
     padding: 8px;
   }
+  .viewEvent-imageCard img{
+    width: 83%;
+  }
 }
 
 /* =========================================================

@@ -222,8 +222,8 @@ const ManagePayments = () => {
     }
   };
 
-  // ── Shared helpers (used by BOTH the table row and the mobile card,
-  //    so status logic / action buttons only live in one place) ──────
+  // ── Shared helpers (used by the table row, the tablet row, AND the
+  //    mobile card, so status logic / action buttons only live in one place) ──────
   const getStatusLabel = (txn) =>
     txn.status === "Refunded" && txn.refundedAmount != null && txn.refundedAmount < txn.amount
       ? "Partially Refunded"
@@ -344,9 +344,7 @@ const ManagePayments = () => {
             </div>
           ) : (
             <>
-              {/* ===== DESKTOP (≥1024px) & TABLET (768–1023px) — table =====
-                  On tablet this scrolls horizontally and hides the
-                  "col-optional" columns via CSS; desktop is untouched. */}
+              {/* ===== DESKTOP (≥1024px) — table, unchanged ===== */}
               <div className="allPayments-tableScroll">
                 <table className="allPayments-table">
                   <thead>
@@ -402,7 +400,50 @@ const ManagePayments = () => {
                 </table>
               </div>
 
-              {/* ===== MOBILE (<768px) — card list ===== */}
+              {/* ===== MEDIUM / TABLET (768px–1023px) — compact card-list rows ===== */}
+              <div className="payments-cardList">
+                {paginatedTxns.map((txn) => (
+                  <div className="payment-row" key={txn._id}>
+                    <div className="payment-row-top">
+                      <div className="payment-row-idBlock">
+                        <span className="payment-id-cell">{txn.transactionId}</span>
+                        <span className="payment-row-booking">
+                          Booking: {txn.booking?.bookingId || "—"}
+                        </span>
+                      </div>
+                      <span className={`status-pill ${txn.status.toLowerCase()}`}>
+                        {getStatusLabel(txn)}
+                      </span>
+                    </div>
+
+                    <div className="payment-row-client">
+                      <strong className="client-primary-name">{txn.client?.fullName || "—"}</strong>
+                      <span className="client-email">{txn.client?.email}</span>
+                    </div>
+
+                    <div className="payment-row-bottom">
+                      <div className="payment-row-meta">
+                        <span className="gold-text-value">
+                          ₹{txn.amount.toLocaleString()}
+                          {txn.status === "Refunded" && txn.refundedAmount != null && txn.refundedAmount < txn.amount && (
+                            <span className="partial-refund-note"> (↩ ₹{txn.refundedAmount.toLocaleString()} refunded)</span>
+                          )}
+                        </span>
+                        <span className="payment-stage-badge">
+                          {txn.paymentStage === "Advance" ? "Advance" : "Balance"}
+                        </span>
+                        <span className="payment-method-badge">{txn.method}</span>
+                        <span className="payment-row-date">
+                          {new Date(txn.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+                        </span>
+                      </div>
+                      {renderActions(txn)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* ===== SMALL / MOBILE (<768px) — card grid, unchanged ===== */}
               <div className="payments-card-list">
                 {paginatedTxns.map((txn) => (
                   <div className="payment-card" key={txn._id}>

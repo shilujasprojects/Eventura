@@ -447,13 +447,13 @@ const EditVendors = () => {
             <div className="addVendor-actionsRow">
               <button
                 type="button"
-                className="btn-cancel"
+                className="vendor-cancel"
                 onClick={() => navigate("/vendors")}
                 disabled={isSubmitting}
               >
                 Cancel
               </button>
-              <button type="submit" className="btn-submit" disabled={isSubmitting}>
+              <button type="submit" className="vendor-submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 size={16} className="spin-icon" />

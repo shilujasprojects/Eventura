@@ -209,6 +209,8 @@
   background-color: rgba(241, 212, 155, 0.08);
   border: 1px solid rgba(241, 212, 155, 0.25);
   color: #f1d49b;
+  padding: 8px;
+  
 }
 
 .cms-btn.edit:hover {
@@ -595,6 +597,10 @@
   color: #4ade80;
 }
 
+.status-pill.featured{
+  color: #4ade80;
+}
+
 .testimonial-cardFooter .status-pill.hidden {
   background-color: rgba(255, 255, 255, 0.05);
   color: #8a9ba8;
@@ -691,8 +697,17 @@
   }
   .cmsPage-tabs{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr ;
+    grid-template-columns: 1fr 1fr 1fr;
   }
+  .cmsPage-tabs .tab-btn {
+  gap: 7px;
+  justify-content: center;
+}
+
+.cms-btn.edit{
+  padding: 8px;
+}
+  
 }
 
 @media (max-width: 576px) {
@@ -808,15 +823,180 @@
 .newsletter-pagination {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 15px;
+  justify-content: flex-end;
+  gap: 6px;
   margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.newsletter-pageBtn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid rgba(241, 212, 155, 0.15);
+  border-radius: 8px;
+  background-color: #061521;
+  color: #fff7ee;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.newsletter-pageBtn:hover:not(:disabled) {
+  background-color: rgba(241, 212, 155, 0.1);
+  border-color: #f1d49b;
+}
+
+.newsletter-pageBtn.active {
+  background-color: #f1d49b;
+  color: #062036;
+  border-color: #f1d49b;
+}
+
+.newsletter-pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---- Newsletter responsive views ----
+   Default (desktop, >900px): table view shown, card views hidden.
+   Medium (577px–900px): compact row "card-list" shown instead of the table.
+   Small (<=576px): full stacked cards shown instead of both. */
+.newsletter-cardList,
+.newsletter-cardGrid {
+  display: none;
+}
+
+.newsletter-listRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.08);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.newsletter-listRow-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.newsletter-listRow-email {
+  color: #fff7ee;
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.newsletter-listRow-date {
   color: #8a9ba8;
+  font-size: 0.78rem;
+}
+
+.newsletter-listRow-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.newsletter-subCard {
+  background-color: #0d2131;
+  border: 1px solid rgba(241, 212, 155, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.newsletter-subCard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.newsletter-subCard-email {
+  color: #fff7ee;
+  font-size: 0.8rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.newsletter-subCard-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 10px;
+  margin-bottom: 14px;
+}
+
+.newsletter-subCard-label {
+  color: #8a9ba8;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.newsletter-subCard-value {
+  color: #d7dee3;
   font-size: 0.85rem;
 }
 
+.newsletter-subCard-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.newsletter-subCard-actions .btn-toggle-featured.full-width {
+  flex: 1;
+  justify-content: center;
+  margin-top: 0;
+}
+
+/* Medium screens: table → compact card-list */
+
+
+@media (max-width: 900px) {
+  .newsletter-tableWrap {
+    display: none;
+  }
+  .newsletter-cardList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+
+/* Small screens: card-list → full stacked cards */
 @media (max-width: 576px) {
   .newsletter-searchForm input {
     min-width: 140px;
+  }
+  .newsletter-cardList {
+    display: none;
+  }
+  .newsletter-cardGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .newsletter-listRow-side {
+    width: 100%;
+    justify-content: space-between;
   }
 }

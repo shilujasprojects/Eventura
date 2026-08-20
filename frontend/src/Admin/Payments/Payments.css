@@ -158,7 +158,7 @@ color: #8a9ba8;
 padding: 5px 12px;
 border-radius: 8px;
 font-size: 0.8rem;
-border: 1px solid rgba(241, 212, 155, 0.05);
+border: 1px solid rgba(241, 212, 155, 0.09);
 }
 
 /* Action Control Icons */
@@ -229,7 +229,7 @@ flex-shrink: 0;
   border-radius: 10px;
 }
 
-/* Card list is hidden by default (desktop + tablet show the table) */
+/* Card grid is hidden by default (desktop + tablet show the table) */
 .payments-card-list {
   display: none;
   flex-direction: column;
@@ -237,38 +237,38 @@ flex-shrink: 0;
   padding: 16px;
 }
 
-/* ---------- TABLET: 768px – 1023px ---------- */
-@media (max-width: 1023px) and (min-width: 768px) {
-  .allPayments-table th,
-  .allPayments-table td {
-    padding: 12px 14px;
-    font-size: 0.85rem;
-  }
-
-  /* Hide less-critical columns; ID, Client Name, Amount,
-     Status and Actions always stay visible */
-  .allPayments-table .col-optional {
-    display: none;
-  }
+/* Compact card-list rows — MEDIUM / TABLET only (768px–1023px) */
+.payments-cardList {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
 }
 
-/* ---------- MOBILE: below 768px ---------- */
-/* ---------- TABLET + MOBILE: up to 1023px — show card list instead of table ---------- */
+/* ---------- Shared wrapper tweaks below desktop (tablet + mobile) ---------- */
 @media (max-width: 1023px) {
   .allPayments-tableScroll {
     display: none;
-  }
-  .payments-card-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
   }
   .allPayments-tableWrapper {
     width: 100%;
     margin: 0 auto;
     border-radius: 12px;
   }
+}
 
+/* ---------- MEDIUM / TABLET: 768px – 1023px — compact card-list rows ---------- */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .payments-cardList {
+    display: flex;
+  }
+}
+
+/* ---------- SMALL / MOBILE: below 768px — 2-column card grid (unchanged) ---------- */
+@media (max-width: 767px) {
   .payments-card-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     padding: 16px 10px;
   }
 }
@@ -352,6 +352,67 @@ flex-shrink: 0;
   .payment-card-meta {
     grid-template-columns: 1fr;
   }
+}
+
+/* =====================================================
+   COMPACT CARD-LIST ROWS (MEDIUM / TABLET, 768px–1023px)
+===================================================== */
+.payment-row {
+  background-color: #061521;
+  border: 1px solid rgba(241, 212, 155, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.payment-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.payment-row-idBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.payment-row-booking {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #8a9ba8;
+}
+
+.payment-row-client {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.payment-row-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.payment-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.payment-row-date {
+  color: #8a9ba8;
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 /* =====================================================
@@ -893,6 +954,9 @@ animation: rotate 0.8s linear infinite;
 
   .allPayments-tableWrapper{
     margin: 0;
+  }
+  .payment-card{
+    background: #061521;
   }
   
 
