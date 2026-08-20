@@ -531,4 +531,8 @@
   .organizerFieldsGrid {
     grid-template-columns: 1fr;
   }
+  
+  .settings-cardHeader h3{
+    font-size: 0.9rem;
+  }
 }
