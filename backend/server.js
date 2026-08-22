@@ -12,9 +12,12 @@ app.use(express.json());   // This middleware allows Express to read JSON data f
 
 
 mongoose
-  .connect("mongodb://localhost:27017/eventura")
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.error("MongoDB Error : ", err));
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Atlas connected");
+    console.log("Database:", mongoose.connection.name);
+  })
+  .catch((err) => console.error("MongoDB Connection Error : ", err));
 
 app.use("/api/auth", require("./routers/authRoutes"));
 app.use('/api/category', require('./routers/categoryRoute'));
