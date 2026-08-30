@@ -1,8 +1,7 @@
 const express = require("express");
-
 const router = express.Router();
 
-const upload = require("../middlewares/upload");
+const upload = require("../middlewares/cloudinaryUpload"); // was: ../middlewares/upload
 
 const {
   addVendor,
@@ -13,27 +12,16 @@ const {
   changeVendorStatus,
 } = require("../controllers/vendorController");
 
-router.post(
-  "/",
-  upload.single("image"),
-  addVendor
-);
+router.post("/", upload.single("image"), addVendor);
 
 router.get("/", getAllVendors);
 
-router.get("/:id", getVendorById);
+router.get("/:id", getVendorById); // no upload middleware — already correct
 
-router.put(
-  "/:id",
-  upload.single("image"),
-  updateVendor
-);
+router.put("/:id", upload.single("image"), updateVendor);
 
 router.delete("/:id", deleteVendor);
 
-router.patch(
-  "/status/:id",
-  changeVendorStatus
-);
+router.patch("/status/:id", changeVendorStatus);
 
 module.exports = router;

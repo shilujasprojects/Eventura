@@ -44,7 +44,7 @@ function RecentEvents() {
               <div className="event-card" key={event._id}>
                 <div className="event-card__image-wrap">
                   <img
-                    src={`${BASE_URL}/uploads/${event.coverImage}`}
+                   src={event.coverImage}   // was: `${BASE_URL}/uploads/${event.coverImage}`
                     alt={event.eventName}
                     className="event-card__image"
                   />

@@ -6,7 +6,10 @@ const dotenv = require("dotenv")
 const app = express();  // creates the Express server
 
 dotenv.config();
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 app.use(express.json());   // This middleware allows Express to read JSON data from request bodies.
 
 
@@ -32,7 +35,7 @@ app.use("/api/settings", require('./routers/settingRoutes'));
 app.use('/api/banner', require('./routers/bannerRoutes'));
 app.use('/api/faqs', require('./routers/faqRoutes'));
 app.use('/api/testimonials', require('./routers/testimonialRoutes'));
-app.use("/api/admin/clients", require("./routers/adminClientRoutes"));
+app.use("/api/admin/clients", require("./routers/adminClientRoutes"));   // Client sig up 
 app.use("/api/public/clients", require("./routers/publicClientRoutes"));
 app.use("/api/payments", require("./routers/paymentRoutes"));
 app.use("/api/reports", require("./routers/reportRoutes"));
@@ -40,7 +43,6 @@ app.use("/api/notifications", require("./routers/notificationRoutes"));
 app.use("/api/dashboard", require("./routers/dashboardRoutes"));
 app.use("/api/newsletter" , require("./routers/Newsletterroutes"))
 
-app.use("/uploads", express.static("uploads"));   // Used to serve static files like images; makes the uploads folder publicly accessible
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on Port : ${PORT}`));

@@ -27,6 +27,7 @@ import "./CMS.css";
 
 const BASE_URL = "http://localhost:5000";
 const MAX_HERO_IMAGES = 4;
+const MAX_IMAGE_MB = 5; // add this line
 
 // ---------- VALIDATION RULES ----------
 // Kept in one place so every field's limits are easy to find and tweak.
@@ -243,51 +244,100 @@ const ManageCMS = () => {
     setBannerState(res.data.data);
   };
 
+  // const handleFiles = async (fileList) => {
+  //   const files = Array.from(fileList || []);
+  //   if (files.length === 0) return;
+
+  //   const currentCount = bannerState?.images?.length || 0;
+  //   const remainingSlots = MAX_HERO_IMAGES - currentCount;
+
+  //   if (remainingSlots <= 0) {
+  //     toast.error(
+  //       `You can only have up to ${MAX_HERO_IMAGES} hero images. Remove one first.`,
+  //     );
+  //     return;
+  //   }
+
+  //   const validFiles = files.filter((file) =>
+  //     ACCEPTED_IMAGE_TYPES.includes(file.type),
+  //   );
+  //   if (validFiles.length < files.length) {
+  //     toast.error("Only JPEG and PNG images are accepted.");
+  //   }
+
+  //   const filesToUpload = validFiles.slice(0, remainingSlots);
+  //   if (validFiles.length > remainingSlots) {
+  //     toast.error(
+  //       `Only ${remainingSlots} more image(s) can be added — the rest were skipped.`,
+  //     );
+  //   }
+
+  //   if (filesToUpload.length === 0) return;
+
+  //   setUploadingImage(true);
+  //   try {
+  //     // Uploaded one at a time since the backend accepts a single file per request
+  //     for (const file of filesToUpload) {
+  //       await uploadOneImage(file);
+  //     }
+  //     toast.success("Hero image(s) uploaded successfully!");
+  //   } catch (error) {
+  //     toast.error("Failed to upload one or more images. Please try again.");
+  //   } finally {
+  //     setUploadingImage(false);
+  //     if (fileInputRef.current) fileInputRef.current.value = "";
+  //   }
+  // };
+
   const handleFiles = async (fileList) => {
-    const files = Array.from(fileList || []);
-    if (files.length === 0) return;
+  const files = Array.from(fileList || []);
+  if (files.length === 0) return;
 
-    const currentCount = bannerState?.images?.length || 0;
-    const remainingSlots = MAX_HERO_IMAGES - currentCount;
+  const currentCount = bannerState?.images?.length || 0;
+  const remainingSlots = MAX_HERO_IMAGES - currentCount;
 
-    if (remainingSlots <= 0) {
-      toast.error(
-        `You can only have up to ${MAX_HERO_IMAGES} hero images. Remove one first.`,
-      );
-      return;
-    }
-
-    const validFiles = files.filter((file) =>
-      ACCEPTED_IMAGE_TYPES.includes(file.type),
+  if (remainingSlots <= 0) {
+    toast.error(
+      `You can only have up to ${MAX_HERO_IMAGES} hero images. Remove one first.`,
     );
-    if (validFiles.length < files.length) {
-      toast.error("Only JPEG and PNG images are accepted.");
+    return;
+  }
+
+  const validFiles = files.filter((file) => {
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      toast.error(`"${file.name}" was skipped — only JPEG and PNG images are accepted.`);
+      return false;
     }
-
-    const filesToUpload = validFiles.slice(0, remainingSlots);
-    if (validFiles.length > remainingSlots) {
-      toast.error(
-        `Only ${remainingSlots} more image(s) can be added — the rest were skipped.`,
-      );
+    if (file.size > MAX_IMAGE_MB * 1024 * 1024) {
+      toast.error(`"${file.name}" was skipped — image must be under ${MAX_IMAGE_MB}MB.`);
+      return false;
     }
+    return true;
+  });
 
-    if (filesToUpload.length === 0) return;
+  const filesToUpload = validFiles.slice(0, remainingSlots);
+  if (validFiles.length > remainingSlots) {
+    toast.error(
+      `Only ${remainingSlots} more image(s) can be added — the rest were skipped.`,
+    );
+  }
 
-    setUploadingImage(true);
-    try {
-      // Uploaded one at a time since the backend accepts a single file per request
-      for (const file of filesToUpload) {
-        await uploadOneImage(file);
-      }
-      toast.success("Hero image(s) uploaded successfully!");
-    } catch (error) {
-      toast.error("Failed to upload one or more images. Please try again.");
-    } finally {
-      setUploadingImage(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+  if (filesToUpload.length === 0) return;
+
+  setUploadingImage(true);
+  try {
+    // Uploaded one at a time since the backend accepts a single file per request
+    for (const file of filesToUpload) {
+      await uploadOneImage(file);
     }
-  };
-
+    toast.success("Hero image(s) uploaded successfully!");
+  } catch (error) {
+    toast.error("Failed to upload one or more images. Please try again.");
+  } finally {
+    setUploadingImage(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+};
   const handleFileInputChange = (e) => handleFiles(e.target.files);
 
   const handleDrop = (e) => {
@@ -296,9 +346,9 @@ const ManageCMS = () => {
     handleFiles(e.dataTransfer.files);
   };
 
-  const handleDeleteImage = async (filename) => {
+  const handleDeleteImage = async (imageId) => {
     try {
-      const res = await axiosInstance.delete(`/api/banner/image/${filename}`);
+      const res = await axiosInstance.delete(`/api/banner/image/${imageId}`);
       setBannerState(res.data.data);
       toast.success("Hero image removed.");
     } catch (error) {
@@ -561,9 +611,9 @@ const ManageCMS = () => {
                   <Upload className="upload-icon" size={28} />
                   <h4>Select hero images or drag &amp; drop files</h4>
                   <p>
-                    Formats accepted: JPEG, PNG &middot; Max {MAX_HERO_IMAGES}{" "}
-                    images
-                  </p>
+  Formats accepted: JPEG, PNG &middot; Max {MAX_HERO_IMAGES}{" "}
+  images &middot; {MAX_IMAGE_MB}MB per image
+</p>
                   <button
                     type="button"
                     className="browse-btn"
@@ -585,7 +635,7 @@ const ManageCMS = () => {
                 <p className="cms-imgCount">
                   {heroImages.length} / {MAX_HERO_IMAGES} images added
                 </p>
-
+                {/* 
                 {heroImages.length > 0 && (
                   <div className="cms-imageGrid">
                     {heroImages.map((filename) => {
@@ -611,6 +661,31 @@ const ManageCMS = () => {
                         </div>
                       );
                     })}
+                  </div>
+                )} */}
+
+                {heroImages.length > 0 && (
+                  <div className="cms-imageGrid">
+                    {heroImages.map((image) => (
+                      <div
+                        key={image._id}
+                        className="cms-imageThumb"
+                        onClick={() => setPreviewImage(image.url)}
+                      >
+                        <img src={image.url} alt="Hero gallery" />
+                        <button
+                          type="button"
+                          className="remove-overlay"
+                          title="Remove image"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteImage(image._id);
+                          }}
+                        >
+                          <Trash2Icon size={14} />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>

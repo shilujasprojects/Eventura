@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../middlewares/upload"); // path to your existing file
+const upload = require("../middlewares/cloudinaryUpload"); // was: ../middlewares/upload
 
 const controllers = require("../controllers/paymentController");
 

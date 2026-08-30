@@ -97,12 +97,12 @@ const ViewServices = () => {
           {/* Banner — clickable */}
           <div className="viewService-banner-wrap">
             <img
-              src={`http://localhost:5000/uploads/${service.bannerImage}`}
+              src={service.bannerImage}   // was: `http://localhost:5000/uploads/${service.bannerImage}`
               alt={service.serviceName}
               className="viewService-banner"
               onClick={() =>
-                setLightboxSrc(`http://localhost:5000/uploads/${service.bannerImage}`)
-              }
+                setLightboxSrc(service.bannerImage)
+              }   // was: setLightboxSrc(`http://localhost:5000/uploads/${service.bannerImage}`)
               onError={(e) => {
                 e.target.src =
                   "https://placehold.co/1200x380/0d2131/f1d49b?text=No+Banner+Image";
@@ -176,12 +176,12 @@ const ViewServices = () => {
                 {service.galleryImages.map((image, index) => (
                   <img
                     key={index}
-                    src={`http://localhost:5000/uploads/${image}`}
+                    src={image}   // was: `http://localhost:5000/uploads/${image}`
                     alt={`Gallery ${index + 1}`}
                     className="gallery-zoomable"
                     onClick={() =>
-                      setLightboxSrc(`http://localhost:5000/uploads/${image}`)
-                    }
+                      setLightboxSrc(image)
+                    }   // was: setLightboxSrc(`http://localhost:5000/uploads/${image}`)
                     onError={(e) => {
                       e.target.src =
                         "https://placehold.co/300x220/0d2131/f1d49b?text=Not+Found";

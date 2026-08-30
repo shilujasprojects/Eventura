@@ -85,7 +85,7 @@ const EditVendors = () => {
 
       // Set existing image preview from server
       if (vendor.image) {
-        setImagePreview(`http://localhost:5000/uploads/${vendor.image}`);
+        setImagePreview(vendor.image);      // was: `http://localhost:5000/uploads/${vendor.image}`
       } else {
         setImagePreview(null);
       }

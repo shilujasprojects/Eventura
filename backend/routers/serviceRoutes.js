@@ -1,8 +1,7 @@
 const express = require("express");
-
 const router = express.Router();
 
-const upload = require("../middlewares/upload");
+const upload = require("../middlewares/cloudinaryUpload"); // was: ../middlewares/upload
 
 const {
   addService,
@@ -15,14 +14,8 @@ const {
 router.post(
   "/",
   upload.fields([
-    {
-      name: "bannerImage",
-      maxCount: 1,
-    },
-    {
-      name: "galleryImages",
-      maxCount: 10,
-    },
+    { name: "bannerImage", maxCount: 1 },
+    { name: "galleryImages", maxCount: 10 },
   ]),
   addService,
 );
@@ -34,14 +27,8 @@ router.get("/:id", getService);
 router.put(
   "/:id",
   upload.fields([
-    {
-      name: "bannerImage",
-      maxCount: 1,
-    },
-    {
-      name: "galleryImages",
-      maxCount: 10,
-    },
+    { name: "bannerImage", maxCount: 1 },
+    { name: "galleryImages", maxCount: 10 },
   ]),
   updateService,
 );

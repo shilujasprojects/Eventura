@@ -17,7 +17,8 @@ export default function CategoryExplore() {
 
   const { category, loading: categoryLoading } = useCategoryDetails(categoryId);
   const { events, loading: eventsLoading } = useCategoryEvents(categoryId);
-  const { packages, loading: packagesLoading } = useCategoryPackages(categoryId);
+  const { packages, loading: packagesLoading } =
+    useCategoryPackages(categoryId);
 
   const { images: momentImages, loading: galleryLoading } = useCategoryGallery(
     category?.categoryName,
@@ -102,7 +103,9 @@ export default function CategoryExplore() {
       <div className="category-explore">
         {/* HERO */}
         <section className="category-explore-hero">
-          <img src={`${IMG_URL}${category.image}`} alt={category.categoryName} />
+          {/* Hero image — category.image, already a Cloudinary URL */}
+          <img src={category.image} alt={category.categoryName} />{" "}
+          {/* was: src={`${IMG_URL}${category.image}`}     */}
           <div className="category-explore-overlay">
             <p>EVENTURA {category.categoryName.toUpperCase()}</p>
             <h1>{category.categoryName}</h1>
@@ -121,7 +124,8 @@ export default function CategoryExplore() {
             <div className="category-explore-events-grid">
               {events.map((event) => (
                 <div key={event._id} className="category-explore-event-card">
-                  <img src={`${IMG_URL}${event.coverImage}`} alt={event.eventName} />
+                  <img src={event.coverImage} alt={event.eventName} />{" "}
+                  {/* was: src={`${IMG_URL}${event.coverImage}`} */}
                   <div className="category-explore-event-info">
                     <h3>{event.eventName}</h3>
                     <p>{event.shortDescription}</p>
@@ -178,10 +182,17 @@ export default function CategoryExplore() {
         {/* LIGHTBOX */}
         {lightbox && (
           <div className="category-explore-lightbox" onClick={closeLightbox}>
-            <span className="category-explore-lightbox-close" onClick={closeLightbox}>
+            <span
+              className="category-explore-lightbox-close"
+              onClick={closeLightbox}
+            >
               &times;
             </span>
-            <img src={selectedImg} alt="preview" onClick={(e) => e.stopPropagation()} />
+            <img
+              src={selectedImg}
+              alt="preview"
+              onClick={(e) => e.stopPropagation()}
+            />
           </div>
         )}
 
@@ -204,7 +215,9 @@ export default function CategoryExplore() {
                 return (
                   <div key={pkg._id} className="category-explore-package-card">
                     {pkg.tags?.length > 0 && (
-                      <div className="category-explore-package-tag">{pkg.tags[0]}</div>
+                      <div className="category-explore-package-tag">
+                        {pkg.tags[0]}
+                      </div>
                     )}
 
                     <h3>{pkg.packageName}</h3>

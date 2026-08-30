@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const Settings = require("../models/Settings");
 // no Admin import — account now lives inside Settings, no login/auth for now
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
 const DEFAULT_SETTINGS = {
   account: { adminName: "", email: "", password: "" },
@@ -297,11 +298,11 @@ const changePassword = async (req, res) => {
 };
 
 //  this new function to handle Organizer updates
+
 const updateOrganizerProfile = async (req, res) => {
   try {
     const { name, title, phone, website } = req.body;
 
-    // Validation
     if (!name?.trim()) return res.status(400).json({ success: false, message: "Organizer name is required" });
     if (!title?.trim()) return res.status(400).json({ success: false, message: "Professional title is required" });
     if (!PHONE_REGEX.test(phone || "")) return res.status(400).json({ success: false, message: "Enter a valid phone number" });
@@ -313,10 +314,9 @@ const updateOrganizerProfile = async (req, res) => {
     settings.organizer.phone = phone.trim();
     settings.organizer.website = website?.trim() || "";
 
-    // If a file was uploaded via Multer, save the path
     if (req.file) {
-      // Assuming you serve the uploads folder statically in server.js
-      settings.organizer.profileImage = `/uploads/${req.file.filename}`;
+      const result = await uploadToCloudinary(req.file.buffer, "eventura/organizer");
+      settings.organizer.profileImage = result.secure_url;
     }
 
     await settings.save();

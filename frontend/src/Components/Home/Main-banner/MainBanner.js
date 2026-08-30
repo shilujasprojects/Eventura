@@ -40,9 +40,10 @@ function MainBanner() {
 
   // Fill each of the 4 collage slots with a CMS image if one exists,
   // otherwise keep the original static photo for that slot.
+  // images is now [{ url, public_id, _id }] instead of plain filenames.
   const collageImages = [0, 1, 2, 3].map((i) => {
     const uploaded = banner?.images?.[i];
-    return uploaded ? `${BASE_URL}/uploads/${uploaded}` : fallbackImages[i];
+    return uploaded ? uploaded.url : fallbackImages[i];
   });
 
   return (

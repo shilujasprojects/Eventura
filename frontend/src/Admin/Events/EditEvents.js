@@ -77,12 +77,12 @@ const EditEvent = () => {
         status: event.status || "Active",
       });
 
-      setCoverPreview(event.coverImage ? `${BASE}/uploads/${event.coverImage}` : "");
+      setCoverPreview(event.coverImage || "");
       setExistingGallery(event.galleryImages || []);
       setGalleryPreview(
         (event.galleryImages || []).map((img) => ({
           type: "existing",
-          src: `${BASE}/uploads/${img}`,
+          src: img,     // was: `${BASE}/uploads/${img}`
           filename: img,
         }))
       );

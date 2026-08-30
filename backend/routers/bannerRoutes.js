@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../middlewares/upload');
+const upload = require('../middlewares/cloudinaryUpload'); // was: ../middlewares/upload
 const {
   getBanner,
   updateBanner,
@@ -11,6 +11,6 @@ const {
 router.get('/', getBanner);
 router.put('/', updateBanner);
 router.post('/upload-image', upload.single('image'), uploadBannerImage);
-router.delete('/image/:filename', deleteBannerImage);
+router.delete('/image/:imageId', deleteBannerImage); // was: /image/:filename
 
 module.exports = router;

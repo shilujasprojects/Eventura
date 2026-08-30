@@ -869,6 +869,36 @@
   transform: translateX(0) translateY(0);
 }
 
+/* Gallery count column */
+.col-gallery {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.gallery-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(241, 212, 155, 0.12);
+  color: #f1d49b;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(241, 212, 155, 0.25);
+}
+
+.gallery-count-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Card view variant */
+.allEvents-card-gallery {
+  font-size: 0.78rem;
+  color: #8a9ba8;
+}
+
 /* Card view — small-screen replacement for the table */
 
 .allEvents-cardList {

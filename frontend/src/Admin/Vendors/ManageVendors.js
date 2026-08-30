@@ -122,7 +122,7 @@ const ManageVendors = () => {
   // Helper: build full image URL
   const getImageUrl = (imageName) => {
     if (!imageName) return null;
-    return `http://localhost:5000/uploads/${imageName}`;
+    return imageName;      // was: `http://localhost:5000/uploads/${imageName}`
   };
 
   // Tab count helpers

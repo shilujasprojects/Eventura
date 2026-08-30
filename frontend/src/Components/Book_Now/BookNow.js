@@ -46,7 +46,10 @@ function BookNow() {
         const res = await axios.get(`${BASE_URL}/api/settings/booking-config`);
         setBookingConfig(res.data.data);
       } catch (error) {
-        console.error("Could not load booking configuration, using defaults", error);
+        console.error(
+          "Could not load booking configuration, using defaults",
+          error,
+        );
       }
     };
     fetchBookingConfig();
@@ -120,7 +123,9 @@ function BookNow() {
         const res = await axios.get(`${BASE_URL}/api/category?status=Active`);
         setCategories(res.data);
       } catch (error) {
-        toast.error("Failed to load event categories. Please refresh the page.");
+        toast.error(
+          "Failed to load event categories. Please refresh the page.",
+        );
       } finally {
         setCategoriesLoading(false);
       }
@@ -229,10 +234,16 @@ function BookNow() {
 
   // Pricing — subtotal from package/services, GST and advance % pulled
   // from bookingConfig (admin-configured), same formula the backend uses.
-  const packagePrice = !isCustom && selectedPackage ? selectedPackage.finalPrice : 0;
-  const extraServicesTotal = selectedExtraServices.reduce((sum, s) => sum + s.price, 0);
+  const packagePrice =
+    !isCustom && selectedPackage ? selectedPackage.finalPrice : 0;
+  const extraServicesTotal = selectedExtraServices.reduce(
+    (sum, s) => sum + s.price,
+    0,
+  );
   const subtotal = packagePrice + extraServicesTotal;
-  const taxAmount = Math.round(subtotal * (bookingConfig.serviceTaxPercentage / 100));
+  const taxAmount = Math.round(
+    subtotal * (bookingConfig.serviceTaxPercentage / 100),
+  );
   const estimatedTotal = subtotal + taxAmount;
   const estimatedAdvance = Math.round(
     estimatedTotal * (bookingConfig.advanceDepositPercentage / 100),
@@ -245,11 +256,13 @@ function BookNow() {
     const phoneRegex = /^[6-9]\d{9}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!selectedCategory) newErrors.category = "Please select an event category.";
+    if (!selectedCategory)
+      newErrors.category = "Please select an event category.";
     if (!selectedEvent) newErrors.event = "Please select an event.";
 
     if (isCustom && selectedExtraServices.length === 0) {
-      newErrors.package = "Select at least one service for your custom booking.";
+      newErrors.package =
+        "Select at least one service for your custom booking.";
     }
 
     // Date validation respects the admin-configured minimum notice period.
@@ -273,7 +286,11 @@ function BookNow() {
 
     if (!formData.startTime) newErrors.startTime = "Start time is required.";
     if (!formData.endTime) newErrors.endTime = "End time is required.";
-    if (formData.startTime && formData.endTime && formData.startTime >= formData.endTime) {
+    if (
+      formData.startTime &&
+      formData.endTime &&
+      formData.startTime >= formData.endTime
+    ) {
       newErrors.endTime = "End time must be after start time.";
     }
 
@@ -289,16 +306,21 @@ function BookNow() {
 
     if (!formData.guestCount) {
       newErrors.guestCount = "Guest count is required.";
-    } else if (!Number.isInteger(Number(formData.guestCount)) || Number(formData.guestCount) < 1) {
+    } else if (
+      !Number.isInteger(Number(formData.guestCount)) ||
+      Number(formData.guestCount) < 1
+    ) {
       newErrors.guestCount = "Enter a valid guest count.";
     } else if (Number(formData.guestCount) > 5000) {
-      newErrors.guestCount = "Guest count seems too high. Please contact us directly for events this size.";
+      newErrors.guestCount =
+        "Guest count seems too high. Please contact us directly for events this size.";
     }
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = "Full name is required.";
     } else if (!nameRegex.test(formData.fullName.trim())) {
-      newErrors.fullName = "Name should only contain letters (3–50 characters).";
+      newErrors.fullName =
+        "Name should only contain letters (3–50 characters).";
     }
 
     if (!formData.phone.trim()) {
@@ -426,22 +448,24 @@ function BookNow() {
             ) : (
               <div className="row g-3">
                 {categories.map((category) => (
-                  <div key={category._id} className="col-6 col-sm-4 col-md-3 event-main">
+                  <div
+                    key={category._id}
+                    className="col-6 col-sm-4 col-md-3 event-main"
+                  >
                     <div
                       className={`event-card ${selectedCategory?._id === category._id ? "active" : ""}`}
                       onClick={() => setSelectedCategory(category)}
                     >
-                      <img
-                        src={`${BASE_URL}/uploads/${category.image}`}
-                        alt={category.categoryName}
-                      />
+                      <img src={category.image} alt={category.categoryName} />
                       <p>{category.categoryName}</p>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-            {errors.category && <small className="error-text">{errors.category}</small>}
+            {errors.category && (
+              <small className="error-text">{errors.category}</small>
+            )}
           </div>
 
           {/* STEP 2: EVENT */}
@@ -452,17 +476,22 @@ function BookNow() {
               {eventsLoading ? (
                 <p>Loading events...</p>
               ) : events.length === 0 ? (
-                <p className="text-muted">No events available under this category yet.</p>
+                <p className="text-muted">
+                  No events available under this category yet.
+                </p>
               ) : (
                 <div className="row g-3">
                   {events.map((event) => (
-                    <div key={event._id} className="col-6 col-sm-4 col-md-3 event-main">
+                    <div
+                      key={event._id}
+                      className="col-6 col-sm-4 col-md-3 event-main"
+                    >
                       <div
                         className={`event-card ${selectedEvent?._id === event._id ? "active" : ""}`}
                         onClick={() => setSelectedEvent(event)}
                       >
                         <img
-                          src={`${BASE_URL}/uploads/${event.coverImage}`}
+                          src={event.coverImage}    // was: `${BASE_URL}/uploads/${event.coverImage}`
                           alt={event.eventName}
                         />
                         <p>{event.eventName}</p>
@@ -471,7 +500,9 @@ function BookNow() {
                   ))}
                 </div>
               )}
-              {errors.event && <small className="error-text">{errors.event}</small>}
+              {errors.event && (
+                <small className="error-text">{errors.event}</small>
+              )}
             </div>
           )}
 
@@ -484,7 +515,8 @@ function BookNow() {
                 <p>Loading packages...</p>
               ) : packages.length === 0 ? (
                 <p className="text-muted">
-                  No pre-built packages available for this event yet — build your own package below.
+                  No pre-built packages available for this event yet — build
+                  your own package below.
                 </p>
               ) : (
                 <div className="row g-3">
@@ -495,10 +527,15 @@ function BookNow() {
                         onClick={() => setSelectedPackage(pkg)}
                       >
                         <h5>{pkg.packageName}</h5>
-                        <p className="mb-2">₹{pkg.finalPrice.toLocaleString()}</p>
+                        <p className="mb-2">
+                          ₹{pkg.finalPrice.toLocaleString()}
+                        </p>
                         <div className="package-included-services">
                           {pkg.services?.map((s) => (
-                            <span key={s.service?._id || s.service} className="included-service-tag">
+                            <span
+                              key={s.service?._id || s.service}
+                              className="included-service-tag"
+                            >
                               {s.service?.serviceName || "Service"}
                               {s.isOptional ? " (optional)" : ""}
                             </span>
@@ -534,18 +571,26 @@ function BookNow() {
                       <div className="col-md-4" key={service._id}>
                         <div
                           className={`service-card ${
-                            selectedExtraServices.some((s) => s.service === service._id) ? "active" : ""
+                            selectedExtraServices.some(
+                              (s) => s.service === service._id,
+                            )
+                              ? "active"
+                              : ""
                           }`}
                           onClick={() => toggleExtraService(service)}
                         >
                           <h5>{service.serviceName}</h5>
-                          <small>+ ₹{service.servicePrice.toLocaleString()}</small>
+                          <small>
+                            + ₹{service.servicePrice.toLocaleString()}
+                          </small>
                         </div>
                       </div>
                     ))}
                   </div>
                   {errors.package && (
-                    <small className="error-text d-block mt-2">{errors.package}</small>
+                    <small className="error-text d-block mt-2">
+                      {errors.package}
+                    </small>
                   )}
                 </div>
 
@@ -578,13 +623,18 @@ function BookNow() {
                       type="date"
                       className="form-control"
                       value={formData.eventDate}
-                      onChange={(e) => handleInputChange("eventDate", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("eventDate", e.target.value)
+                      }
                     />
                     <small className="text-muted">
-                      Minimum {bookingConfig.minimumBookingMarginDays} day(s) notice required.
+                      Minimum {bookingConfig.minimumBookingMarginDays} day(s)
+                      notice required.
                     </small>
                     {errors.eventDate && (
-                      <small className="error-text d-block">{errors.eventDate}</small>
+                      <small className="error-text d-block">
+                        {errors.eventDate}
+                      </small>
                     )}
                   </div>
                   <div className="col-md-3">
@@ -593,9 +643,13 @@ function BookNow() {
                       type="time"
                       className="form-control"
                       value={formData.startTime}
-                      onChange={(e) => handleInputChange("startTime", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("startTime", e.target.value)
+                      }
                     />
-                    {errors.startTime && <small className="error-text">{errors.startTime}</small>}
+                    {errors.startTime && (
+                      <small className="error-text">{errors.startTime}</small>
+                    )}
                   </div>
                   <div className="col-md-3">
                     <label>End Time</label>
@@ -603,9 +657,13 @@ function BookNow() {
                       type="time"
                       className="form-control"
                       value={formData.endTime}
-                      onChange={(e) => handleInputChange("endTime", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("endTime", e.target.value)
+                      }
                     />
-                    {errors.endTime && <small className="error-text">{errors.endTime}</small>}
+                    {errors.endTime && (
+                      <small className="error-text">{errors.endTime}</small>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <label>City</label>
@@ -613,9 +671,13 @@ function BookNow() {
                       type="text"
                       className="form-control"
                       value={formData.city}
-                      onChange={(e) => handleInputChange("city", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("city", e.target.value)
+                      }
                     />
-                    {errors.city && <small className="error-text">{errors.city}</small>}
+                    {errors.city && (
+                      <small className="error-text">{errors.city}</small>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <label>Venue Name (optional)</label>
@@ -623,9 +685,13 @@ function BookNow() {
                       type="text"
                       className="form-control"
                       value={formData.venueName}
-                      onChange={(e) => handleInputChange("venueName", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("venueName", e.target.value)
+                      }
                     />
-                    {errors.venueName && <small className="error-text">{errors.venueName}</small>}
+                    {errors.venueName && (
+                      <small className="error-text">{errors.venueName}</small>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <label>Guest Count</label>
@@ -636,15 +702,22 @@ function BookNow() {
                       min="1"
                       max="5000"
                       value={formData.guestCount}
-                      onChange={(e) => handleInputChange("guestCount", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("guestCount", e.target.value)
+                      }
                       onKeyDown={(e) => {
-                        if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+                        if (e.key === "ArrowUp" || e.key === "ArrowDown")
+                          e.preventDefault();
                       }}
                       onWheel={(e) => e.target.blur()}
                     />
-                    <small className="text-muted">Approximate guest count</small>
+                    <small className="text-muted">
+                      Approximate guest count
+                    </small>
                     {errors.guestCount && (
-                      <small className="error-text d-block">{errors.guestCount}</small>
+                      <small className="error-text d-block">
+                        {errors.guestCount}
+                      </small>
                     )}
                   </div>
                 </div>
@@ -660,14 +733,17 @@ function BookNow() {
                         <select
                           className="form-select"
                           value={formData.budgetRange}
-                          onChange={(e) => handleInputChange("budgetRange", e.target.value)}
+                          onChange={(e) =>
+                            handleInputChange("budgetRange", e.target.value)
+                          }
                         >
                           <option>₹50,000 – ₹1,00,000</option>
                           <option>₹1,00,000 – ₹3,00,000</option>
                           <option>₹3,00,000+</option>
                         </select>
                         <small className="text-muted">
-                          Helps our team plan since no fixed package is selected.
+                          Helps our team plan since no fixed package is
+                          selected.
                         </small>
                       </div>
                       <div className="col-md-8 mb-2">
@@ -679,11 +755,16 @@ function BookNow() {
                           placeholder="Tell us anything specific about your event..."
                           value={formData.specialRequirements}
                           onChange={(e) =>
-                            handleInputChange("specialRequirements", e.target.value)
+                            handleInputChange(
+                              "specialRequirements",
+                              e.target.value,
+                            )
                           }
                         ></textarea>
                         {errors.specialRequirements && (
-                          <small className="error-text">{errors.specialRequirements}</small>
+                          <small className="error-text">
+                            {errors.specialRequirements}
+                          </small>
                         )}
                       </div>
                     </div>
@@ -706,9 +787,12 @@ function BookNow() {
                       </div>
                       <div className="d-flex justify-content-between mt-1">
                         <span className="text-muted">
-                          Advance due now ({bookingConfig.advanceDepositPercentage}%)
+                          Advance due now (
+                          {bookingConfig.advanceDepositPercentage}%)
                         </span>
-                        <span className="text-muted">₹{estimatedAdvance.toLocaleString()}</span>
+                        <span className="text-muted">
+                          ₹{estimatedAdvance.toLocaleString()}
+                        </span>
                       </div>
                     </div>
                   </>
@@ -731,9 +815,12 @@ function BookNow() {
                       </div>
                       <div className="d-flex justify-content-between mt-1">
                         <span className="text-muted">
-                          Advance due now ({bookingConfig.advanceDepositPercentage}%)
+                          Advance due now (
+                          {bookingConfig.advanceDepositPercentage}%)
                         </span>
-                        <span className="text-muted">₹{estimatedAdvance.toLocaleString()}</span>
+                        <span className="text-muted">
+                          ₹{estimatedAdvance.toLocaleString()}
+                        </span>
                       </div>
                     </div>
                     <label>Special Requirements</label>
@@ -748,7 +835,9 @@ function BookNow() {
                       }
                     ></textarea>
                     {errors.specialRequirements && (
-                      <small className="error-text">{errors.specialRequirements}</small>
+                      <small className="error-text">
+                        {errors.specialRequirements}
+                      </small>
                     )}
                   </>
                 )}
@@ -768,9 +857,13 @@ function BookNow() {
                       className="form-control"
                       placeholder="Full Name"
                       value={formData.fullName}
-                      onChange={(e) => handleInputChange("fullName", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("fullName", e.target.value)
+                      }
                     />
-                    {errors.fullName && <small className="error-text">{errors.fullName}</small>}
+                    {errors.fullName && (
+                      <small className="error-text">{errors.fullName}</small>
+                    )}
                   </div>
                   <div className="col-md-4 mb-2">
                     <input
@@ -778,9 +871,13 @@ function BookNow() {
                       className="form-control"
                       placeholder="Phone Number"
                       value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
                     />
-                    {errors.phone && <small className="error-text">{errors.phone}</small>}
+                    {errors.phone && (
+                      <small className="error-text">{errors.phone}</small>
+                    )}
                   </div>
                   <div className="col-md-4 mb-2">
                     <input
@@ -788,9 +885,13 @@ function BookNow() {
                       className="form-control"
                       placeholder="Email"
                       value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                     />
-                    {errors.email && <small className="error-text">{errors.email}</small>}
+                    {errors.email && (
+                      <small className="error-text">{errors.email}</small>
+                    )}
                   </div>
                   <div className="col-md-6 d-flex align-items-center">
                     <div className="form-check mt-2">
@@ -803,7 +904,10 @@ function BookNow() {
                           handleInputChange("whatsappUpdates", e.target.checked)
                         }
                       />
-                      <label className="form-check-label" htmlFor="whatsappConfirm">
+                      <label
+                        className="form-check-label"
+                        htmlFor="whatsappConfirm"
+                      >
                         Send updates via WhatsApp
                       </label>
                     </div>

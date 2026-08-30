@@ -52,11 +52,12 @@ const EditServices = () => {
         status: service.status,
       });
 
-      setBannerPreview(`http://localhost:5000/uploads/${service.bannerImage}`);
+      // setBannerPreview(`http://localhost:5000/uploads/${service.bannerImage}`);
+      setBannerPreview(service.bannerImage || "");   // was: `http://localhost:5000/uploads/${service.bannerImage}`
       setExistingGallery(service.galleryImages || []);
       setGalleryPreview(
         (service.galleryImages || []).map(
-          (img) => ({ type: "existing", src: `http://localhost:5000/uploads/${img}`, filename: img })
+          (img) => ({ type: "existing", src: img, filename: img }) // was: src: `http://localhost:5000/uploads/${img} 
         )
       );
     } catch (error) {

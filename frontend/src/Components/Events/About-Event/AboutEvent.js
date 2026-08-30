@@ -277,7 +277,7 @@ function AboutEvent() {
                   {/* Image Column */}
                   <div className="col-12 col-md-12 col-lg-4 mb-3 mb-lg-0 d-flex justify-content-center justify-content-lg-start">
                     <img 
-                      src={organizer.profileImage ? `http://localhost:5000${organizer.profileImage}` : profileFallback} 
+                      src={organizer.profileImage || profileFallback}   // src={organizer.profileImage ? `http://localhost:5000${organizer.profileImage}` : profileFallback}
                       alt="Organizer Profile" 
                       className="img-fluid" 
                       style={{ 

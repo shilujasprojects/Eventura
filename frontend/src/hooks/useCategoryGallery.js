@@ -45,8 +45,8 @@ export default function useCategoryGallery(categoryName, imageCount = 3) {
 
         const uniqueImages = [...new Set(allImages)];
         const randomSubset = shuffleArray(uniqueImages)
-          .slice(0, imageCount)
-          .map((filename) => `http://localhost:5000/uploads/${filename}`);
+          .slice(0, imageCount);
+          //  was: .map((filename) => `http://localhost:5000/uploads/${filename}`)
 
         if (isMounted) {
           setImages(randomSubset);

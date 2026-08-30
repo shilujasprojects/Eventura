@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const cloudinary = require("../config/cloudinary");
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 const Banner = require('../models/Banner');
 
 // @desc   Get homepage banner (creates a default one on first run)
@@ -63,7 +63,6 @@ exports.uploadBannerImage = async (req, res) => {
 
     let banner = await Banner.findOne();
 
-    // Create the banner with defaults if this is somehow the very first save
     if (!banner) {
       banner = await Banner.create({
         heroTitle: 'Crafting Unforgettable Indian & Heritage Celebrations',
@@ -76,12 +75,12 @@ exports.uploadBannerImage = async (req, res) => {
     }
 
     if (banner.images.length >= 4) {
-      // reject and clean up the file multer already wrote to disk
-      fs.unlink(path.join(__dirname, '..', 'uploads', req.file.filename), () => {});
       return res.status(400).json({ success: false, message: 'Maximum of 4 hero images reached. Remove one first.' });
     }
 
-    banner.images.push(req.file.filename);
+    const result = await uploadToCloudinary(req.file.buffer, "eventura/banners");
+
+    banner.images.push({ url: result.secure_url, public_id: result.public_id });
     await banner.save();
 
     res.status(200).json({ success: true, data: banner });
@@ -91,20 +90,25 @@ exports.uploadBannerImage = async (req, res) => {
 };
 
 // @desc   Remove a hero gallery image
-// @route  DELETE /api/banner/image/:filename
+// @route  DELETE /api/banner/image/:imageId
 exports.deleteBannerImage = async (req, res) => {
   try {
-    const { filename } = req.params;
+    const { imageId } = req.params;
     const banner = await Banner.findOne();
 
     if (!banner) {
       return res.status(404).json({ success: false, message: 'Banner not found' });
     }
 
-    banner.images = banner.images.filter((img) => img !== filename);
-    await banner.save();
+    const image = banner.images.id(imageId);
+    if (!image) {
+      return res.status(404).json({ success: false, message: 'Image not found' });
+    }
 
-    fs.unlink(path.join(__dirname, '..', 'uploads', filename), () => {});
+    await cloudinary.uploader.destroy(image.public_id);
+
+    banner.images.pull(imageId);
+    await banner.save();
 
     res.status(200).json({ success: true, data: banner });
   } catch (error) {

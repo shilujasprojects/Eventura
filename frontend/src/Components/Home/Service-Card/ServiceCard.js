@@ -46,19 +46,24 @@ function ServiceCard() {
             <div className="category-card" key={category._id}>
               <div className="category-card__image-wrap">
                 <img
-                  src={`${IMG_URL}${category.image}`}
+                  src={category.image}
                   alt={category.categoryName}
                   className="category-card__image"
                 />
               </div>
               <div className="category-card__body">
-                <h5 className="category-card__title">{category.categoryName}</h5>
+                <h5 className="category-card__title">
+                  {category.categoryName}
+                </h5>
                 <p className="category-card__text">
                   {truncateText(category.description)}
                 </p>
                 {/* Now links using the real DB id, not a hardcoded slug —
                     works automatically for any category admin adds */}
-                <Link to={`/explore/${category._id}`} className="category-card__btn">
+                <Link
+                  to={`/explore/${category._id}`}
+                  className="category-card__btn"
+                >
                   Explore
                 </Link>
               </div>

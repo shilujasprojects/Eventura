@@ -1,13 +1,6 @@
 const Event = require("../models/Events");
 const Category = require("../models/Category");
-const fs = require("fs");
-const path = require("path");
-
-const deleteFile = (filename) => {
-  if (!filename) return;
-  const filePath = path.join("uploads", filename);
-  fs.unlink(filePath, () => {});
-};
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
 // CREATE
 exports.createEvent = async (req, res) => {
@@ -30,8 +23,14 @@ exports.createEvent = async (req, res) => {
       return res.status(400).json({ success: false, message: "Cover image is required." });
     }
 
-    const coverImage = req.files.coverImage[0].filename;
-    const galleryImages = (req.files.galleryImages || []).map((f) => f.filename);
+    const coverResult = await uploadToCloudinary(req.files.coverImage[0].buffer, "eventura/events");
+    const coverImage = coverResult.secure_url;
+
+    const galleryImages = [];
+    for (const file of req.files.galleryImages || []) {
+      const result = await uploadToCloudinary(file.buffer, "eventura/events/gallery");
+      galleryImages.push(result.secure_url);
+    }
 
     const newEvent = await Event.create({
       eventName,
@@ -113,18 +112,20 @@ exports.updateEvent = async (req, res) => {
 
     // Cover image
     if (req.files?.coverImage) {
-      deleteFile(event.coverImage);
-      event.coverImage = req.files.coverImage[0].filename;
+      const coverResult = await uploadToCloudinary(req.files.coverImage[0].buffer, "eventura/events");
+      event.coverImage = coverResult.secure_url;
     } else if (removeCover === "true") {
-      deleteFile(event.coverImage);
       event.coverImage = "";
     }
 
-    // Gallery
+    // Gallery — keepGalleryImages holds the Cloudinary URLs the frontend wants kept
     const keepGalleryImages = [].concat(req.body.keepGalleryImages || []);
-    const removedImages = event.galleryImages.filter((img) => !keepGalleryImages.includes(img));
-    removedImages.forEach(deleteFile);
-    const newGalleryImages = (req.files?.galleryImages || []).map((f) => f.filename);
+
+    const newGalleryImages = [];
+    for (const file of req.files?.galleryImages || []) {
+      const result = await uploadToCloudinary(file.buffer, "eventura/events/gallery");
+      newGalleryImages.push(result.secure_url);
+    }
 
     event.eventName = eventName ?? event.eventName;
     event.category = category ?? event.category;
@@ -149,9 +150,7 @@ exports.deleteEvent = async (req, res) => {
       return res.status(404).json({ success: false, message: "Event not found." });
     }
 
-    deleteFile(event.coverImage);
-    (event.galleryImages || []).forEach(deleteFile);
-
+    // No Cloudinary deletion yet — same as Category, add later if needed
     res.status(200).json({ success: true, message: "Event deleted successfully." });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

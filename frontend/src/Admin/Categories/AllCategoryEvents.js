@@ -201,7 +201,7 @@ const AllCategoryEvents = () => {
                       <td>
                         {cat.image ? (
                           <img
-                            src={`http://localhost:5000/uploads/${cat.image}`}
+                            src={cat.image}
                             alt={cat.categoryName}
                             className="allCategory-image"
                             onError={(e) => {
@@ -251,7 +251,7 @@ const AllCategoryEvents = () => {
                     <div className="allCategory-card-top">
                       {cat.image ? (
                         <img
-                          src={`http://localhost:5000/uploads/${cat.image}`}
+                          src={cat.image}
                           alt={cat.categoryName}
                           className="allCategory-card-image"
                           onError={(e) => {

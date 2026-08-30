@@ -203,7 +203,7 @@ const AllServices = () => {
                     <tr key={service._id}>
                       <td>
                         <img
-                          src={`http://localhost:5000/uploads/${service.bannerImage}`}
+                          src={service.bannerImage}   // was: `http://localhost:5000/uploads/${service.bannerImage}`
                           alt={service.serviceName}
                           className="allServices-image"
                           onError={(e) => {
@@ -267,7 +267,7 @@ const AllServices = () => {
                   <div className="allServices-card" key={service._id}>
                     <div className="allServices-card-top">
                       <img
-                        src={`http://localhost:5000/uploads/${service.bannerImage}`}
+                        src={service.bannerImage}   // was: `http://localhost:5000/uploads/${service.bannerImage}`
                         alt={service.serviceName}
                         className="allServices-card-image"
                         onError={(e) => {

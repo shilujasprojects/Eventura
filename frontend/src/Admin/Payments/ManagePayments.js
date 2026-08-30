@@ -191,8 +191,7 @@ const ManagePayments = () => {
     }
   };
 
-  const receiptUrl = (filename) =>
-    filename ? `${BASE_URL}/uploads/${filename}` : null;
+  const receiptUrl = (filename) => filename;    // was: filename ? `${BASE_URL}/uploads/${filename}` : null;
 
   // ── Download receipt ───────────────────────────────────────
   const handleDownloadReceipt = async (filename) => {

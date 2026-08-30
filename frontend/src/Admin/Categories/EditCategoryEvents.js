@@ -55,9 +55,10 @@ const EditCategoryEvents = () => {
         setDescription(data.description || "");
         setStatus(data.status || "Active");
         setExistingImage(data.image || "");
-        setImagePreview(
-          data.image ? `http://localhost:5000/uploads/${data.image}` : null
-        );
+        // setImagePreview(
+        //   data.image ? `http://localhost:5000/uploads/${data.image}` : null
+        // );
+        setImagePreview(data.image || null); // was: `http://localhost:5000/uploads/${data.image}`
       } catch (error) {
         console.error(error);
         toast.error("Failed to load category details.");

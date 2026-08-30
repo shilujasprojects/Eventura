@@ -1,14 +1,15 @@
+// POST /api/payments/submit — client submits proof of an advance or final payment
 const Transaction = require("../models/Transaction");
 const Booking = require("../models/Booking");
 const createNotification = require("../utils/createNotification");
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
 // POST /api/payments/submit — client submits proof of an advance or final payment
 exports.submitPayment = async (req, res) => {
   try {
     const { bookingId, paymentStage, method, referenceNumber } = req.body;
-    const receiptUrl = req.file ? req.file.filename : null;
 
-    if (!bookingId || !paymentStage || !method || !referenceNumber || !receiptUrl) {
+    if (!bookingId || !paymentStage || !method || !referenceNumber || !req.file) {
       return res.status(400).json({ success: false, message: "All fields, including the receipt, are required." });
     }
 
@@ -30,8 +31,6 @@ exports.submitPayment = async (req, res) => {
     if (currentStatus === "Pending") {
       return res.status(400).json({ success: false, message: `${paymentStage} payment is already under review.` });
     }
-    // "Not Paid" and "Failed" can both retry — a fresh attempt after a
-    // rejected one is normal and expected here.
 
     if (paymentStage === "Final") {
       if (booking.paymentSummary.advanceStatus !== "Paid") {
@@ -45,6 +44,9 @@ exports.submitPayment = async (req, res) => {
     const amount = paymentStage === "Advance"
       ? booking.paymentSummary.advanceAmount
       : booking.paymentSummary.balanceAmount;
+
+    const uploadResult = await uploadToCloudinary(req.file.buffer, "eventura/payments/receipts");
+    const receiptUrl = uploadResult.secure_url;
 
     const transaction = await Transaction.create({
       booking: booking._id,
@@ -60,7 +62,6 @@ exports.submitPayment = async (req, res) => {
     booking.paymentSummary[statusField] = "Pending";
     await booking.save();
 
-    // NEW — this is the urgent dashboard alert
     await createNotification({
       type: "payment",
       priority: "urgent",

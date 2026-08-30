@@ -64,7 +64,7 @@ function OurService() {
                   data-aos-duration="2000"
                 >
                   <img
-                    src={`${UPLOADS_BASE_URL}/${service.bannerImage}`}
+                    src={service.bannerImage}   // was: `${UPLOADS_BASE_URL}/${service.bannerImage}`
                     alt={service.serviceName}
                   />
                   <div className="service-overlay">

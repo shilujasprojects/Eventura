@@ -7,10 +7,15 @@ const bannerSchema = new mongoose.Schema(
     heroSubtitle: { type: String, required: true, trim: true },
     ctaText: { type: String, required: true, trim: true },
     promoDiscount: { type: String, required: true, trim: true },
-    // Filenames only — the frontend builds the full URL the same way it already
-    // does for other uploads: `${BASE_URL}/uploads/${filename}`
+    // Each image now stores both the Cloudinary secure_url (for display)
+    // and public_id (required to delete it from Cloudinary later).
     images: {
-      type: [String],
+      type: [
+        {
+          url: { type: String, required: true },
+          public_id: { type: String, required: true },
+        },
+      ],
       default: [],
       validate: {
         validator: (arr) => arr.length <= 4,

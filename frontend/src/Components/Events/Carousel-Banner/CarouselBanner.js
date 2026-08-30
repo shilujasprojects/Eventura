@@ -81,7 +81,7 @@ function CarouselBanner() {
             key={booking._id}
           >
             <img
-              src={`${UPLOADS_BASE_URL}/${booking.event.coverImage}`}
+              src={booking.event.coverImage}   // was: `${UPLOADS_BASE_URL}/${booking.event.coverImage}`
               alt={booking.event.eventName}
               className="img-fluid"
             />

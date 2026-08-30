@@ -96,11 +96,11 @@ const ViewEvents = () => {
           <div className="viewEvent-imageCard">
             {event.coverImage ? (
               <img
-                src={`${BASE}/uploads/${event.coverImage}`}
+                src={event.coverImage} // was: `${BASE}/uploads/${event.coverImage}`
                 alt={event.eventName}
                 style={{ cursor: "pointer" }}
                 onClick={() =>
-                  setLightboxSrc(`${BASE}/uploads/${event.coverImage}`)
+                  setLightboxSrc(event.coverImage)
                 }
               />
             ) : (
@@ -227,10 +227,10 @@ const ViewEvents = () => {
               {event.galleryImages.map((img, i) => (
                 <img
                   key={i}
-                  src={`${BASE}/uploads/${img}`}
+                  src={img} // was: `${BASE}/uploads/${img}`
                   alt={`Gallery ${i + 1}`}
                   style={{ cursor: "pointer" }}
-                  onClick={() => setLightboxSrc(`${BASE}/uploads/${img}`)}
+                  onClick={() => setLightboxSrc(img)}
                 />
               ))}
             </div>

@@ -1,13 +1,21 @@
 const Category = require("../models/Category");
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
 // Create Category
 exports.createCategory = async (req, res) => {
   try {
+    let imageUrl = "";
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, "eventura/categories");
+      imageUrl = result.secure_url;
+    }
+
     const category = new Category({
       categoryName: req.body.categoryName,
       description: req.body.description,
       status: req.body.status,
-      image: req.file ? req.file.filename : "",
+      image: imageUrl,
     });
 
     const savedCategory = await category.save();
@@ -26,17 +34,6 @@ exports.createCategory = async (req, res) => {
 };
 
 // Read All Categories
-// exports.getCategory = async (req, res) => {
-//   try {
-//     const categories = await Category.find().sort({ createdAt: -1 });
-
-//     res.json(categories);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// Read All Categories
 exports.getCategory = async (req, res) => {
   try {
     const filter = {};
@@ -50,22 +47,6 @@ exports.getCategory = async (req, res) => {
 };
 
 // Read Category By Id
-// exports.getCategoryById = async (req, res) => {
-//   try {
-//     const category = await Category.findById(req.params.id);
-
-//     res.status(201).json({
-//       success: true,
-//       data: category
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
-
 exports.getCategoryById = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
@@ -92,13 +73,21 @@ exports.getCategoryById = async (req, res) => {
 // Update Category
 exports.updateCategory = async (req, res) => {
   try {
+    // Default to whatever value the frontend sent back (the existing
+    // secure_url, unchanged) unless a new file was uploaded.
+    let imageValue = req.body.image;
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, "eventura/categories");
+      imageValue = result.secure_url;
+    }
 
     const updatedData = {
-      categoryName : req.body.categoryName,
-      description : req.body.description,
-      status : req.body.status,
-      image : req.file? req.file.filename : req.body.image
-    }
+      categoryName: req.body.categoryName,
+      description: req.body.description,
+      status: req.body.status,
+      image: imageValue,
+    };
 
     const updated = await Category.findByIdAndUpdate(
       req.params.id,
@@ -111,7 +100,6 @@ exports.updateCategory = async (req, res) => {
       message: "Category updated successfully",
       data: updated,
     });
-    
   } catch (error) {
     res.status(500).json({
       success: false,

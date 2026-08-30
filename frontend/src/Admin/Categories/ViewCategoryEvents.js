@@ -48,9 +48,10 @@ const ViewCategoryEvents = () => {
     });
   };
 
-  const imageUrl = category?.image
-    ? `http://localhost:5000/uploads/${category.image}`
-    : null;
+  // const imageUrl = category?.image
+  //   : null;
+
+  const imageUrl = category?.image || null; // was: `http://localhost:5000/uploads/${category.image}`
 
   if (loading) {
     return (
@@ -181,120 +182,3 @@ const ViewCategoryEvents = () => {
 };
 
 export default ViewCategoryEvents;
-
-// import React, { useEffect, useState } from "react";
-// import { ArrowLeft, Pencil, Tag, FileText } from "lucide-react";
-// import { useNavigate, useParams } from "react-router-dom";
-// import { toast } from "react-toastify";
-// import axios from "axios";
-// import "./CategoryEvents.css";
-// import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
-
-// const ViewCategory = () => {
-//   const navigate = useNavigate();
-//   const { id } = useParams();
-//   const [category, setCategory] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchCategory = async () => {
-//       try {
-//         const res = await axios.get(`/api/category/${id}`);
-//         setCategory(res.data);
-//       } catch (err) {
-//         toast.error("Failed to load category.");
-//         navigate("/adminCategories");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchCategory();
-//   }, [id, navigate]);
-
-//   if (loading) {
-//     return (
-//       <AdminLayout>
-//         <div className="viewCategory-loading">Loading...</div>
-//       </AdminLayout>
-//     );
-//   }
-
-//   if (!category) return null;
-
-//   return (
-//     <AdminLayout>
-//       <div className="viewCategory">
-//         <div className="viewCategory-header">
-//           <div>
-//             <h2>{category.categoryName}</h2>
-//             <p>Category Details</p>
-//           </div>
-
-//           <div className="viewCategory-headerActions">
-//             <button
-//               className="viewCategory-backBtn"
-//               onClick={() => navigate("/adminCategories")}
-//             >
-//               <ArrowLeft size={18} />
-//               Back
-//             </button>
-//             <button
-//               className="viewCategory-editBtn"
-//               onClick={() => navigate(`/editCategory/${category._id}`)}
-//             >
-//               <Pencil size={18} />
-//               Edit Category
-//             </button>
-//           </div>
-//         </div>
-
-//         <div className="viewCategory-topGrid">
-//           <div className="viewCategory-imageCard">
-//             <img
-//               src={`${process.env.REACT_APP_API_BASE_URL}/uploads/${category.image}`}
-//               alt={category.categoryName}
-//             />
-//           </div>
-
-//           <div className="viewCategory-detailsCard">
-//             <div className="viewCategory-cardHeader">
-//               <h3>Category Information</h3>
-//               <span
-//                 className={`viewCategory-status ${
-//                   category.status === "Active" ? "active" : "inactive"
-//                 }`}
-//               >
-//                 {category.status}
-//               </span>
-//             </div>
-
-//             <div className="viewCategory-info">
-//               <div className="viewCategory-infoItem">
-//                 <Tag size={18} />
-//                 <span>{category.categoryName}</span>
-//               </div>
-//               <div className="viewCategory-infoItem">
-//                 <FileText size={18} />
-//                 <span>
-//                   Created{" "}
-//                   {new Date(category.createdAt).toLocaleDateString("en-IN", {
-//                     day: "2-digit",
-//                     month: "short",
-//                     year: "numeric",
-//                   })}
-//                 </span>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="viewCategory-card">
-//           <h3>Description</h3>
-//           <p>{category.description}</p>
-//         </div>
-//       </div>
-//     </AdminLayout>
-//   );
-// };
-
-// export default ViewCategory;

@@ -394,7 +394,7 @@ const ManageBookings = () => {
                       <tr key={booking._id}>
                         <td>
                           <img
-                            src={`${BASE_URL}/uploads/${booking.event?.coverImage}`}
+                            src={booking.event?.coverImage}    //`${BASE_URL}/uploads/${booking.event?.coverImage}`
                             alt={booking.event?.eventName}
                             className="booking-table-img"
                           />
@@ -455,7 +455,7 @@ const ManageBookings = () => {
                     {/* 1. Top Details as Grid */}
                     <div className="allBookings-card-top">
                       <img
-                        src={`${BASE_URL}/uploads/${booking.event?.coverImage}`}
+                        src={booking.event?.coverImage}   // was: `${BASE_URL}/uploads/${booking.event?.coverImage}`
                         alt={booking.event?.eventName}
                       />
                       <div className="allBookings-card-titleBlock">
@@ -580,7 +580,7 @@ const ManageBookings = () => {
               <div className="bookingModal-body">
                 <div className="bookingModal-topHero">
                   <img
-                    src={`${BASE_URL}/uploads/${selectedBooking.event?.coverImage}`}
+                    src={selectedBooking.event?.coverImage}    //`${BASE_URL}/uploads/${selectedBooking.event?.coverImage}`
                     alt="Event Cover"
                   />
                   <div>

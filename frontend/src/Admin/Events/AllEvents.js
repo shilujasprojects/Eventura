@@ -7,6 +7,7 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
+  Images,
 } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -216,6 +217,7 @@ const AllEvents = () => {
                 <th>Image</th>
                 <th>Event Name</th>
                 <th className="col-category">Category</th>
+                <th className="col-gallery">Gallery</th>
                 <th>Status</th>
                 <th className="col-created">Created At</th>
                 <th>Actions</th>
@@ -246,7 +248,7 @@ const AllEvents = () => {
                     <td>
                       {event.coverImage ? (
                         <img
-                          src={`http://localhost:5000/uploads/${event.coverImage}`}
+                          src={event.coverImage}
                           alt={event.eventName}
                           className="allEvents-image"
                         />
@@ -258,6 +260,12 @@ const AllEvents = () => {
                     <td className="col-category">
                       {event.category?.categoryName || "-"}
                     </td>
+                    <td className="col-gallery">
+  <span className="gallery-count-badge">
+    <Images size={14} />
+    {event.galleryImages?.length || 0} image{event.galleryImages?.length <= 1 ? "" : "s"}
+  </span>
+</td>
                     <td>
                       <span
                         className={
@@ -300,7 +308,7 @@ const AllEvents = () => {
                   <div className="allEvents-card-top">
                     {event.coverImage ? (
                       <img
-                        src={`http://localhost:5000/uploads/${event.coverImage}`}
+                        src={event.coverImage}
                         alt={event.eventName}
                         className="allEvents-card-image"
                       />
@@ -312,6 +320,7 @@ const AllEvents = () => {
                       <span className="allEvents-card-category">
                         {event.category?.categoryName || "-"}
                       </span>
+                      
                       <span
                         className={
                           event.status === "Active"
@@ -320,7 +329,9 @@ const AllEvents = () => {
                         }
                       >
                         {event.status}
+                        
                       </span>
+                      
                     </div>
                   </div>
 

@@ -65,6 +65,7 @@ const OFFICE_ADDRESS_MIN = 10;
 const OFFICE_ADDRESS_MAX = 300;
 const DESCRIPTION_MIN = 20;
 const DESCRIPTION_MAX = 500;
+const MAX_IMAGE_MB = 5;
 
 const ManageSettings = () => {
   const [activeTab, setActiveTab] = useState("Account");
@@ -166,7 +167,7 @@ const ManageSettings = () => {
           setOrganizerForm(organizer);
           setSavedOrganizer(organizer);
           if (organizer.profileImage) {
-            setPreviewUrl(`http://localhost:5000${organizer.profileImage}`);
+            setPreviewUrl(organizer.profileImage); // was: `http://localhost:5000${organizer.profileImage}`
           }
           setIsEditingOrganizer(!hasSavedOrganizer);
         }
@@ -225,16 +226,22 @@ const ManageSettings = () => {
   };
 
   const validateAndSetImage = (file) => {
-    if (file) {
-      if (file.type === "image/jpeg" || file.type === "image/png") {
-        setSelectedFile(file);
-        setPreviewUrl(URL.createObjectURL(file));
-        setOrganizerErrors((prev) => ({ ...prev, profileImage: "" }));
-      } else {
-        toast.error("Invalid file format. Please upload JPEG or PNG.");
-      }
-    }
-  };
+  if (!file) return;
+
+  if (file.type !== "image/jpeg" && file.type !== "image/png") {
+    toast.error("Invalid file format. Please upload JPEG or PNG.");
+    return;
+  }
+
+  if (file.size > MAX_IMAGE_MB * 1024 * 1024) {
+    toast.error(`Image must be under ${MAX_IMAGE_MB}MB.`);
+    return;
+  }
+
+  setSelectedFile(file);
+  setPreviewUrl(URL.createObjectURL(file));
+  setOrganizerErrors((prev) => ({ ...prev, profileImage: "" }));
+};
 
   const handleRemoveImage = (e) => {
     e.stopPropagation();
@@ -454,17 +461,17 @@ const ManageSettings = () => {
   // ---------- Organizer edit-mode controls ----------
   const startEditingOrganizer = () => setIsEditingOrganizer(true);
 
-  const cancelEditingOrganizer = () => {
-    setOrganizerForm(savedOrganizer);
-    setOrganizerErrors({});
-    setSelectedFile(null);
-    if (savedOrganizer.profileImage) {
-      setPreviewUrl(`http://localhost:5000${savedOrganizer.profileImage}`);
-    } else {
-      setPreviewUrl(null);
-    }
-    setIsEditingOrganizer(false);
-  };
+const cancelEditingOrganizer = () => {
+  setOrganizerForm(savedOrganizer);
+  setOrganizerErrors({});
+  setSelectedFile(null);
+  if (savedOrganizer.profileImage) {
+    setPreviewUrl(savedOrganizer.profileImage); // was: `http://localhost:5000${savedOrganizer.profileImage}`
+  } else {
+    setPreviewUrl(null);
+  }
+  setIsEditingOrganizer(false);
+};
 
   // ---------- Submit handlers ----------
   const saveAccountSettings = async (e) => {
@@ -1179,145 +1186,6 @@ const ManageSettings = () => {
                 className="settings-form"
                 noValidate
               >
-                {/* <div className="settings-formRow split-2">
-                  <div className="settings-formGroup">
-                    <label>Organizer Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={organizerForm.name}
-                      onChange={handleOrganizerChange}
-                      disabled={!isEditingOrganizer}
-                    />
-                    {organizerErrors.name && (
-                      <small className="settings-field-error">
-                        {organizerErrors.name}
-                      </small>
-                    )}
-                  </div>
-                  <div className="settings-formGroup">
-                    <label>Professional Title</label>
-                    <input
-                      type="text"
-                      name="title"
-                      placeholder="e.g. Certified Wedding Planner"
-                      value={organizerForm.title}
-                      onChange={handleOrganizerChange}
-                      disabled={!isEditingOrganizer}
-                    />
-                    {organizerErrors.title && (
-                      <small className="settings-field-error">
-                        {organizerErrors.title}
-                      </small>
-                    )}
-                  </div>
-                  <div className="settings-formGroup">
-                    <label>Contact Phone</label>
-                    <input
-                      type="text"
-                      name="phone"
-                      value={organizerForm.phone}
-                      onChange={handleOrganizerChange}
-                      disabled={!isEditingOrganizer}
-                    />
-                    {organizerErrors.phone && (
-                      <small className="settings-field-error">
-                        {organizerErrors.phone}
-                      </small>
-                    )}
-                  </div>
-                </div> */}
-
-                {/* <div className="settings-formRow split-2">
-                  <div className="settings-formGroup">
-                    <label>Website URL (Optional)</label>
-                    <input
-                      type="text"
-                      name="website"
-                      placeholder="www.example.com"
-                      value={organizerForm.website}
-                      onChange={handleOrganizerChange}
-                      disabled={!isEditingOrganizer}
-                    />
-                    {organizerErrors.website && (
-                      <small className="settings-field-error">
-                        {organizerErrors.website}
-                      </small>
-                    )}
-                  </div>
-                  <div className="settings-formGroup">
-                    <label>Profile Image</label>
-
-                    {!previewUrl ? (
-                      <div
-                        className={`file-upload-zone ${!isEditingOrganizer ? "disabled" : ""}`}
-                        onClick={() =>
-                          isEditingOrganizer && fileInputRef.current.click()
-                        }
-                        onDrop={handleFileDrop}
-                        onDragOver={(e) => e.preventDefault()}
-                      >
-                        <UploadCloud size={32} className="upload-icon" />
-                        <p>Select profile image or drag drop files</p>
-                        <small>Formats accepted: JPEG, PNG</small>
-                        <button
-                          type="button"
-                          className="browse-btn"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            fileInputRef.current.click();
-                          }}
-                          disabled={!isEditingOrganizer}
-                        >
-                          Browse Local Files
-                        </button>
-                        <input
-                          type="file"
-                          hidden
-                          ref={fileInputRef}
-                          onChange={handleFileSelect}
-                          accept="image/jpeg, image/png"
-                        />
-                      </div>
-                    ) : (
-                      <div className="profile-image-previewBox">
-                        <img
-                          src={previewUrl}
-                          alt="Organizer profile"
-                          className="profile-image-previewImg"
-                          onClick={() => setImagePreviewModal(true)}
-                          title="Click to enlarge"
-                        />
-                        {isEditingOrganizer && (
-                          <button
-                            type="button"
-                            className="profile-image-removeBtn"
-                            onClick={handleRemoveImage}
-                            title="Remove image"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        )}
-                        <span className="image-preview-hint">
-                          Click image to enlarge
-                        </span>
-                        <input
-                          type="file"
-                          hidden
-                          ref={fileInputRef}
-                          onChange={handleFileSelect}
-                          accept="image/jpeg, image/png"
-                        />
-                      </div>
-                    )}
-
-                    {organizerErrors.profileImage && (
-                      <small className="settings-field-error">
-                        {organizerErrors.profileImage}
-                      </small>
-                    )}
-                  </div>
-                </div> */}
 
                 {/* Row 1+2 combined into one responsive grid: name, title, phone, website, image */}
                 <div className="organizerFieldsGrid">
@@ -1401,7 +1269,7 @@ const ManageSettings = () => {
                       >
                         <UploadCloud size={32} className="upload-icon" />
                         <p>Select profile image or drag drop files</p>
-                        <small>Formats accepted: JPEG, PNG</small>
+                        <small>Formats accepted: JPEG, PNG · Max {MAX_IMAGE_MB}MB</small>
                         <button
                           type="button"
                           className="browse-btn"
