@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "./Clients.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { Ban, Eye, Search, UserCheck, Users, ChevronLeft, ChevronRight } from "lucide-react";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL  = API_URL;
 const ROWS_PER_PAGE = 10;
 
 const getInitials = (name) => (name || "").trim().charAt(0).toUpperCase() || "?";

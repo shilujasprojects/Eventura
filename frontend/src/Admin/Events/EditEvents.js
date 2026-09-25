@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Save, ArrowLeft, Upload, Trash2, X, ZoomIn } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import "./Events.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
-const BASE = "http://localhost:5000";
+const BASE = API_URL;
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 const MAX_MB = 5;
 

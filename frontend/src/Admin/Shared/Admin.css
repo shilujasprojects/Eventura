@@ -869,6 +869,23 @@ box-sizing: border-box;
 .navbar-left-top {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+
+}
+
+.go-to-website {
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff7ee;
+  white-space: nowrap;
+  margin-top: 15px;
+  margin-left: 440px;
+  transition: color 0.2s ease;
+}
+
+.go-to-website:hover {
+  color: #f1d49b;
 }
 
 .sidebar-close-btn {
@@ -911,6 +928,24 @@ box-sizing: border-box;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .go-to-website {
+    margin-left: 520px;
+    font-size: 17px;
+    margin-top: 10px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .go-to-website {
+   font-size: 15px;
+   margin-left: 100px;
+   margin-top: 5px;
   }
 }
 

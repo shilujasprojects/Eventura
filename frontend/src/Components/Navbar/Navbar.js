@@ -7,12 +7,29 @@ import { toast } from "react-toastify";
 export default function Navbar() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
   const loadUserFromStorage = () => {
     const storedUser = localStorage.getItem("user");
-    setUser(storedUser ? JSON.parse(storedUser) : null);
+    const storedRole = localStorage.getItem("role");
+
+    if (storedRole === "admin") {
+      setIsAdmin(true);
+      setUser(null);
+      return;
+    }
+
+    setIsAdmin(false);
+
+    // The public navbar's user menu is only for clients —
+    // an admin session should never show here, even if logged in elsewhere.
+    if (storedUser && storedRole === "client") {
+      setUser(JSON.parse(storedUser));
+    } else {
+      setUser(null);
+    }
   };
 
   useEffect(() => {
@@ -23,9 +40,18 @@ export default function Navbar() {
     // Fires when we log in/out in THIS tab (dispatched manually — see Auth.jsx)
     window.addEventListener("authChange", loadUserFromStorage);
 
+    // handles browser back/forward button restoring a stale page
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        loadUserFromStorage();
+      }
+    };
+    window.addEventListener("pageshow", handlePageShow);
+
     return () => {
       window.removeEventListener("storage", loadUserFromStorage);
       window.removeEventListener("authChange", loadUserFromStorage);
+      window.removeEventListener("pageshow", handlePageShow);
     };
   }, []);
 
@@ -132,13 +158,27 @@ export default function Navbar() {
             </NavLink>
           </li>
           <li className="nav-item">
-            <Link to="/BookNow" className="btn btn-warning  my-2 my-lg-0" id="book-now">
+            <Link
+              to="/BookNow"
+              className="btn btn-warning  my-2 my-lg-0"
+              id="book-now"
+            >
               Book Now
             </Link>
           </li>
 
           {/* ROLE-BASED AUTH AREA */}
-          {!user ? (
+          {isAdmin ? (
+            <li className="nav-item">
+              <Link
+                to="/adminDashboard"
+                className="btn btn-warning mx-0 mx-lg-2 my-2 my-lg-0"
+                id="book-now"
+              >
+                Admin Dashboard
+              </Link>
+            </li>
+          ) : !user ? (
             <li className="nav-item">
               <Link
                 to="/loginSign"
@@ -150,8 +190,6 @@ export default function Navbar() {
             </li>
           ) : (
             <li className="nav-item user-menu" ref={menuRef}>
-              
-
               <button
                 className="btn btn-warning mx-2 user-menu-trigger"
                 id="book-now"
@@ -161,7 +199,8 @@ export default function Navbar() {
                   {displayName.charAt(0).toUpperCase()}
                 </span>
                 {/* {displayName} */}
-                {displayName.charAt(0).toUpperCase() + displayName.slice(1).toLowerCase()}
+                {displayName.charAt(0).toUpperCase() +
+                  displayName.slice(1).toLowerCase()}
                 <i
                   className={`bi bi-caret-down-fill user-menu-caret ${menuOpen ? "rotated" : ""}`}
                 ></i>

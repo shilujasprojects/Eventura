@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../../api/api";
 import { toast } from "react-toastify";
 import "./ViewMoreEvents.css";
 import Navbar from "../../Navbar/Navbar";
 import Footer from "../../Footer/Footer";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = API_URL;
 
 function ViewMoreEvents() {
   const [groupedEvents, setGroupedEvents] = useState({});

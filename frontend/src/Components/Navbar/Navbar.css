@@ -32,6 +32,10 @@ nav {
   .nav-item {
     margin-left: 10px;
   }
+
+  .nav-link::after {
+    display: none
+  }
 }
 
 .nav-link {

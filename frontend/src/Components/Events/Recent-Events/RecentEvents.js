@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../../api/api";
 import { toast } from "react-toastify";
 import "./RecentEvents.css";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL  = API_URL;
 
 function RecentEvents() {
   const [events, setEvents] = useState([]);

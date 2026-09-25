@@ -3,15 +3,19 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv")
 
-const app = express();  // creates the Express server
+dotenv.config();   // ← MUST be first, before using any process.env value
 
-dotenv.config();
+const app = express();
+
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true
 }));
-app.use(express.json());   // This middleware allows Express to read JSON data from request bodies.
 
+app.use(express.json());
+
+
+// console.log("Server file running from:", __filename);
 
 
 mongoose
@@ -45,4 +49,5 @@ app.use("/api/newsletter" , require("./routers/Newsletterroutes"))
 
 
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => console.log(`Server is running on Port : ${PORT}`));

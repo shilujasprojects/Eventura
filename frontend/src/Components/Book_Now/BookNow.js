@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "./BookNow.css";
 
 // 👈 Update this if your login page's route is different
 const LOGIN_ROUTE = "/loginSign";
-const BASE_URL = "http://localhost:5000";
+const BASE_URL  = API_URL;
 
 function BookNow() {
   const navigate = useNavigate();

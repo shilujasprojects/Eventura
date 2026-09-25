@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axiosInstance from "../../api/axiosInstance";
+import api from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import {
@@ -24,8 +24,9 @@ import {
 } from "lucide-react";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import "./CMS.css";
+import { API_URL } from './../../api/api';
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = API_URL;
 const MAX_HERO_IMAGES = 4;
 const MAX_IMAGE_MB = 5; // add this line
 
@@ -125,7 +126,7 @@ const ManageCMS = () => {
 
   const fetchBanner = async () => {
     try {
-      const res = await axiosInstance.get("/api/banner");
+      const res = await api.get("/api/banner");
       setBannerState(res.data.data);
       setBannerError(false);
     } catch (error) {
@@ -136,7 +137,7 @@ const ManageCMS = () => {
 
   const fetchFaqs = async () => {
     try {
-      const res = await axiosInstance.get("/api/faqs");
+      const res = await api.get("/api/faqs");
       setFaqList(res.data.data);
     } catch (error) {
       toast.error("Failed to load FAQs.");
@@ -145,7 +146,7 @@ const ManageCMS = () => {
 
   const fetchTestimonials = async () => {
     try {
-      const res = await axiosInstance.get("/api/testimonials");
+      const res = await api.get("/api/testimonials");
       setTestimonials(res.data.data);
     } catch (error) {
       toast.error("Failed to load testimonials.");
@@ -155,7 +156,7 @@ const ManageCMS = () => {
   const fetchNewsletter = async (page = 1, search = "") => {
     setNewsletterLoading(true);
     try {
-      const res = await axiosInstance.get("/api/newsletter", {
+      const res = await api.get("/api/newsletter", {
         params: { page, limit: 5, search: search || undefined },
       });
       setNewsletterList(res.data.data);
@@ -222,7 +223,7 @@ const ManageCMS = () => {
 
     setSavingBanner(true);
     try {
-      const res = await axiosInstance.put("/api/banner", bannerDraft);
+      const res = await api.put("/api/banner", bannerDraft);
       setBannerState(res.data.data);
       setIsEditingBanner(false);
       toast.success("Homepage hero banner updated successfully!");
@@ -238,7 +239,7 @@ const ManageCMS = () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    const res = await axiosInstance.post("/api/banner/upload-image", formData, {
+    const res = await api.post("/api/banner/upload-image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     setBannerState(res.data.data);
@@ -348,7 +349,7 @@ const ManageCMS = () => {
 
   const handleDeleteImage = async (imageId) => {
     try {
-      const res = await axiosInstance.delete(`/api/banner/image/${imageId}`);
+      const res = await api.delete(`/api/banner/image/${imageId}`);
       setBannerState(res.data.data);
       toast.success("Hero image removed.");
     } catch (error) {
@@ -381,7 +382,7 @@ const ManageCMS = () => {
 
     setAddingFaq(true);
     try {
-      const res = await axiosInstance.post("/api/faqs", newFaq);
+      const res = await api.post("/api/faqs", newFaq);
       setFaqList((prev) => [res.data.data, ...prev]);
       setNewFaq({ question: "", answer: "" });
       setNewFaqErrors({ question: "", answer: "" });
@@ -420,7 +421,7 @@ const ManageCMS = () => {
     }
 
     try {
-      const res = await axiosInstance.put(`/api/faqs/${id}`, editingFaqData);
+      const res = await api.put(`/api/faqs/${id}`, editingFaqData);
       setFaqList((prev) =>
         prev.map((item) => (item._id === id ? res.data.data : item)),
       );
@@ -433,7 +434,7 @@ const ManageCMS = () => {
 
   const handleDeleteFaq = async (id) => {
     try {
-      await axiosInstance.delete(`/api/faqs/${id}`);
+      await api.delete(`/api/faqs/${id}`);
       setFaqList((prev) => prev.filter((item) => item._id !== id));
       toast.success("FAQ deleted successfully.");
     } catch (error) {
@@ -444,7 +445,7 @@ const ManageCMS = () => {
   // ---------- TESTIMONIALS ----------
   const handleToggleTestimonialFeatured = async (id) => {
     try {
-      const res = await axiosInstance.patch(
+      const res = await api.patch(
         `/api/testimonials/${id}/toggle-featured`,
       );
       setTestimonials((prev) =>
@@ -471,7 +472,7 @@ const ManageCMS = () => {
       subscriber.status === "Subscribed" ? "Unsubscribed" : "Subscribed";
     setUpdatingSubscriberId(subscriber._id);
     try {
-      const res = await axiosInstance.patch(
+      const res = await api.patch(
         `/api/newsletter/${subscriber._id}/status`,
         { status: newStatus },
       );
@@ -508,7 +509,7 @@ const ManageCMS = () => {
     if (!result.isConfirmed) return;
 
     try {
-      await axiosInstance.delete(`/api/newsletter/${id}`);
+      await api.delete(`/api/newsletter/${id}`);
       setNewsletterList((prev) => prev.filter((item) => item._id !== id));
       if (wasSubscribed) {
         setNewsletterTotalSubscribed((prev) => Math.max(prev - 1, 0));

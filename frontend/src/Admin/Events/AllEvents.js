@@ -11,13 +11,14 @@ import {
 } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import "./Events.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE =API_URL;
 const ROWS_PER_PAGE = 8;
 
 const AllEvents = () => {
@@ -40,7 +41,7 @@ const AllEvents = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_BASE}/events`);
+      const res = await axios.get(`${API_BASE}/api/events`);
       setEvents(res.data.data || []);
     } catch {
       toast.error("Failed to load events.");
@@ -51,7 +52,7 @@ const AllEvents = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/category`);
+      const res = await axios.get(`${API_BASE}/api/category`);
       setCategories(res.data || []);
     } catch {
       toast.error("Failed to load categories.");
@@ -71,7 +72,7 @@ const AllEvents = () => {
     }).then(async (result) => {
       if (!result.isConfirmed) return;
       try {
-        await axios.delete(`${API_BASE}/events/${id}`);
+        await axios.delete(`${API_BASE}/api/events/${id}`);
         setEvents((prev) => prev.filter((ev) => ev._id !== id));
         Swal.fire({
           icon: "success",

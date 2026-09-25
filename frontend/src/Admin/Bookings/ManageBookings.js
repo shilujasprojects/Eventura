@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "./Bookings.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
@@ -18,7 +19,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = API_URL;
 
 // Tabs shown in the UI, mapped to the actual booking.status values stored in
 // the DB. Order matters — it mirrors the lifecycle left to right.

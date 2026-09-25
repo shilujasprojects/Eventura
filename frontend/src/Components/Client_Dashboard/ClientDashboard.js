@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Star, X, Pencil } from "lucide-react";
@@ -9,7 +10,7 @@ import Footer from "../Footer/Footer";
 import ClientInquiryForm from "../Inquiries_Form/ClientInquiryForm";
 import "./ClientDashboard.css";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL  = API_URL;
 
 // ---------- VALIDATION ----------
 const validateReviewField = (name, value) => {

@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
+import { API_URL } from "../../../api/api";
 import "./ClientTestimonials.css";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL  = API_URL;
 const AUTO_ADVANCE_MS = 4000;
 
 // Clients don't upload a profile photo, so we show a navy circle with their

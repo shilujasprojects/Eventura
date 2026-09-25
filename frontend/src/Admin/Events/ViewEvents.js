@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { CalendarDays, Tag, ArrowLeft, Pencil, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "./Events.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 
-const BASE = "http://localhost:5000";
+const BASE  = API_URL;
 
 const ViewEvents = () => {
   const navigate = useNavigate();

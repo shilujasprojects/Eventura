@@ -100,6 +100,10 @@ const AdminNavbar = ({ onMenuClick }) => {
             <Menu size={22} />
           </button>
           <h2>Dashboard</h2>
+          <span className="go-to-website" onClick={() => navigate("/")}>
+    Website
+  </span>
+
         </div>
         <p>Welcome back, {adminName} 👋</p>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { API_URL } from "../../api/api";
 import { 
   Search, 
   Mail, 
@@ -20,7 +21,7 @@ import {
 import './Support.css';
 import AdminLayout from '../../Pages/Admin/Layout/AdminLayout';
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL  = API_URL;
 const ROWS_PER_PAGE = 10;
 
 const ManageInquiries = () => {

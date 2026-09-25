@@ -4,11 +4,12 @@ import axios from "axios";
 import "./Auth.css";
 import Navbar from "../Navbar/Navbar";
 import { ToastContainer, toast } from "react-toastify";
+import { API_URL } from "../../api/api";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../Images/logo2.png";
 import Footer from "../Footer/Footer";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL  = API_URL;
 
 // ---------- VALIDATION ----------
 const validateSignupField = (name, value, allValues = {}) => {
@@ -69,18 +70,22 @@ const Auth = () => {
   // Both login and signup check it so the user lands back on their booking
   // instead of the usual dashboard.
   const goToPendingBookingOrDashboard = (role) => {
-    const redirectTo = sessionStorage.getItem("postLoginRedirect");
-    if (redirectTo) {
-      sessionStorage.removeItem("postLoginRedirect");
-      navigate(redirectTo);
-      return;
-    }
-    if (role === "admin") {
-      navigate("/adminDashboard");
-    } else {
-      navigate("/clientDashboard");
-    }
-  };
+  // Admins never get redirected into a client booking flow
+  if (role?.toLowerCase()  === "admin") {
+    sessionStorage.removeItem("postLoginRedirect");
+    navigate("/adminDashboard");
+    return;
+  }
+
+  const redirectTo = sessionStorage.getItem("postLoginRedirect");
+  if (redirectTo) {
+    sessionStorage.removeItem("postLoginRedirect");
+    navigate(redirectTo);
+    return;
+  }
+
+  navigate("/clientDashboard");
+};
 
   // ---------- LOGIN ----------
   const handleLoginChange = (e) => {
@@ -109,6 +114,7 @@ const Auth = () => {
         toast.success("Login successful!");
         localStorage.setItem("user", JSON.stringify(res.data.user));
         localStorage.setItem("role", res.data.role);
+        goToPendingBookingOrDashboard(res.data.role);
         localStorage.setItem("token", res.data.token);
         window.dispatchEvent(new Event("authChange"));
 
