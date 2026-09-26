@@ -27,4 +27,5 @@ yarn-error.log*
 
 # OS files
 .DS_Store
-Thumbs.dbatlas_db.txt 
+Thumbs.db"atlas_db.txt" 
+node_modules/ 
