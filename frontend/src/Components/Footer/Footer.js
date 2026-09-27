@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Footer.css";
 import Logo from "../Images/logo2.png";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../api/api";
+
 
 const CATEGORY_LIMIT = 6;
 const SERVICE_LIMIT = 5;
@@ -16,7 +18,7 @@ export default function Footer() {
   useEffect(() => {
     const fetchFooterData = async () => {
       try {
-        const API_BASE_URL = "http://localhost:5000/api";
+        const API_BASE_URL = `${API_URL}/api`;
 
         const [categoryRes, serviceRes, settingsRes] = await Promise.all([
           fetch(`${API_BASE_URL}/category?status=Active`),

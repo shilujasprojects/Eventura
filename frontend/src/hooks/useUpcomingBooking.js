@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../api/api";  
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = `${API_URL}/api`;
 
 export default function useUpcomingBooking(eventId) {
   const [booking, setBooking] = useState(null);

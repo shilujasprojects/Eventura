@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./OurService.css";
+import { API_URL } from "../../../api/api"; 
 
-const API_BASE_URL = "http://localhost:5000/api";
-const UPLOADS_BASE_URL = "http://localhost:5000/uploads";
+const API_BASE_URL = `${API_URL}/api`;
+// const UPLOADS_BASE_URL = "http://localhost:5000/uploads";
 
 function OurService() {
   const [services, setServices] = useState([]);

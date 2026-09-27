@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './ContactBanner.css'
+import { API_URL } from "../../../api/api"; 
 import candleLight from '../anniversary-couple.jpg'
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = `${API_URL}/api`;
 
 function ContactBanner() {
   const [settings, setSettings] = useState(null);

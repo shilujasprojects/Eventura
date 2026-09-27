@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./CarouselBanner.css";
+import { API_URL } from "../../../api/api"; 
 
-const API_BASE_URL = "http://localhost:5000/api";
-const UPLOADS_BASE_URL = "http://localhost:5000/uploads";
+const API_BASE_URL = `${API_URL}/api`;
+// const UPLOADS_BASE_URL = "http://localhost:5000/uploads";
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
