@@ -3,6 +3,7 @@ import { Search, Plus, Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lu
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -18,10 +19,12 @@ const AllCategoryEvents = () => {
   const [searchQuery, setSearchQuery] = useState("");  // search input
   const [currentPage, setCurrentPage] = useState(1);
 
+  const BASE_URL = `${API_URL}/api`;
+
   // ---------- fetch ----------
   const fetchCategory = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/category");
+      const res = await axios.get(`${BASE_URL}/category`);
       setCategories(res.data);
     } catch (error) {
       console.error(error);
@@ -77,7 +80,7 @@ const AllCategoryEvents = () => {
     if (!result.isConfirmed) return; // user cancelled — do nothing
 
     try {
-      await axios.delete(`http://localhost:5000/api/category/${id}`);
+      await axios.delete(`${BASE_URL}/category/${id}`);
       setCategories((prev) => prev.filter((cat) => cat._id !== id));
 
       Swal.fire({

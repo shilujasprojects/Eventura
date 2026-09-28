@@ -21,6 +21,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import logo from "../../Components/Images/logo2.png";
 import "./Admin.css";
+import { API_URL } from "../../api/api";
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -47,10 +48,12 @@ const Sidebar = ({ isOpen, onClose }) => {
     payments: 0,
   });
 
+  const BASE_URL = `${API_URL}/api`;
+
   useEffect(() => {
     const fetchBadgeCounts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/dashboard/badge-counts");
+        const res = await axios.get(`${BASE_URL}/dashboard/badge-counts`);
         setBadgeCounts(res.data.data);
       } catch (error) {
         console.error("Failed to load badge counts:", error.message);

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Save, ArrowLeft, Upload, Trash2, X, ZoomIn } from "lucide-react";
 import "./Services.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../../api/api";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 const MAX_FILE_SIZE_MB = 5;
+const BASE_URL = `${API_URL}/api`;
 
 const EditServices = () => {
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const EditServices = () => {
   const getService = async () => {
     try {
       setFetching(true);
-      const response = await axios.get(`http://localhost:5000/api/services/${id}`);
+      const response = await axios.get(`${BASE_URL}/services/${id}`);
       const service = response.data.data;
 
       setFormData({
@@ -236,7 +238,7 @@ const EditServices = () => {
         data.append("galleryImages", file);
       });
 
-      await axios.put(`http://localhost:5000/api/services/${id}`, data, {
+      await axios.put(`${BASE_URL}/services/${id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./Packages.css";
@@ -22,6 +23,8 @@ const AddPackages = () => {
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
 
+  const BASE_URL = `${API_URL}/api`;
+
   const [formData, setFormData] = useState({
     packageName: "",
     category: "",
@@ -42,7 +45,7 @@ const AddPackages = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/category");
+      const res = await axios.get(`${BASE_URL}/category`);
       const activeCategories = (res.data || []).filter(
         (category) => category.status === "Active",
       );
@@ -54,7 +57,7 @@ const AddPackages = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/services");
+      const res = await axios.get(`${BASE_URL}/services`);
       setServices((res.data.data || []).filter((s) => s.status === "Active"));
     } catch {
       toast.error("Failed to load services.");
@@ -162,7 +165,7 @@ const AddPackages = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/packages/create-package",
+        `${BASE_URL}/packages/create-package`,
         payload,
       );
       toast.success("Package created successfully!");

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../api/api';
 import { toast } from 'react-toastify';
 import { Mail, Phone, Clock, MessageSquare, Send, X, HelpCircle } from 'lucide-react';
 import './ClientMyInquiries.css';
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = API_URL;
 
 const ClientMyInquiries = ({ loggedInClient }) => {
   // loggedInClient: { _id, fullName, email, phone } from your client auth context

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../api/api";
 
 function shuffleArray(arr) {
   const array = [...arr];
@@ -18,6 +19,8 @@ export default function useCategoryGallery(categoryName, imageCount = 3) {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const BASE_URL = `${API_URL}/api`;
+
   useEffect(() => {
     if (!categoryName) {
       setImages([]);
@@ -29,7 +32,7 @@ export default function useCategoryGallery(categoryName, imageCount = 3) {
     setLoading(true);
 
     axios
-      .get(`http://localhost:5000/api/events?status=Active`)
+      .get(`${BASE_URL}/events?status=Active`)
       .then((res) => {
         const events = res.data?.data || [];
 

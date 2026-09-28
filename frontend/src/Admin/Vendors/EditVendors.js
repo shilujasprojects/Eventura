@@ -15,6 +15,7 @@ import {
 import "./Vendors.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 const EditVendors = () => {
@@ -43,6 +44,8 @@ const EditVendors = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
 
+  const BASE_URL = `${API_URL}/api`;
+
   useEffect(() => {
     fetchServiceCategories();
     fetchVendor();
@@ -50,7 +53,7 @@ const EditVendors = () => {
 
   const fetchServiceCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/services");
+      const response = await axios.get(`${BASE_URL}/services`);
       const activeServices = response.data.data.filter(
         (s) => s.status === "Active"
       );
@@ -65,7 +68,7 @@ const EditVendors = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/vendors/${id}`
+        `${BASE_URL}/vendors/${id}`
       );
       const vendor = response.data.data;
 
@@ -196,7 +199,7 @@ const EditVendors = () => {
         vendorData.append("image", formData.image);
       }
 
-      await axios.put(`http://localhost:5000/api/vendors/${id}`, vendorData);
+      await axios.put(`${BASE_URL}/vendors/${id}`, vendorData);
 
       toast.success("Vendor updated successfully!");
       navigate("/vendors");

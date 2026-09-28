@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./Packages.css";
@@ -20,13 +21,15 @@ const ViewPackages = () => {
   const [pkg, setPkg] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const BASE_URL = `${API_URL}/api`;
+
   useEffect(() => {
     fetchPackage();
   }, [id]);
 
   const fetchPackage = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
+      const res = await axios.get(`${BASE_URL}/packages/${id}`);
       setPkg(res.data.data);
     } catch {
       toast.error("Failed to load package.");

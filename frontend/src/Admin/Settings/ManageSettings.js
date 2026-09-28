@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Ensure toast styles are loaded
 import {
@@ -20,7 +21,7 @@ import {
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import "./Settings.css";
 
-const API_BASE = "http://localhost:5000/api/settings";
+const API_BASE =`${API_URL}/api/settings`;
 
 const EMPTY_ACCOUNT = {
   adminName: "",

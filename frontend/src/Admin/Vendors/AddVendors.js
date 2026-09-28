@@ -16,6 +16,7 @@ import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 
 const AddVendors = () => {
   const navigate = useNavigate();
@@ -40,6 +41,8 @@ const AddVendors = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const BASE_URL = `${API_URL}/api`;
+
   // Fetch service categories from the backend
   useEffect(() => {
     fetchServiceCategories();
@@ -47,7 +50,7 @@ const AddVendors = () => {
 
   const fetchServiceCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/services");
+      const response = await axios.get(`${BASE_URL}/services`);
       // Only show Active services in the dropdown
       const activeServices = response.data.data.filter(
         (s) => s.status === "Active"
@@ -161,7 +164,7 @@ const AddVendors = () => {
         vendorData.append("image", formData.image);
       }
 
-      await axios.post("http://localhost:5000/api/vendors", vendorData);
+      await axios.post(`${BASE_URL}/vendors`, vendorData);
 
       toast.success("Vendor registered successfully!");
       navigate("/vendors");

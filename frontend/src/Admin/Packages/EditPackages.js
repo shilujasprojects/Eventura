@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowLeft, Save } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./Packages.css";
@@ -30,6 +31,8 @@ const EditPackages = () => {
     tags: [],
   });
 
+  const BASE_URL = `${API_URL}/api`;
+
   useEffect(() => {
     fetchCategories();
     fetchServices();
@@ -38,7 +41,7 @@ const EditPackages = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/category");
+      const res = await axios.get(`${BASE_URL}/category`);
       setCategories(res.data || []);
     } catch {
       toast.error("Failed to load categories.");
@@ -47,7 +50,7 @@ const EditPackages = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/services");
+      const res = await axios.get(`${BASE_URL}/services`);
       setServices((res.data.data || []).filter((s) => s.status === "Active"));
     } catch {
       toast.error("Failed to load services.");
@@ -57,7 +60,7 @@ const EditPackages = () => {
   const fetchPackage = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
+      const res = await axios.get(`${BASE_URL}/packages/${id}`);
       const pkg = res.data.data;
 
       setFormData({
@@ -153,7 +156,7 @@ const EditPackages = () => {
     };
 
     try {
-      await axios.put(`http://localhost:5000/api/packages/edit-package/${id}`, payload);
+      await axios.put(`${BASE_URL}/packages/edit-package/${id}`, payload);
       toast.success("Package updated successfully!");
       navigate("/adminPackages");
     } catch (err) {

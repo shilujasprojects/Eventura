@@ -13,8 +13,9 @@ import {
 import { toast, ToastContainer } from 'react-toastify';
 import AdminLayout from '../../Pages/Admin/Layout/AdminLayout';
 import './Reports.css'
+import { API_URL } from '../../api/api';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = `${API_URL}/api`;
 
 // Turns a preset name into an actual { start, end } date range.
 // This is the piece that makes "Last Month" / "Last Year" possible —

@@ -21,12 +21,15 @@ import "./Vendors.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 const ROWS_PER_PAGE = 10;
 
 const ManageVendors = () => {
   const navigate = useNavigate();
+
+  const BASE_URL = `${API_URL}/api`;
 
   const [vendors, setVendors] = useState([]);
   const [filteredVendors, setFilteredVendors] = useState([]);
@@ -88,7 +91,7 @@ const ManageVendors = () => {
   const fetchVendors = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/api/vendors");
+      const response = await axios.get(`${BASE_URL}/vendors`);
       setVendors(response.data.data);
     } catch (error) {
       console.error("Fetch vendors error:", error);
@@ -100,7 +103,7 @@ const ManageVendors = () => {
 
   const handleToggleStatus = async (id, status) => {
     try {
-      await axios.patch(`http://localhost:5000/api/vendors/status/${id}`, {
+      await axios.patch(`${BASE_URL}/vendors/status/${id}`, {
         status,
       });
 

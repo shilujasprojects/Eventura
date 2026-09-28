@@ -4,10 +4,12 @@ import "./Services.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/jpg"];
 const MAX_FILE_SIZE_MB = 5;
+const BASE_URL = `${API_URL}/api`;
 
 const AddServices = () => {
   const navigate = useNavigate();
@@ -153,7 +155,7 @@ const AddServices = () => {
       data.append("bannerImage", formData.bannerImage);
       formData.galleryImages.forEach((img) => data.append("galleryImages", img));
 
-      await axios.post("http://localhost:5000/api/services", data, {
+      await axios.post(`${BASE_URL}/services/`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

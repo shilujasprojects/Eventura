@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Search, Plus, Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +21,8 @@ const AllPackages = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const BASE_URL = `${API_URL}/api`;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +33,7 @@ const AllPackages = () => {
   const fetchPackages = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/packages");
+      const res = await axios.get(`${BASE_URL}/packages`);
       setPackages(res.data.data || []);
     } catch {
       toast.error("Failed to load packages.");
@@ -41,7 +44,7 @@ const AllPackages = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/category");
+      const res = await axios.get(`${BASE_URL}/category`);
       setCategories(res.data || []);
     } catch {
       toast.error("Failed to load categories.");
@@ -62,7 +65,7 @@ const AllPackages = () => {
       if (!result.isConfirmed) return;
 
       try {
-        await axios.delete(`http://localhost:5000/api/packages/${id}`);
+        await axios.delete(`${BASE_URL}/packages/${id}`);
         setPackages((prev) => prev.filter((pkg) => pkg._id !== id));
         Swal.fire({
           icon: "success",

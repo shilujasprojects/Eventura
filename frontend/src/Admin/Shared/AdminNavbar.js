@@ -8,6 +8,7 @@ import {
   X
 } from "lucide-react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import "./Admin.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -25,10 +26,12 @@ const AdminNavbar = ({ onMenuClick }) => {
   
   const searchRef = useRef(null);
 
+  const BASE_URL = `${API_URL}/api`;
+
   useEffect(() => {
     const fetchAdminName = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/settings");
+        const res = await axios.get(`${BASE_URL}/settings`);
         const name = res.data?.data?.account?.adminName;
         if (name) setAdminName(name);
       } catch (error) {
@@ -61,7 +64,7 @@ const AdminNavbar = ({ onMenuClick }) => {
         setIsSearching(true);
         setShowDropdown(true);
         try {
-          const res = await axios.get(`http://localhost:5000/api/dashboard/search?q=${searchText.trim()}`);
+          const res = await axios.get(`${BASE_URL}/dashboard/search?q=${searchText.trim()}`);
           setSearchResults(res.data.data);
         } catch (error) {
           console.error("Search failed", error);

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import "./MakePayment.css";
 import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = API_URL;
 
 function MakePayment() {
   const { bookingId } = useParams();

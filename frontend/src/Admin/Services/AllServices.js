@@ -13,12 +13,14 @@ import Swal from "sweetalert2";
 import "./Services.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 const ROWS_PER_PAGE = 6;
 
 const AllServices = () => {
   const navigate = useNavigate();
+  const BASE_URL = `${API_URL}/api`;
 
   const [services, setServices] = useState([]);
   const [search, setSearch] = useState("");
@@ -32,7 +34,7 @@ const AllServices = () => {
   const fetchServices = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:5000/api/services");
+      const response = await axios.get(`${BASE_URL}/services`);
       setServices(response.data.data);
     } catch (error) {
       toast.error("Failed to load services.");
@@ -56,7 +58,7 @@ const AllServices = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:5000/api/services/${id}`);
+          await axios.delete(`${BASE_URL}/services/${id}`);
           toast.success(`"${serviceName}" deleted successfully.`);
           fetchServices();
         } catch (error) {

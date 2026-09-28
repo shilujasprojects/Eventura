@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "./BookSummary.css";
@@ -11,6 +12,8 @@ function BookSummary() {
   const [data, setData] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const BASE_URL = `${API_URL}/api`;
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("eventBooking"));
@@ -25,7 +28,7 @@ function BookSummary() {
 
     setSubmitting(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/bookings", {
+      const res = await axios.post(`${BASE_URL}/bookings`, {
         event: data.event,
         package: data.package,
         isCustomPackage: data.isCustomPackage,

@@ -3,6 +3,7 @@ import "./CategoryEvents.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -22,6 +23,8 @@ const TrashIcon = () => (
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_MB = 5;
+
+const BASE_URL = `${API_URL}/api`;
 
 const AddCategoryEvents = () => {
   const navigate = useNavigate();
@@ -130,7 +133,7 @@ const AddCategoryEvents = () => {
       formData.append("image", image);
 
       await axios.post(
-        "http://localhost:5000/api/category/create-category",
+        `${BASE_URL}/category/create-category`,
         formData
       );
 

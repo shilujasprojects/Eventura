@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { API_URL } from '../../../api/api';
 import './MainBanner.css'
 import img1 from "../Images/white-gown-belly.jpg";
 import img2 from "../Images/cake.jpg";
@@ -7,7 +8,7 @@ import img3 from "../Images/party.jpg";
 import img4 from "../Images/carousel_1.jpg";
 import { Link } from 'react-router-dom';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = API_URL;
 
 // Static fallbacks — used whenever the CMS hasn't uploaded a hero image for
 // that slot yet, so the collage layout never breaks or shows gaps.

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -22,11 +23,13 @@ const ViewCategoryEvents = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const BASE_URL = `${API_URL}/api`;
+
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/category/view-category/${id}`,
+          `${BASE_URL}/category/view-category/${id}`,
         );
         setCategory(res.data.data);
       } catch (error) {

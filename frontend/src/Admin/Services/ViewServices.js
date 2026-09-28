@@ -4,11 +4,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./Services.css";
 import AdminLayout from "../../Pages/Admin/Layout/AdminLayout";
 import axios from "axios";
+import { API_URL } from "../../api/api";
 import { toast, ToastContainer } from "react-toastify";
 
 const ViewServices = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const BASE_URL = `${API_URL}/api`;
 
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ const ViewServices = () => {
   const getService = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5000/api/services/${id}`);
+      const response = await axios.get(`${BASE_URL}/services/${id}`);
       setService(response.data.data);
     } catch (error) {
       toast.error("Failed to load service details.");

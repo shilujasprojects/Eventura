@@ -15,10 +15,13 @@ import cater_seets from "../Event-Images/cater-seets.jpg";
 import funeral_flower2 from "../Event-Images/funeral-flower2.jpg";
 import profileFallback from '../Event-Images/profile3.jpg';
 import axios from "axios";
+import { API_URL } from "../../../api/api";
 
 function AboutEvent() {
   // Grab the specific package ID from the URL (e.g., /about-event/64a7f9b...)
   const { id } = useParams();
+
+  const BASE_URL = `${API_URL}/api`;
 
   // State to hold the dynamic organizer data
   const [organizer, setOrganizer] = useState({
@@ -36,7 +39,7 @@ function AboutEvent() {
   useEffect(() => {
     const fetchSettingsData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/settings");
+        const res = await axios.get(`${BASE_URL}/settings`);
         
         if (res.data.data.organizer) {
           const fetchedData = res.data.data.organizer;
@@ -69,7 +72,7 @@ function AboutEvent() {
       if (!id) return; // Skip if there is no ID in the URL
       try {
         // Hitting the getPackageById controller you made!
-        const res = await axios.get(`http://localhost:5000/api/packages/${id}`);
+        const res = await axios.get(`${BASE_URL}/packages/${id}`);
         if (res.data.success) {
           setEventPackage(res.data.data);
         }

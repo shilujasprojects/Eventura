@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { API_URL } from '../../../api/api'
 import { toast } from 'react-toastify'
 import './Newsletter.css'
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = API_URL;
 
 function Newsletter() {
   const [email, setEmail] = useState('');
